@@ -625,10 +625,10 @@ html,body{
 
 <main class="main">
   <div class="topbar">
-    <div class="bc" id="bc"><span class="bc-root">資料庫</span> &nbsp;/&nbsp; <span>1. 這遊戲到底在搞什麼？</span> &nbsp;/&nbsp; <span>1.1 拆！吃！合！贏！</span></div>
+    <div class="bc" id="bc"><span class="bc-root">Database</span> &nbsp;/&nbsp; <span>1. What's This Game About?</span> &nbsp;/&nbsp; <span>1.1 Smash! Eat! Fuse! Win!</span></div>
     <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('zh')">中文</button>
-      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('zh')">中文</button>
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
     </div>
   </div>
   <div class="content">
@@ -1179,7 +1179,7 @@ html,body{
 </div>
 
 <script>
-let lang = 'zh';
+let lang = 'en';
 
 // Metadata for breadcrumb — both languages
 const M = {
@@ -1268,6 +1268,9 @@ function sw(id, el) {
   document.querySelectorAll('.ngt').forEach(x => x.classList.remove('active'));
   document.querySelector(`[onclick="tg(this,'${m.g}')"]`).classList.add('active');
 }
+
+// Apply default language on page load
+document.addEventListener('DOMContentLoaded', () => applyLang('en'));
 
 function tg(el, gid) {
   const isOpen = document.getElementById(gid).classList.contains('open');
