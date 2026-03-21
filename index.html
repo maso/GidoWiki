@@ -719,7 +719,7 @@ html,body{
 <div class="entry" id="entry-3-2">
   <div class="eh">
     <div class="ey" data-zh="3.2 角色介紹" data-en="3.2 Character Profile">3.2 角色介紹</div>
-    <div class="et"><em>坦古</em> (Tanku)</div>
+    <div class="et" data-zh="<em>坦古</em> (Tanku)" data-en="<em>Tanku</em>"><em>坦古</em> (Tanku)</div>
     <div class="etag" data-zh="我擋，你拆！我擋，你快去拆！拜託！" data-en="I'll block, you smash! I'm blocking — GO SMASH ALREADY!">我擋，你拆！我擋，你快去拆！拜託！</div>
   </div>
   <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 坦古角色圖 ]" data-en="[ Tanku Character Art ]">[ 坦古角色圖 ]</div></div>
@@ -731,7 +731,7 @@ html,body{
 <div class="entry" id="entry-3-3">
   <div class="eh">
     <div class="ey" data-zh="3.3 角色介紹" data-en="3.3 Character Profile">3.3 角色介紹</div>
-    <div class="et"><em>漂漂</em> (Pewpiu)</div>
+    <div class="et" data-zh="<em>漂漂</em> (Pewpiu)" data-en="<em>Pewpiu</em>"><em>漂漂</em> (Pewpiu)</div>
     <div class="etag" data-zh="瞄好了才射，打準比打多重要！" data-en="Take aim before you fire — accuracy beats volume!">瞄好了才射，打準比打多重要！</div>
   </div>
   <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 漂漂角色圖 ]" data-en="[ Pewpiu Character Art ]">[ 漂漂角色圖 ]</div></div>
@@ -743,7 +743,7 @@ html,body{
 <div class="entry" id="entry-3-4">
   <div class="eh">
     <div class="ey" data-zh="3.4 角色介紹" data-en="3.4 Character Profile">3.4 角色介紹</div>
-    <div class="et"><em>史洛噗</em> (Slobu)</div>
+    <div class="et" data-zh="<em>史洛噗</em> (Slobu)" data-en="<em>Slobu</em>"><em>史洛噗</em> (Slobu)</div>
     <div class="etag" data-zh="嘔嘔嘔～這不是壞肚子，是我的毒性攻擊！" data-en="Bleeugh~ That's not a stomachache, that's my toxic attack!">嘔嘔嘔～這不是壞肚子，是我的毒性攻擊！</div>
   </div>
   <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 史洛噗角色圖 ]" data-en="[ Slobu Character Art ]">[ 史洛噗角色圖 ]</div></div>
@@ -755,7 +755,7 @@ html,body{
 <div class="entry" id="entry-3-5">
   <div class="eh">
     <div class="ey" data-zh="3.5 角色介紹" data-en="3.5 Character Profile">3.5 角色介紹</div>
-    <div class="et"><em>羅佐</em> (Rolzo)</div>
+    <div class="et" data-zh="<em>羅佐</em> (Rolzo)" data-en="<em>Rolzo</em>"><em>羅佐</em> (Rolzo)</div>
     <div class="etag" data-zh="彎得過超強，彎不過撞牆！" data-en="Nail the turn and you're unstoppable — miss it and it's wall time!">彎得過超強，彎不過撞牆！</div>
   </div>
   <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 羅佐角色圖 ]" data-en="[ Rolzo Character Art ]">[ 羅佐角色圖 ]</div></div>
@@ -767,7 +767,7 @@ html,body{
 <div class="entry" id="entry-3-6">
   <div class="eh">
     <div class="ey" data-zh="3.6 角色介紹" data-en="3.6 Character Profile">3.6 角色介紹</div>
-    <div class="et"><em>拉逗</em> (Raddog)</div>
+    <div class="et" data-zh="<em>拉逗</em> (Raddog)" data-en="<em>Raddog</em>"><em>拉逗</em> (Raddog)</div>
     <div class="etag" data-zh="切切切！通通剁碎！" data-en="Slice slice slice! Mince everything up!">切切切！通通剁碎！</div>
   </div>
   <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 拉逗角色圖 ]" data-en="[ Raddog Character Art ]">[ 拉逗角色圖 ]</div></div>
@@ -779,7 +779,7 @@ html,body{
 <div class="entry" id="entry-3-7">
   <div class="eh">
     <div class="ey" data-zh="3.7 角色介紹" data-en="3.7 Character Profile">3.7 角色介紹</div>
-    <div class="et"><em>博美多</em> (Bomato)</div>
+    <div class="et" data-zh="<em>博美多</em> (Bomato)" data-en="<em>Bomato</em>"><em>博美多</em> (Bomato)</div>
     <div class="etag" data-zh="藝術就是滿地爆炸！" data-en="Art is explosions everywhere!">藝術就是滿地爆炸！</div>
   </div>
   <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 博美多角色圖 ]" data-en="[ Bomato Character Art ]">[ 博美多角色圖 ]</div></div>
@@ -1258,7 +1258,7 @@ function sw(id, el) {
   el.classList.add('active');
   const m = M[id];
   const d = m[lang];
-  document.getElementById('bc').innerHTML = `<span class="bc-root">${l === "zh" ? "資料庫" : "Database"}</span> &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
+  document.getElementById('bc').innerHTML = `<span class="bc-root">${lang === "zh" ? "資料庫" : "Database"}</span> &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
   document.querySelector('.main').scrollTo({top: 0, behavior: 'smooth'});
   const g = document.getElementById(m.g);
   if (!g.classList.contains('open')) {
