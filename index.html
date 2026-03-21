@@ -92,7 +92,7 @@ html,body{
 }
 .logo-img{
   width:100%;height:auto;display:block;
-  object-fit:cover;max-height:110px;object-position:center;
+  object-fit:contain;
 }
 
 /* Codex label */
@@ -545,12 +545,12 @@ html,body{
 <aside class="sidebar">
   <div class="logo">
     <img
-      src="Gido_Logo_1280x720.png"
+      src="Small_Capsule_462x174.png"
       alt="Gido Gido: Kaiju Battle Party"
       class="logo-img"
     />
   </div>
-  <div class="cl" data-zh="Codex" data-en="Codex">Codex</div>
+  <div class="cl" data-zh="資料庫" data-en="Database">資料庫</div>
 
   <div class="ngt open active" onclick="tg(this,'g1')"><span class="n">1</span><span class="l" data-zh="這遊戲到底在搞什麼？" data-en="What's This Game About?">這遊戲到底在搞什麼？</span><span class="a">▶</span></div>
   <div class="ni-wrap open" id="g1">
@@ -625,7 +625,7 @@ html,body{
 
 <main class="main">
   <div class="topbar">
-    <div class="bc" id="bc">Codex &nbsp;/&nbsp; <span>1. 這遊戲到底在搞什麼？</span> &nbsp;/&nbsp; <span>1.1 拆！吃！合！贏！</span></div>
+    <div class="bc" id="bc"><span class="bc-root">資料庫</span> &nbsp;/&nbsp; <span>1. 這遊戲到底在搞什麼？</span> &nbsp;/&nbsp; <span>1.1 拆！吃！合！贏！</span></div>
     <div class="lang-toggle">
       <button class="lang-btn active" onclick="setLang('zh')">中文</button>
       <button class="lang-btn" onclick="setLang('en')">EN</button>
@@ -1239,7 +1239,7 @@ function applyLang(l) {
   const m = M[currentEntry];
   if(m) {
     const d = m[l];
-    document.getElementById('bc').innerHTML = `Codex &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
+    document.getElementById('bc').innerHTML = `<span class="bc-root">${l === "zh" ? "資料庫" : "Database"}</span> &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
   }
   // Update toggle buttons
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
@@ -1258,7 +1258,7 @@ function sw(id, el) {
   el.classList.add('active');
   const m = M[id];
   const d = m[lang];
-  document.getElementById('bc').innerHTML = `Codex &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
+  document.getElementById('bc').innerHTML = `<span class="bc-root">${l === "zh" ? "資料庫" : "Database"}</span> &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
   document.querySelector('.main').scrollTo({top: 0, behavior: 'smooth'});
   const g = document.getElementById(m.g);
   if (!g.classList.contains('open')) {
@@ -1274,10 +1274,13 @@ function tg(el, gid) {
   // Close all groups
   document.querySelectorAll('.ni-wrap').forEach(g => g.classList.remove('open'));
   document.querySelectorAll('.ngt').forEach(g => g.classList.remove('open'));
-  // If it wasn't already open, open it now
+  // If it wasn't already open, open it and navigate to first child
   if (!isOpen) {
     document.getElementById(gid).classList.add('open');
     el.classList.add('open');
+    // Click the first nav item inside this group
+    const firstItem = document.querySelector('#' + gid + ' .ni');
+    if (firstItem) firstItem.click();
   }
 }
 </script>
