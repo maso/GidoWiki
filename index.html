@@ -556,6 +556,28 @@ html,body{
   display:block;
 }
 
+/* Character portraits — contain so full image is visible */
+.char-img-wrap{
+  width:100%;
+  border:var(--bw-lg) solid var(--c-black);
+  border-radius:12px;
+  box-shadow:var(--sh-md);
+  overflow:hidden;
+  margin:1.5rem 0;
+  background:var(--c-bg-dots);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:1rem;
+}
+.char-img{
+  width:100%;
+  height:auto;
+  max-height:400px;
+  object-fit:contain;
+  display:block;
+}
+
 /* ============================================================
    RWD — Mobile
    ============================================================ */
@@ -820,7 +842,8 @@ html,body{
     <div class="et" data-zh="<em>坦古</em> (Tanku)" data-en="<em>Tanku</em>"><em>坦古</em> (Tanku)</div>
     <div class="etag" data-zh="我擋，你拆！我擋，你快去拆！拜託！" data-en="I'll block, you smash! I'm blocking — GO SMASH ALREADY!">我擋，你拆！我擋，你快去拆！拜託！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 坦古角色圖 ]" data-en="[ Tanku Character Art ]">[ 坦古角色圖 ]</div></div>
+  <div class="char-img-wrap"><img src="_images/char_tanku.png" alt="Tanku" class="char-img"/>
+  </div>
   <div class="sb"><div class="sb-lbl" data-zh="技能" data-en="SKILL">技能</div><div class="sb-txt" data-zh="架起護盾完全格擋正面傷害，格擋到的傷害會轉換成<strong style='color:var(--accent2)'>「怒氣」</strong>，釋放震波向前轟出！" data-en="Raise a shield that fully blocks frontal damage. Blocked damage converts into <strong style='color:var(--accent2)'>Rage</strong>, which is then unleashed as a shockwave blast!">架起護盾完全格擋正面傷害，格擋到的傷害會轉換成<strong style="color:var(--accent2)">「怒氣」</strong>，釋放震波向前轟出！</div></div>
   <div class="fb"><div class="fb-lbl" data-zh="融合因子" data-en="FUSION FACTOR">融合因子</div><div class="sb-txt" data-zh="合體後，周圍產生<strong style='color:var(--accent3)'>旋轉護盾</strong>，可格擋所有攻擊。" data-en="After fusing, generates a <strong style='color:var(--accent3)'>rotating shield</strong> that blocks all incoming attacks.">合體後，周圍產生<strong style="color:var(--accent3)">旋轉護盾</strong>，可格擋所有攻擊。</div></div>
 </div>
@@ -832,7 +855,8 @@ html,body{
     <div class="et" data-zh="<em>漂漂</em> (Pewpiu)" data-en="<em>Pewpiu</em>"><em>漂漂</em> (Pewpiu)</div>
     <div class="etag" data-zh="瞄好了才射，打準比打多重要！" data-en="Take aim before you fire — accuracy beats volume!">瞄好了才射，打準比打多重要！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 漂漂角色圖 ]" data-en="[ Pewpiu Character Art ]">[ 漂漂角色圖 ]</div></div>
+  <div class="char-img-wrap"><img src="_images/char_pewpiu.png" alt="Pewpiu" class="char-img"/>
+  </div>
   <div class="sb"><div class="sb-lbl" data-zh="技能" data-en="SKILL">技能</div><div class="sb-txt" data-zh="點按可一邊移動一邊<strong style='color:var(--accent2)'>連射普通子彈</strong>。長按進行蓄力，蓄力完成後射出一發威力強大的<strong style='color:var(--accent2)'>多段穿透彈</strong>！" data-en="Tap to <strong style='color:var(--accent2)'>rapid-fire bullets</strong> while moving. Hold to charge, then release a powerful <strong style='color:var(--accent2)'>multi-hit piercing shot</strong>!">點按可一邊移動一邊<strong style="color:var(--accent2)">連射普通子彈</strong>。長按進行蓄力，蓄力完成後射出一發威力強大的<strong style="color:var(--accent2)">多段穿透彈</strong>！</div></div>
   <div class="fb"><div class="fb-lbl" data-zh="融合因子" data-en="FUSION FACTOR">融合因子</div><div class="sb-txt" data-zh="合體後，每次普攻附帶<strong style='color:var(--accent3)'>火球噴出</strong>。" data-en="After fusing, each normal attack triggers an additional <strong style='color:var(--accent3)'>fireball burst</strong>.">合體後，每次普攻附帶<strong style="color:var(--accent3)">火球噴出</strong>。</div></div>
 </div>
@@ -844,7 +868,8 @@ html,body{
     <div class="et" data-zh="<em>史洛噗</em> (Slobu)" data-en="<em>Slobu</em>"><em>史洛噗</em> (Slobu)</div>
     <div class="etag" data-zh="嘔嘔嘔～這不是壞肚子，是我的毒性攻擊！" data-en="Bleeugh~ That's not a stomachache, that's my toxic attack!">嘔嘔嘔～這不是壞肚子，是我的毒性攻擊！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 史洛噗角色圖 ]" data-en="[ Slobu Character Art ]">[ 史洛噗角色圖 ]</div></div>
+  <div class="char-img-wrap"><img src="_images/char_slobu.png" alt="Slobu" class="char-img"/>
+  </div>
   <div class="sb"><div class="sb-lbl" data-zh="技能" data-en="SKILL">技能</div><div class="sb-txt" data-zh="朝前方<strong style='color:var(--accent2)'>持續噴射黏液</strong>，在地面留下能造成持續傷害的黏液區。" data-en="Continuously <strong style='color:var(--accent2)'>spray slime</strong> forward, leaving a puddle on the ground that deals damage over time.">朝前方<strong style="color:var(--accent2)">持續噴射黏液</strong>，在地面留下能造成持續傷害的黏液區。</div></div>
   <div class="fb"><div class="fb-lbl" data-zh="融合因子" data-en="FUSION FACTOR">融合因子</div><div class="sb-txt" data-zh="合體後，走路時<strong style='color:var(--accent3)'>每一步都會留下黏液</strong>。" data-en="After fusing, <strong style='color:var(--accent3)'>every step leaves a slime trail</strong>.">合體後，走路時<strong style="color:var(--accent3)">每一步都會留下黏液</strong>。</div></div>
 </div>
@@ -856,7 +881,8 @@ html,body{
     <div class="et" data-zh="<em>羅佐</em> (Rolzo)" data-en="<em>Rolzo</em>"><em>羅佐</em> (Rolzo)</div>
     <div class="etag" data-zh="彎得過超強，彎不過撞牆！" data-en="Nail the turn and you're unstoppable — miss it and it's wall time!">彎得過超強，彎不過撞牆！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 羅佐角色圖 ]" data-en="[ Rolzo Character Art ]">[ 羅佐角色圖 ]</div></div>
+  <div class="char-img-wrap"><img src="_images/char_rolzo.png" alt="Rolzo" class="char-img"/>
+  </div>
   <div class="sb"><div class="sb-lbl" data-zh="技能" data-en="SKILL">技能</div><div class="sb-txt" data-zh="按住技能鍵<strong style='color:var(--accent2)'>暴衝</strong>，暴衝中檔位越高速度與傷害越強，衝刺期間附帶<strong style='color:var(--accent2)'>減傷效果</strong>。" data-en="Hold the skill button to <strong style='color:var(--accent2)'>charge forward</strong> — higher gear = faster speed and more damage, plus <strong style='color:var(--accent2)'>damage reduction</strong> during the dash.">按住技能鍵<strong style="color:var(--accent2)">暴衝</strong>，暴衝中檔位越高速度與傷害越強，衝刺期間附帶<strong style="color:var(--accent2)">減傷效果</strong>。</div></div>
   <div class="fb"><div class="fb-lbl" data-zh="融合因子" data-en="FUSION FACTOR">融合因子</div><div class="sb-txt" data-zh="合體後，方向一致時加速效果暴增，速度夠快還會噴出<strong style='color:var(--accent3)'>衝擊波</strong>！" data-en="After fusing, synchronized movement causes a massive speed boost — go fast enough and emit a <strong style='color:var(--accent3)'>shockwave</strong>!">合體後，方向一致時加速效果暴增，速度夠快還會噴出<strong style="color:var(--accent3)">衝擊波</strong>！</div></div>
 </div>
@@ -868,7 +894,8 @@ html,body{
     <div class="et" data-zh="<em>拉逗</em> (Raddog)" data-en="<em>Raddog</em>"><em>拉逗</em> (Raddog)</div>
     <div class="etag" data-zh="切切切！通通剁碎！" data-en="Slice slice slice! Mince everything up!">切切切！通通剁碎！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 拉逗角色圖 ]" data-en="[ Raddog Character Art ]">[ 拉逗角色圖 ]</div></div>
+  <div class="char-img-wrap"><img src="_images/char_raddog.png" alt="Raddog" class="char-img"/>
+  </div>
   <div class="sb"><div class="sb-lbl" data-zh="技能" data-en="SKILL">技能</div><div class="sb-txt" data-zh="一邊移動一邊射出<strong style='color:var(--accent2)'>旋轉葉刃</strong>，自己踩到葉刃還會加速並讓葉刃變大追擊敵人！" data-en="Launch <strong style='color:var(--accent2)'>spinning blade discs</strong> while moving — stepping on your own blades boosts your speed and enlarges them to chase enemies!">一邊移動一邊射出<strong style="color:var(--accent2)">旋轉葉刃</strong>，自己踩到葉刃還會加速並讓葉刃變大追擊敵人！</div></div>
   <div class="fb"><div class="fb-lbl" data-zh="融合因子" data-en="FUSION FACTOR">融合因子</div><div class="sb-txt" data-zh="融合初始獲得<strong style='color:var(--accent3)'>10 秒的移速加成</strong>。" data-en="Upon fusing, grants a <strong style='color:var(--accent3)'>10-second movement speed boost</strong>.">融合初始獲得<strong style="color:var(--accent3)">10 秒的移速加成</strong>。</div></div>
 </div>
@@ -880,7 +907,8 @@ html,body{
     <div class="et" data-zh="<em>博美多</em> (Bomato)" data-en="<em>Bomato</em>"><em>博美多</em> (Bomato)</div>
     <div class="etag" data-zh="藝術就是滿地爆炸！" data-en="Art is explosions everywhere!">藝術就是滿地爆炸！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 博美多角色圖 ]" data-en="[ Bomato Character Art ]">[ 博美多角色圖 ]</div></div>
+  <div class="char-img-wrap"><img src="_images/char_bomato.png" alt="Bomato" class="char-img"/>
+  </div>
   <div class="sb"><div class="sb-lbl" data-zh="技能" data-en="SKILL">技能</div><div class="sb-txt" data-zh="按住技能鍵舉起炸彈，放開鍵將炸彈<strong style='color:var(--accent2)'>放置在前方地面</strong>，數秒後炸彈會<strong style='color:var(--accent2)'>自動隱形</strong>！隱形期只有己方可見，敵人踩上去就會現形閃爍後爆炸。（用近戰攻擊可以打飛炸彈喔！）" data-en="Hold to hoist a bomb, release to <strong style='color:var(--accent2)'>place it on the ground ahead</strong>. After a moment it goes <strong style='color:var(--accent2)'>invisible</strong>! Only your team can see it — enemies who step on it will trigger a flash and then boom. (Melee attacks can knock the bomb away!)">按住技能鍵舉起炸彈，放開鍵將炸彈<strong style="color:var(--accent2)">放置在前方地面</strong>，數秒後炸彈會<strong style="color:var(--accent2)">自動隱形</strong>！隱形期只有己方可見，敵人踩上去就會現形閃爍後爆炸。（用近戰攻擊可以打飛炸彈喔！）</div></div>
   <div class="fb"><div class="fb-lbl" data-zh="融合因子" data-en="FUSION FACTOR">融合因子</div><div class="sb-txt" data-zh="合成獸解體時會觸發一次<strong style='color:var(--accent3)'>大爆炸</strong>。" data-en="When the kaiju splits apart, it triggers a massive <strong style='color:var(--accent3)'>explosion</strong>.">合成獸解體時會觸發一次<strong style="color:var(--accent3)">大爆炸</strong>。</div></div>
 </div>
