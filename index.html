@@ -538,6 +538,23 @@ html,body{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}
 }
+
+/* Game image — 2:1 ratio, full width, comic panel border */
+.game-img-wrap{
+  width:100%;
+  aspect-ratio:2/1;
+  border:var(--bw-lg) solid var(--c-black);
+  border-radius:12px;
+  box-shadow:var(--sh-md);
+  overflow:hidden;
+  margin:1.5rem 0;
+}
+.game-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 </style>
 </head>
 <body>
@@ -640,7 +657,9 @@ html,body{
     <div class="et"><em data-zh="拆！吃！合！贏！" data-en="Smash! Eat! Fuse! Win!">拆！吃！合！贏！</em></div>
     <div class="etag" data-zh="吃飽飽，拆好好，怪獸日常就是這麼樸實無華。" data-en="Eat hearty, smash hard — a kaiju's daily grind is just that simple.">吃飽飽，拆好好，怪獸日常就是這麼樸實無華。</div>
   </div>
-  <div class="ip ipt"><div class="ico">🖼</div><div class="lbl" data-zh="[ 遊戲概覽示意圖 ]" data-en="[ Game Overview Illustration ]">[ 遊戲概覽示意圖 ]</div></div>
+  <div class="game-img-wrap">
+    <img src="general_battle.gif" alt="Game Overview" class="game-img"/>
+  </div>
   <div class="eb">
     <p data-zh="兩隊怪獸大戰，先把敵方的<strong>「核心根脈」</strong>打爆的一方獲勝！" data-en="Two teams of kaiju clash — the first to destroy the enemy's <strong>Core Root</strong> wins!">兩隊怪獸大戰，先把敵方的<strong>「核心根脈」</strong>打爆的一方獲勝！</p>
     <p data-zh="但要拆核心根脈，必須先清掉敵方的所有<strong>守衛花</strong>，核心根脈才會解除封印。" data-en="But to reach the Core Root, you must first destroy all enemy <strong>Guard Flowers</strong> to unseal it.">但要拆核心根脈，必須先清掉敵方的所有<strong>守衛花</strong>，核心根脈才會解除封印。</p>
