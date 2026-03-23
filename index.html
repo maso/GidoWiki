@@ -594,6 +594,34 @@ html,body{
   .lang-btn{padding:5px 10px;font-size:0.8rem;}
 }
 
+
+/* Next page button */
+.next-btn-wrap{
+  margin-top:3rem;
+  padding-top:1.5rem;
+  border-top:var(--bw) dashed rgba(0,0,0,0.15);
+  display:flex;
+  justify-content:flex-end;
+}
+.next-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-family:var(--hf);
+  font-size:1.1rem;
+  letter-spacing:0.04em;
+  color:var(--c-black);
+  background:var(--c-lime);
+  border:var(--bw-md) solid var(--c-black);
+  border-radius:10px;
+  padding:12px 24px;
+  box-shadow:var(--sh-sm);
+  cursor:pointer;
+  transition:transform 0.15s var(--ease-pop),box-shadow 0.15s;
+}
+.next-btn:hover{transform:translate(-3px,-3px);box-shadow:var(--sh-md);}
+.next-btn .arrow{font-size:1.2rem;}
+
 </style>
 <link rel="apple-touch-icon" sizes="180x180" href="_favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="_favicon/favicon-32x32.png">
@@ -742,7 +770,7 @@ html,body{
     <div class="et" data-zh="怎麼<em>走路</em>" data-en="How to <em>Move</em>">怎麼<em>走路</em></div>
     <div class="etag" data-zh="別看我腿短，衝刺起來連我都怕。" data-en="Don't judge my stubby legs — my dash speed scares even me.">別看我腿短，衝刺起來連我都怕。</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 移動操作示意圖 ]" data-en="[ Movement Controls Illustration ]">[ 移動操作示意圖 ]</div></div>
+  <div class="game-img-wrap"><video src="_videos/walk_dash.mp4" class="game-img" autoplay loop muted playsinline></video></div>
   <div class="eb">
     <p data-zh="使用<strong>搖桿</strong>或<strong>方向鍵</strong>移動你的小短腿。如果在移動中按下<strong>衝刺（Dash）</strong>，就能快速拉開距離或是貼近敵人。善用衝刺，你就能馬上取消攻擊動作的破綻、溜之大吉或繼續追擊！" data-en="Use the <strong>joystick</strong> or <strong>directional buttons</strong> to waddle around. Press <strong>Dash</strong> while moving to quickly close in or escape. Master the Dash to cancel attack recovery, flee, or keep up the pressure!">使用<strong>搖桿</strong>或<strong>方向鍵</strong>移動你的小短腿。如果在移動中按下<strong>衝刺（Dash）</strong>，就能快速拉開距離或是貼近敵人。善用衝刺，你就能馬上取消攻擊動作的破綻、溜之大吉或繼續追擊！</p>
   </div>
@@ -755,7 +783,7 @@ html,body{
     <div class="et" data-zh="怎麼<em>搞破壞</em>" data-en="How to <em>Wreck Things</em>">怎麼<em>搞破壞</em></div>
     <div class="etag" data-zh="連擊不斷才是王道，發呆被打那叫活靶！" data-en="Keep that combo going — standing still just makes you a punching bag!">連擊不斷才是王道，發呆被打那叫活靶！</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 連擊示意圖 ]" data-en="[ Combo Attack Illustration ]">[ 連擊示意圖 ]</div></div>
+  <div class="game-img-wrap"><video src="_videos/melee.mp4" class="game-img" autoplay loop muted playsinline></video></div>
   <div class="eb"><p data-zh="普通攻擊連按最多可打出<strong>多段連擊</strong>，建築、路人、敵人全都能打！盡情搞破壞吧！" data-en="Mash the normal attack button for a <strong>multi-hit combo</strong> — buildings, civilians, enemies, everything's fair game! Go wild!">普通攻擊連按最多可打出<strong>多段連擊</strong>，建築、路人、敵人全都能打！盡情搞破壞吧！</p></div>
 </div>
 
@@ -766,7 +794,7 @@ html,body{
     <div class="et" data-zh="招式與<em>精力值</em>" data-en="Skills &amp; <em>Stamina</em>">招式與<em>精力值</em></div>
     <div class="etag" data-zh="精力見底的那一刻，你就是一隻會走的巨大沙包。" data-en="The moment your stamina hits zero, you're just a very large, very hittable target.">精力見底的那一刻，你就是一隻會走的巨大沙包。</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 精力條 UI 說明圖 ]" data-en="[ Stamina Bar UI Illustration ]">[ 精力條 UI 說明圖 ]</div></div>
+  <div class="game-img-wrap"><video src="_videos/skill.mp4" class="game-img" autoplay loop muted playsinline></video></div>
   <div class="eb"><p data-zh="每個 Gido 都有自己的<strong>專屬絕活</strong>，但使用技能需要消耗<strong>「精力值」</strong>。隨時注意精力條喔！" data-en="Every Gido has their own <strong>signature skill</strong>, but using it costs <strong>Stamina</strong>. Keep an eye on that bar!">每個 Gido 都有自己的<strong>專屬絕活</strong>，但使用技能需要消耗<strong>「精力值」</strong>。隨時注意精力條喔！</p></div>
   <div class="warn"><div class="ti">⚠️</div><div class="wt" data-zh="<strong>精力見底警告：</strong>技能再帥，精力歸零就什麼都打不出來。別一下子把精力全部榨乾，留一點應急！" data-en="<strong>Stamina Warning:</strong> No matter how cool your skill looks, zero stamina means zero skills. Don't burn through it all — save some for emergencies!"><strong>精力見底警告：</strong>技能再帥，精力歸零就什麼都打不出來。別一下子把精力全部榨乾，留一點應急！</div></div>
 </div>
@@ -1311,6 +1339,7 @@ function applyLang(l) {
     const d = m[l];
     document.getElementById('bc').innerHTML = `<span class="bc-root">${l === "zh" ? "資料庫" : "Database"}</span> &nbsp;/&nbsp; <span>${d.s}</span> &nbsp;/&nbsp; <span>${d.t}</span>`;
   }
+  updateNextLabels();
   // Update toggle buttons
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
@@ -1381,6 +1410,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// ── Next page navigation ──────────────────────────────────
+const ORDER = [
+  '1-1','1-2',
+  '2-1','2-2','2-3',
+  '3-1','3-2','3-3','3-4','3-5','3-6','3-7',
+  '4-1','4-2','4-3','4-4','4-5','4-6','4-7','4-8','4-9','4-10',
+  '5-1','5-2','5-3','5-4','5-5','5-6','5-7',
+  '6-1','6-2','6-3','6-4','6-5','6-6','6-7','6-8','6-9','6-10',
+  '7-1','7-2','7-3'
+];
+
+function buildNextButtons() {
+  ORDER.forEach((id, idx) => {
+    if (idx === ORDER.length - 1) return; // last page, no next
+    const nextId = ORDER[idx + 1];
+    const entry = document.getElementById('entry-' + id);
+    if (!entry) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'next-btn-wrap';
+    wrap.innerHTML = `<button class="next-btn" onclick="goNext('${nextId}')">
+      <span class="next-label"></span>
+      <span class="arrow">→</span>
+    </button>`;
+    wrap.querySelector('.next-label').setAttribute('data-next', nextId);
+    entry.appendChild(wrap);
+  });
+  updateNextLabels();
+}
+
+function updateNextLabels() {
+  document.querySelectorAll('[data-next]').forEach(el => {
+    const nextId = el.getAttribute('data-next');
+    const m = M[nextId];
+    if (!m) return;
+    const d = m[lang];
+    el.textContent = d.t;
+  });
+}
+
+function goNext(id) {
+  const navEl = document.querySelector(`[onclick="sw('${id}',this)"]`);
+  if (navEl) navEl.click();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildNextButtons();
+});
+
 </script>
 </body>
 </html>
