@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Gido Gido — Kaiju Battle Party Codex</title>
+<title>Gido Gido Wiki</title>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 /* ============================================================
@@ -555,6 +555,45 @@ html,body{
   object-fit:cover;
   display:block;
 }
+
+/* ============================================================
+   RWD — Mobile
+   ============================================================ */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:90;}
+.overlay.active{display:block;}
+.hamburger{
+  display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;background:rgba(255,255,255,0.15);
+  border:3px solid rgba(255,255,255,0.6);border-radius:6px;
+  padding:7px;cursor:pointer;flex-shrink:0;
+}
+.hamburger span{display:block;width:100%;height:3px;background:#fff;border-radius:2px;transition:all 0.25s;}
+.hamburger.open span:nth-child(1){transform:translateY(8px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg);}
+@media(max-width:768px){
+  .app{flex-direction:column;height:auto;min-height:100vh;overflow:visible;}
+  .sidebar{
+    position:fixed;top:0;left:0;bottom:0;width:80%;max-width:300px;
+    height:100%;z-index:100;transform:translateX(-100%);
+    transition:transform 0.3s ease;overflow-y:auto;min-width:0;
+  }
+  .sidebar.open{transform:translateX(0);}
+  .main{width:100%;height:auto;min-height:100vh;overflow-y:visible;}
+  .hamburger{display:flex;}
+  .topbar{position:sticky;top:0;padding:0.6rem 1rem;gap:10px;}
+  .bc{font-size:0.72rem;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .content{padding:1.5rem 1.1rem 3rem;}
+  .eh{padding:1rem 1rem 1.25rem;}
+  .et{font-size:clamp(1.6rem,6vw,2.4rem);}
+  .fc-grid{grid-template-columns:1fr;}
+  .bg-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:420px){
+  .bg-grid{grid-template-columns:1fr;}
+  .lang-btn{padding:5px 10px;font-size:0.8rem;}
+}
+
 </style>
 <link rel="apple-touch-icon" sizes="180x180" href="_favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="_favicon/favicon-32x32.png">
@@ -565,6 +604,7 @@ html,body{
 </head>
 <body>
 <div class="app">
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 <aside class="sidebar">
   <div class="logo">
     <img
@@ -648,6 +688,9 @@ html,body{
 
 <main class="main">
   <div class="topbar">
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu" onclick="toggleSidebar()">
+      <span></span><span></span><span></span>
+    </button>
     <div class="bc" id="bc"><span class="bc-root">Database</span> &nbsp;/&nbsp; <span>1. What's This Game About?</span> &nbsp;/&nbsp; <span>1.1 Smash! Eat! Fuse! Win!</span></div>
     <div class="lang-toggle">
       <button class="lang-btn" onclick="setLang('zh')">中文</button>
@@ -1313,6 +1356,31 @@ function tg(el, gid) {
     if (firstItem) firstItem.click();
   }
 }
+
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('overlay');
+  const hamburger = document.getElementById('hamburger');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('active');
+  hamburger.classList.toggle('open');
+}
+
+// Close sidebar when a nav item is clicked on mobile
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.ni, .ngt').forEach(el => {
+    el.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        const sidebar = document.querySelector('.sidebar');
+        const overlay = document.getElementById('overlay');
+        const hamburger = document.getElementById('hamburger');
+        sidebar.classList.remove('open');
+        overlay.classList.remove('active');
+        hamburger.classList.remove('open');
+      }
+    });
+  });
+});
 </script>
 </body>
 </html>
