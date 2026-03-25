@@ -747,13 +747,13 @@ html,body{
     <div class="ni" onclick="sw('6-1',this)"><span class="sn">6.1</span><span data-zh="道具獲取來源" data-en="Item Sources">道具獲取來源</span></div>
     <div class="ni" onclick="sw('6-2',this)"><span class="sn">6.2</span><span data-zh="主動道具" data-en="Active Items">主動道具</span></div>
     <div class="ni" onclick="sw('6-3',this)"><span class="sn">6.3</span><span data-zh="被動道具" data-en="Passive Items">被動道具</span></div>
-    <div class="ni" onclick="sw('6-4',this)"><span class="sn">6.4</span><span data-zh="大補棒" data-en="Heal Rod">大補棒</span></div>
-    <div class="ni" onclick="sw('6-5',this)"><span class="sn">6.5</span><span data-zh="炸彈道具" data-en="Bomb Item">炸彈道具</span></div>
-    <div class="ni" onclick="sw('6-6',this)"><span class="sn">6.6</span><span data-zh="隕石術" data-en="Meteor Strike">隕石術</span></div>
-    <div class="ni" onclick="sw('6-7',this)"><span class="sn">6.7</span><span data-zh="小補包" data-en="Small Medkit">小補包</span></div>
-    <div class="ni" onclick="sw('6-8',this)"><span class="sn">6.8</span><span data-zh="能量飲料" data-en="Energy Drink">能量飲料</span></div>
-    <div class="ni" onclick="sw('6-9',this)"><span class="sn">6.9</span><span data-zh="無敵星星" data-en="Invincibility Star">無敵星星</span></div>
-    <div class="ni" onclick="sw('6-10',this)"><span class="sn">6.10</span><span data-zh="復活羽毛" data-en="Revival Feather">復活羽毛</span></div>
+    <div class="ni" onclick="sw('6-4',this)"><span class="sn">6.4</span><span data-zh="大補棒" data-en="Mega Heal Pack">大補棒</span></div>
+    <div class="ni" onclick="sw('6-5',this)"><span class="sn">6.5</span><span data-zh="炸彈道具" data-en="Bomb">炸彈道具</span></div>
+    <div class="ni" onclick="sw('6-6',this)"><span class="sn">6.6</span><span data-zh="隕石術" data-en="Meteor Smash">隕石術</span></div>
+    <div class="ni" onclick="sw('6-7',this)"><span class="sn">6.7</span><span data-zh="小補包" data-en="Heal Pack">小補包</span></div>
+    <div class="ni" onclick="sw('6-8',this)"><span class="sn">6.8</span><span data-zh="能量飲料" data-en="Stamina Drink">能量飲料</span></div>
+    <div class="ni" onclick="sw('6-9',this)"><span class="sn">6.9</span><span data-zh="無敵星星" data-en="Invincistar">無敵星星</span></div>
+    <div class="ni" onclick="sw('6-10',this)"><span class="sn">6.10</span><span data-zh="復活羽毛" data-en="Revive Plume">復活羽毛</span></div>
   </div>
 
   <div class="ngt" onclick="tg(this,'g7')"><span class="n">7</span><span class="l" data-zh="老怪獸才知道的事" data-en="Veteran Kaiju Tips">老怪獸才知道的事</span><span class="a">▶</span></div>
@@ -1193,7 +1193,7 @@ html,body{
     <div class="et"><em data-zh="道具" data-en="Item">道具</em><span data-zh="獲取來源" data-en=" Sources">獲取來源</span></div>
     <div class="etag" data-zh="要搶道具，就要先跑快一點。就這樣。" data-en="Want items? Run faster. That's it.">要搶道具，就要先跑快一點。就這樣。</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 道具來源示意圖 ]" data-en="[ Item Sources Illustration ]">[ 道具來源示意圖 ]</div></div>
+  <div class="game-img-wrap"><video src="_videos/get_item.mp4" class="game-img" autoplay loop muted playsinline></video></div>
   <div class="eb">
     <p data-zh="<strong>【神秘種子】</strong>中後期道具最主要的來源，破壞後掉落。" data-en="<strong>[Myth Seeds]</strong> The primary item source in mid-to-late game — destroy them to collect."><strong>【神秘種子】</strong>中後期道具最主要的來源，破壞後掉落。</p>
     <p data-zh="<strong>【建築摧毀】</strong>建築倒塌時有機率彈出道具，看到就趕快過去搶！" data-en="<strong>[Building Destruction]</strong> Buildings have a chance to eject items when destroyed — sprint over and grab them!"><strong>【建築摧毀】</strong>建築倒塌時有機率彈出道具，看到就趕快過去搶！</p>
@@ -1208,7 +1208,20 @@ html,body{
     <div class="et" data-zh="按下去有驚喜：<em>主動道具</em>" data-en="Press for a Surprise: <em>Active Items</em>">按下去有驚喜：<em>主動道具</em></div>
     <div class="etag" data-zh="拿在手上不丟，難道要留著過年？" data-en="Holding it without throwing — saving it for the new year or what?">拿在手上不丟，難道要留著過年？</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 主動道具使用示意圖 ]" data-en="[ Active Item Usage Illustration ]">[ 主動道具使用示意圖 ]</div></div>
+  <div style="display:flex;gap:12px;justify-content:center;align-items:center;margin:1.5rem 0;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <img src="_images/item_healPack.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="大補棒" data-en="Mega Heal Pack">大補棒</div>
+    </div>
+    <div style="text-align:center;">
+      <img src="_images/item_bomb.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="炸彈道具" data-en="Bomb">炸彈道具</div>
+    </div>
+    <div style="text-align:center;">
+      <img src="_images/item_meteor.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="隕石術" data-en="Meteor Smash">隕石術</div>
+    </div>
+  </div>
   <div class="eb"><p data-zh="主動道具撿起來會存在<strong>口袋裡</strong>，按住瞄準放開就能<strong>投擲使用</strong>。" data-en="Picked-up active items go into your <strong>pocket</strong>. Hold to aim, release to <strong>throw and activate</strong>.">主動道具撿起來會存在<strong>口袋裡</strong>，按住瞄準放開就能<strong>投擲使用</strong>。</p></div>
   <div class="warn"><div class="ti">⚠️</div><div class="wt" data-zh="<strong>注意：</strong>同時只能攜帶一個主動道具喔！" data-en="<strong>Note:</strong> You can only carry one active item at a time!"><strong>注意：</strong>同時只能攜帶一個主動道具喔！</div></div>
 </div>
@@ -1220,7 +1233,24 @@ html,body{
     <div class="et" data-zh="帶在身上有保庇：<em>被動道具</em>" data-en="Carry It for Blessings: <em>Passive Items</em>">帶在身上有保庇：<em>被動道具</em></div>
     <div class="etag" data-zh="撿越多越賺。" data-en="The more you pick up, the better. Full stop.">撿越多越賺。</div>
   </div>
-  <div class="ip ipm"><div class="ico">🖼</div><div class="lbl" data-zh="[ 被動道具示意圖 ]" data-en="[ Passive Items Illustration ]">[ 被動道具示意圖 ]</div></div>
+  <div style="display:flex;gap:12px;justify-content:center;align-items:center;margin:1.5rem 0;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <img src="_images/buff_heal.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="小補包" data-en="Heal Pack">小補包</div>
+    </div>
+    <div style="text-align:center;">
+      <img src="_images/buff_revive.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="能量飲料" data-en="Stamina Drink">能量飲料</div>
+    </div>
+    <div style="text-align:center;">
+      <img src="_images/buff_invincible.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="無敵星星" data-en="Invincistar">無敵星星</div>
+    </div>
+    <div style="text-align:center;">
+      <img src="_images/buff_revive.png" style="width:80px;height:80px;object-fit:contain;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);display:block;"/>
+      <div style="font-family:var(--hf);font-size:0.8rem;margin-top:6px;" data-zh="復活羽毛" data-en="Revive Plume">復活羽毛</div>
+    </div>
+  </div>
   <div class="eb"><p data-zh="被動道具只要撿到就會<strong>立刻生效</strong>，並賦予你短暫的強大增益。" data-en="Passive items <strong>activate immediately</strong> upon pickup, granting you a powerful temporary buff.">被動道具只要撿到就會<strong>立刻生效</strong>，並賦予你短暫的強大增益。</p></div>
 </div>
 
@@ -1228,10 +1258,10 @@ html,body{
 <div class="entry" id="entry-6-4">
   <div class="eh">
     <div class="ey" data-zh="6.4 主動道具" data-en="6.4 Active Item">6.4 主動道具</div>
-    <div class="et"><em data-zh="大補棒" data-en="Heal Rod">大補棒</em></div>
+    <div class="et"><em data-zh="大補棒" data-en="Mega Heal Pack">大補棒</em></div>
     <div class="etag" data-zh="打塔打到一半補血，打完繼續打，這才叫效率！" data-en="Heal mid-tower fight, then keep smashing — now THAT'S efficiency!">打塔打到一半補血，打完繼續打，這才叫效率！</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 大補棒圖示 ]" data-en="[ Heal Rod Icon ]">[ 大補棒圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/item_healPack.png" alt="Mega Heal Pack" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb"><p data-zh="丟到指定位置，在落點<strong>持續進行範圍補血</strong>，分多次回復。對範圍內所有友方角色皆有效，<strong>拆塔時丟在腳下最划算</strong>！" data-en="Throw to a target location for a <strong>sustained area heal</strong> in multiple pulses. Affects all friendly characters in range — <strong>most effective when thrown at your feet while destroying towers</strong>!">丟到指定位置，在落點<strong>持續進行範圍補血</strong>，分多次回復。對範圍內所有友方角色皆有效，<strong>拆塔時丟在腳下最划算</strong>！</p></div>
   <div class="item-c"><div class="item-tr"><span class="ib ba" data-zh="主動" data-en="ACTIVE">主動</span><span class="ib r2">★★</span></div><div class="item-d" data-zh="範圍持續補血 · 對所有友方有效 · 拆塔時投擲效益最高" data-en="Area sustained heal · Works on all allies · Best used while attacking towers">範圍持續補血 · 對所有友方有效 · 拆塔時投擲效益最高</div></div>
 </div>
@@ -1240,10 +1270,10 @@ html,body{
 <div class="entry" id="entry-6-5">
   <div class="eh">
     <div class="ey" data-zh="6.5 主動道具" data-en="6.5 Active Item">6.5 主動道具</div>
-    <div class="et"><em data-zh="炸彈道具" data-en="Bomb Item">炸彈道具</em></div>
+    <div class="et"><em data-zh="炸彈道具" data-en="Bomb">炸彈道具</em></div>
     <div class="etag" data-zh="工欲善其事，必先扔個炸彈。這就是哲學。" data-en="Before any great endeavor, throw a bomb first. That's philosophy.">工欲善其事，必先扔個炸彈。這就是哲學。</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 炸彈道具圖示 ]" data-en="[ Bomb Item Icon ]">[ 炸彈道具圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/item_bomb.png" alt="Bomb" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb">
     <p data-zh="丟至指定位置，落地後<strong>爆炸造成範圍傷害</strong>。碰到敵方建築會直接爆炸；若是碰到我方建築則安全落地不爆。" data-en="Throw to a target spot and it <strong>explodes on impact for AoE damage</strong>. Hits enemy buildings immediately; safely lands without exploding on friendly structures.">丟至指定位置，落地後<strong>爆炸造成範圍傷害</strong>。碰到敵方建築會直接爆炸；若是碰到我方建築則安全落地不爆。</p>
     <p data-zh="跟 Bomato 的炸彈不一樣，<strong>這顆不會隱形</strong>。" data-en="Unlike Bomato's bombs, <strong>this one stays visible</strong>.">跟 Bomato 的炸彈不一樣，<strong>這顆不會隱形</strong>。</p>
@@ -1255,10 +1285,10 @@ html,body{
 <div class="entry" id="entry-6-6">
   <div class="eh">
     <div class="ey" data-zh="6.6 主動道具" data-en="6.6 Active Item">6.6 主動道具</div>
-    <div class="et"><em data-zh="隕石術" data-en="Meteor Strike">隕石術</em></div>
+    <div class="et"><em data-zh="隕石術" data-en="Meteor Smash">隕石術</em></div>
     <div class="etag" data-zh="我不是在選落點，我在選倒楣的目標。" data-en="I'm not choosing a landing spot — I'm choosing my victim.">我不是在選落點，我在選倒楣的目標。</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 隕石術圖示 ]" data-en="[ Meteor Strike Icon ]">[ 隕石術圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/item_meteor.png" alt="Meteor Smash" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb"><p data-zh="瞄準範圍可<strong>覆蓋整張地圖</strong>！選好落點，隕石從天而降造成<strong>超大範圍傷害</strong>。稀有度最高，效果也最強——看到就先拿，時機到了再丟！" data-en="Targeting range <strong>covers the entire map</strong>! Pick your spot and a meteor crashes down for <strong>massive AoE damage</strong>. Rarest item in the game, strongest effect — grab it immediately, save it for the right moment!">瞄準範圍可<strong>覆蓋整張地圖</strong>！選好落點，隕石從天而降造成<strong>超大範圍傷害</strong>。稀有度最高，效果也最強——看到就先拿，時機到了再丟！</p></div>
   <div class="item-c"><div class="item-tr"><span class="ib ba" data-zh="主動" data-en="ACTIVE">主動</span><span class="ib r4">★★★★</span></div><div class="item-d" data-zh="全圖瞄準 · 超大範圍傷害 · 最高稀有度" data-en="Full-map targeting · Massive AoE damage · Highest rarity">全圖瞄準 · 超大範圍傷害 · 最高稀有度</div></div>
 </div>
@@ -1267,10 +1297,10 @@ html,body{
 <div class="entry" id="entry-6-7">
   <div class="eh">
     <div class="ey" data-zh="6.7 被動道具" data-en="6.7 Passive Item">6.7 被動道具</div>
-    <div class="et"><em data-zh="小補包" data-en="Small Medkit">小補包</em></div>
+    <div class="et"><em data-zh="小補包" data-en="Heal Pack">小補包</em></div>
     <div class="etag" data-zh="就算是怪獸，受傷了也要吃補給。" data-en="Even kaiju need first aid when they're hurt.">就算是怪獸，受傷了也要吃補給。</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 小補包圖示 ]" data-en="[ Small Medkit Icon ]">[ 小補包圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/buff_heal.png" alt="Heal Pack" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb"><p data-zh="撿到<strong>立刻回復血量</strong>，簡單快速。殘血時看到就衝過去撿吧！" data-en="Picking it up <strong>instantly restores HP</strong> — simple and fast. On low HP? Dash over and grab it!">撿到<strong>立刻回復血量</strong>，簡單快速。殘血時看到就衝過去撿吧！</p></div>
   <div class="item-c"><div class="item-tr"><span class="ib bp" data-zh="被動" data-en="PASSIVE">被動</span><span class="ib r1">★</span></div><div class="item-d" data-zh="即時回血 · 殘血必搶" data-en="Instant HP restore · Must-grab when low">即時回血 · 殘血必搶</div></div>
 </div>
@@ -1279,10 +1309,10 @@ html,body{
 <div class="entry" id="entry-6-8">
   <div class="eh">
     <div class="ey" data-zh="6.8 被動道具" data-en="6.8 Passive Item">6.8 被動道具</div>
-    <div class="et"><em data-zh="能量飲料" data-en="Energy Drink">能量飲料</em></div>
+    <div class="et"><em data-zh="能量飲料" data-en="Stamina Drink">能量飲料</em></div>
     <div class="etag" data-zh="喝完以後整個人容光煥發，技能不停，破壞不停！" data-en="One sip and you're glowing — skills non-stop, destruction non-stop!">喝完以後整個人容光煥發，技能不停，破壞不停！</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 能量飲料圖示 ]" data-en="[ Energy Drink Icon ]">[ 能量飲料圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/buff_revive.png" alt="Stamina Drink" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb"><p data-zh="撿到後，一段時間內使用技能<strong>「完全不消耗精力」</strong>！是衝進敵陣瘋狂丟技能輸出的最佳幫手。" data-en="After pickup, skills cost <strong>zero Stamina</strong> for a limited time! The perfect companion for charging into the enemy line and spamming skills.">撿到後，一段時間內使用技能<strong>「完全不消耗精力」</strong>！是衝進敵陣瘋狂丟技能輸出的最佳幫手。</p></div>
   <div class="item-c"><div class="item-tr"><span class="ib bp" data-zh="被動" data-en="PASSIVE">被動</span><span class="ib r1">★</span></div><div class="item-d" data-zh="限時技能零消耗 · 瘋狂輸出神器" data-en="Timed zero-stamina skills · Insane damage tool">限時技能零消耗 · 瘋狂輸出神器</div></div>
 </div>
@@ -1291,10 +1321,10 @@ html,body{
 <div class="entry" id="entry-6-9">
   <div class="eh">
     <div class="ey" data-zh="6.9 被動道具" data-en="6.9 Passive Item">6.9 被動道具</div>
-    <div class="et"><em data-zh="無敵星星" data-en="Invincibility Star">無敵星星</em></div>
-    <div class="etag" data-zh="拿著無敵星星無腦衝進去，這不叫戰術，叫享受。" data-en="Charging in with an Invincibility Star isn't strategy — it's pure joy.">拿著無敵星星無腦衝進去，這不叫戰術，叫享受。</div>
+    <div class="et"><em data-zh="無敵星星" data-en="Invincistar">無敵星星</em></div>
+    <div class="etag" data-zh="拿著無敵星星無腦衝進去，這不叫戰術，叫享受。" data-en="Charging in with an Invincistar isn't strategy — it's pure joy.">拿著無敵星星無腦衝進去，這不叫戰術，叫享受。</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 無敵星星圖示 ]" data-en="[ Invincibility Star Icon ]">[ 無敵星星圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/buff_invincible.png" alt="Invincistar" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb"><p data-zh="撿到後一段時間內進入<strong>完全無敵狀態</strong>，且移動速度大幅提升！無敵期間任何傷害都是 0，是衝塔或開戰的神器。" data-en="After pickup, enter <strong>full invincibility</strong> with a massive speed boost for a limited time! All incoming damage is 0 — perfect for charging towers or diving straight into a fight.">撿到後一段時間內進入<strong>完全無敵狀態</strong>，且移動速度大幅提升！無敵期間任何傷害都是 0，是衝塔或開戰的神器。</p></div>
   <div class="item-c"><div class="item-tr"><span class="ib bp" data-zh="被動" data-en="PASSIVE">被動</span><span class="ib r1">★</span></div><div class="item-d" data-zh="限時完全無敵 · 移速大增 · 衝塔首選" data-en="Timed full invincibility · Huge speed boost · Top pick for tower rushes">限時完全無敵 · 移速大增 · 衝塔首選</div></div>
 </div>
@@ -1303,10 +1333,10 @@ html,body{
 <div class="entry" id="entry-6-10">
   <div class="eh">
     <div class="ey" data-zh="6.10 被動道具" data-en="6.10 Passive Item">6.10 被動道具</div>
-    <div class="et"><em data-zh="復活羽毛" data-en="Revival Feather">復活羽毛</em></div>
+    <div class="et"><em data-zh="復活羽毛" data-en="Revive Plume">復活羽毛</em></div>
     <div class="etag" data-zh="我不會輕易死掉的，因為我有羽毛。（沒有的話就老實點）" data-en="I don't die easy — I've got the feather. (Without it, behave yourself.)">我不會輕易死掉的，因為我有羽毛。（沒有的話就老實點）</div>
   </div>
-  <div class="ip ips"><div class="ico">🖼</div><div class="lbl" data-zh="[ 復活羽毛圖示 ]" data-en="[ Revival Feather Icon ]">[ 復活羽毛圖示 ]</div></div>
+  <div style="display:flex;justify-content:center;margin:1.5rem 0;"><img src="_images/buff_revive.png" alt="Revive Plume" style="width:30%;height:auto;border:var(--bw-md) solid var(--c-black);border-radius:10px;box-shadow:var(--sh-sm);"/></div>
   <div class="eb"><p data-zh="持有時若不幸死亡：你會立刻在原地<strong>復活</strong>，不扣雙合能量、不計死亡數、不掉主動道具！復活後血量和精力全滿，持有的 Buff 狀態也不會清除。" data-en="If you die while holding this item, you immediately <strong>revive on the spot</strong> — no Duo Energy loss, no death count, no active item dropped! You revive at full HP and Stamina with all Buffs intact.">持有時若不幸死亡：你會立刻在原地<strong>復活</strong>，不扣雙合能量、不計死亡數、不掉主動道具！復活後血量和精力全滿，持有的 Buff 狀態也不會清除。</p></div>
   <div class="item-c"><div class="item-tr"><span class="ib bp" data-zh="被動" data-en="PASSIVE">被動</span><span class="ib r2">★★</span></div><div class="item-d" data-zh="死亡立刻原地復活 · 滿血滿精 · 能量與道具全保留" data-en="Instant on-site revival · Full HP & Stamina · Energy and items fully preserved">死亡立刻原地復活 · 滿血滿精 · 能量與道具全保留</div></div>
 </div>
@@ -1393,13 +1423,13 @@ const M = {
   '6-1':{zh:{s:'6. 道具大全',t:'6.1 道具獲取來源'},en:{s:'6. Item Encyclopedia',t:'6.1 Item Sources'},g:'g6'},
   '6-2':{zh:{s:'6. 道具大全',t:'6.2 主動道具'},en:{s:'6. Item Encyclopedia',t:'6.2 Active Items'},g:'g6'},
   '6-3':{zh:{s:'6. 道具大全',t:'6.3 被動道具'},en:{s:'6. Item Encyclopedia',t:'6.3 Passive Items'},g:'g6'},
-  '6-4':{zh:{s:'6. 道具大全',t:'6.4 大補棒'},en:{s:'6. Item Encyclopedia',t:'6.4 Heal Rod'},g:'g6'},
-  '6-5':{zh:{s:'6. 道具大全',t:'6.5 炸彈道具'},en:{s:'6. Item Encyclopedia',t:'6.5 Bomb Item'},g:'g6'},
-  '6-6':{zh:{s:'6. 道具大全',t:'6.6 隕石術'},en:{s:'6. Item Encyclopedia',t:'6.6 Meteor Strike'},g:'g6'},
-  '6-7':{zh:{s:'6. 道具大全',t:'6.7 小補包'},en:{s:'6. Item Encyclopedia',t:'6.7 Small Medkit'},g:'g6'},
-  '6-8':{zh:{s:'6. 道具大全',t:'6.8 能量飲料'},en:{s:'6. Item Encyclopedia',t:'6.8 Energy Drink'},g:'g6'},
-  '6-9':{zh:{s:'6. 道具大全',t:'6.9 無敵星星'},en:{s:'6. Item Encyclopedia',t:'6.9 Invincibility Star'},g:'g6'},
-  '6-10':{zh:{s:'6. 道具大全',t:'6.10 復活羽毛'},en:{s:'6. Item Encyclopedia',t:'6.10 Revival Feather'},g:'g6'},
+  '6-4':{zh:{s:'6. 道具大全',t:'6.4 大補棒'},en:{s:'6. Item Encyclopedia',t:'6.4 Mega Heal Pack'},g:'g6'},
+  '6-5':{zh:{s:'6. 道具大全',t:'6.5 炸彈道具'},en:{s:'6. Item Encyclopedia',t:'6.5 Bomb'},g:'g6'},
+  '6-6':{zh:{s:'6. 道具大全',t:'6.6 隕石術'},en:{s:'6. Item Encyclopedia',t:'6.6 Meteor Smash'},g:'g6'},
+  '6-7':{zh:{s:'6. 道具大全',t:'6.7 小補包'},en:{s:'6. Item Encyclopedia',t:'6.7 Heal Pack'},g:'g6'},
+  '6-8':{zh:{s:'6. 道具大全',t:'6.8 能量飲料'},en:{s:'6. Item Encyclopedia',t:'6.8 Stamina Drink'},g:'g6'},
+  '6-9':{zh:{s:'6. 道具大全',t:'6.9 無敵星星'},en:{s:'6. Item Encyclopedia',t:'6.9 Invincistar'},g:'g6'},
+  '6-10':{zh:{s:'6. 道具大全',t:'6.10 復活羽毛'},en:{s:'6. Item Encyclopedia',t:'6.10 Revive Plume'},g:'g6'},
   '7-1':{zh:{s:'7. 老怪獸才知道的事',t:'7.1 死亡也別閒著'},en:{s:'7. Veteran Kaiju Tips',t:'7.1 Stay Useful After Death'},g:'g7'},
   '7-2':{zh:{s:'7. 老怪獸才知道的事',t:'7.2 組合技最佳時機'},en:{s:'7. Veteran Kaiju Tips',t:'7.2 Best Time for Combo Skill'},g:'g7'},
   '7-3':{zh:{s:'7. 老怪獸才知道的事',t:'7.3 什麼時候進攻塔'},en:{s:'7. Veteran Kaiju Tips',t:'7.3 When to Attack the Tower'},g:'g7'},
