@@ -56,6 +56,8 @@
 
   /* S52 easing */
   --ease-pop: cubic-bezier(0.68,-0.55,0.27,1.55);
+  --c-border-content: #7d59e8;
+  --sh-content: 6px 6px 0 #7d59e8;
 }
 
 /* ============================================================
@@ -75,7 +77,7 @@ html,body{
 .sidebar{
   width:268px;min-width:268px;
   background:var(--c-blue);
-  border-right:var(--bw-lg) solid var(--c-black);
+  border-right:var(--bw-lg) solid #4ee8c8;
   display:flex;flex-direction:column;overflow-y:auto;
   /* Ben-Day dots over cobalt — exactly like the promo art BG */
   background-image:
@@ -85,7 +87,7 @@ html,body{
 
 /* Logo */
 .logo{
-  border-bottom:var(--bw-lg) solid var(--c-black);
+  border-bottom:var(--bw-lg) solid #4ee8c8;
   background:#000;
   display:flex;align-items:center;justify-content:center;
   padding:0;overflow:hidden;
@@ -190,10 +192,10 @@ html,body{
 .topbar{
   position:sticky;top:0;z-index:10;
   background:var(--c-pink);
-  border-bottom:var(--bw-lg) solid var(--c-black);
+  border-bottom:var(--bw-lg) solid #4ee8c8;
   padding:0.75rem 2rem;
   display:flex;align-items:center;justify-content:space-between;
-  box-shadow:0 6px 0 var(--c-black);
+  box-shadow:0 6px 0 #4ee8c8;
   background-image:
     radial-gradient(circle,rgba(255,255,255,0.18) 1.5px,transparent 1.5px);
   background-size:14px 14px;
@@ -212,10 +214,10 @@ html,body{
    ============================================================ */
 .lang-toggle{
   display:flex;align-items:center;
-  border:var(--bw) solid var(--c-black);
+  border:var(--bw) solid #4e33b7;
   border-radius:6px;
   overflow:hidden;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #4e33b7;
   flex-shrink:0;
 }
 .lang-btn{
@@ -229,7 +231,7 @@ html,body{
   color:#fff;
   transition:background 0.1s,color 0.1s;
 }
-.lang-btn.active{background:var(--c-black);color:var(--c-lime);}
+.lang-btn.active{background:#4e33b7;color:var(--c-lime);}
 .lang-btn:hover:not(.active){background:rgba(255,255,255,0.35);}
 
 /* ============================================================
@@ -248,9 +250,9 @@ html,body{
   margin-bottom:2rem;
   padding:1.5rem 1.75rem 1.75rem;
   background:var(--c-white);
-  border:var(--bw-lg) solid var(--c-black);
+  border:var(--bw-lg) solid #7d59e8;
   border-radius:12px;
-  box-shadow:var(--sh-lg);
+  box-shadow:6px 6px 0 #7d59e8;
   position:relative;
   overflow:hidden;
 }
@@ -364,13 +366,13 @@ html,body{
 .fc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.1rem;margin:1.5rem 0;}
 .fc{
   background:var(--c-white);
-  border:var(--bw-lg) solid var(--c-black);
+  border:var(--bw-lg) solid #7d59e8;
   border-radius:14px;
   padding:1.25rem;
-  box-shadow:var(--sh-md);
+  box-shadow:6px 6px 0 #7d59e8;
   transition:transform 0.15s var(--ease-pop),box-shadow 0.15s var(--ease-pop);
 }
-.fc:hover{transform:translate(-4px,-4px);box-shadow:var(--sh-lg);}
+.fc:hover{transform:translate(-4px,-4px);box-shadow:8px 8px 0 #7d59e8;}
 .fct{
   display:inline-block;
   font-family:var(--hf);
@@ -400,11 +402,11 @@ html,body{
    ============================================================ */
 .sb{
   background:var(--c-purple);
-  border:var(--bw-md) solid var(--c-black);
+  border:var(--bw-md) solid #7d59e8;
   border-radius:10px;
   padding:0.9rem 1.1rem;
   margin-bottom:0.85rem;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #7d59e8;
 }
 .sb-lbl{
   font-family:var(--hf);
@@ -419,11 +421,11 @@ html,body{
 .sb-txt{font-size:0.88rem;line-height:1.7;color:#fff;font-weight:700;}
 .fb{
   background:var(--c-pink);
-  border:var(--bw-md) solid var(--c-black);
+  border:var(--bw-md) solid #7d59e8;
   border-radius:10px;
   padding:0.9rem 1.1rem;
   margin-bottom:0.85rem;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #7d59e8;
 }
 .fb-lbl{
   font-family:var(--hf);
@@ -441,14 +443,14 @@ html,body{
    ============================================================ */
 .item-c{
   background:var(--c-white);
-  border:var(--bw-md) solid var(--c-black);
+  border:var(--bw-md) solid #7d59e8;
   border-radius:10px;
   padding:1rem 1.3rem;
   margin-bottom:1rem;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #7d59e8;
   transition:transform 0.12s var(--ease-pop),box-shadow 0.12s;
 }
-.item-c:hover{transform:translate(-3px,-3px);box-shadow:var(--sh-md);}
+.item-c:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 #7d59e8;}
 .item-tr{display:flex;gap:8px;align-items:center;margin-bottom:0.4rem;}
 .ib{
   font-family:var(--hf);
@@ -473,10 +475,10 @@ html,body{
 .bg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:1rem;margin:1.5rem 0;}
 .bg-c{
   background:var(--c-white);
-  border:var(--bw-md) solid var(--c-black);
+  border:var(--bw-md) solid #7d59e8;
   border-radius:10px;
   padding:1rem 1.1rem;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #7d59e8;
   transition:transform 0.12s var(--ease-pop);
 }
 .bg-c:hover{transform:translate(-3px,-3px);}
@@ -494,12 +496,12 @@ html,body{
    ============================================================ */
 .tip{
   background:var(--c-lime);
-  border:var(--bw-md) solid var(--c-black);
+  border:var(--bw-md) solid #7d59e8;
   border-radius:10px;
   padding:1rem 1.25rem;
   margin:1.25rem 0;
   display:flex;gap:12px;align-items:flex-start;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #7d59e8;
 }
 .tip .ti{font-size:1.1rem;margin-top:2px;flex-shrink:0;}
 .tip .tt{font-size:0.88rem;line-height:1.7;color:var(--c-black);font-weight:700;}
@@ -543,9 +545,9 @@ html,body{
 .game-img-wrap{
   width:100%;
   aspect-ratio:2/1;
-  border:var(--bw-lg) solid var(--c-black);
+  border:var(--bw-lg) solid #7d59e8;
   border-radius:12px;
-  box-shadow:var(--sh-md);
+  box-shadow:6px 6px 0 #7d59e8;
   overflow:hidden;
   margin:1.5rem 0;
 }
@@ -634,14 +636,14 @@ html,body{
   letter-spacing:0.04em;
   color:var(--c-black);
   background:var(--c-lime);
-  border:var(--bw-md) solid var(--c-black);
+  border:var(--bw-md) solid #7d59e8;
   border-radius:10px;
   padding:12px 24px;
-  box-shadow:var(--sh-sm);
+  box-shadow:4px 4px 0 #7d59e8;
   cursor:pointer;
   transition:transform 0.15s var(--ease-pop),box-shadow 0.15s;
 }
-.next-btn:hover{transform:translate(-3px,-3px);box-shadow:var(--sh-md);}
+.next-btn:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 #7d59e8;}
 .next-btn .arrow{font-size:1.2rem;}
 
 
