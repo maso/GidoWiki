@@ -672,6 +672,53 @@ html,body{
   .eh-char .eh-portrait{height:154px;right:-12px;bottom:-12px;}
 }
 
+
+/* ── Image Carousel (fade) ───────────────────────── */
+.carousel-wrap{
+  position:relative;
+  overflow:hidden;
+}
+.carousel-track{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+.carousel-slide{
+  position:absolute;
+  top:0;left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity 0.7s ease;
+  pointer-events:none;
+}
+.carousel-slide.active{
+  opacity:1;
+  pointer-events:auto;
+  position:relative;
+}
+.carousel-dots{
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:8px;
+  z-index:5;
+}
+.carousel-dot{
+  width:10px;height:10px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.5);
+  border:2px solid var(--c-black);
+  cursor:pointer;
+  transition:background 0.2s;
+}
+.carousel-dot.active{
+  background:var(--c-lime);
+}
+
 </style>
 <link rel="apple-touch-icon" sizes="180x180" href="_favicon/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="_favicon/favicon-32x32.png">
@@ -784,8 +831,17 @@ html,body{
     <div class="et"><em data-zh="拆！吃！合！贏！" data-en="Smash! Eat! Fuse! Win!">拆！吃！合！贏！</em></div>
     <div class="etag" data-zh="吃飽飽，拆好好，怪獸日常就是這麼樸實無華。" data-en="Eat hearty, smash hard — a kaiju's daily grind is just that simple.">吃飽飽，拆好好，怪獸日常就是這麼樸實無華。</div>
   </div>
-  <div class="game-img-wrap">
-    <video src="_videos/general_battle.mp4" class="game-img" autoplay loop muted playsinline></video>
+  <div class="carousel-wrap game-img-wrap">
+    <div class="carousel-track">
+      <img src="_images/general_0.png" class="carousel-slide game-img" alt=""/>
+      <img src="_images/general_1.png" class="carousel-slide game-img" alt=""/>
+      <img src="_images/general_2.png" class="carousel-slide game-img" alt=""/>
+    </div>
+    <div class="carousel-dots">
+      <span class="carousel-dot active"></span>
+      <span class="carousel-dot"></span>
+      <span class="carousel-dot"></span>
+    </div>
   </div>
   <div class="eb">
     <p data-zh="兩隊怪獸大戰，先把敵方的<strong>「核心根脈」</strong>打爆的一方獲勝！" data-en="Two teams of kaiju clash — the first to destroy the enemy's <strong>Rootcore</strong> wins!">兩隊怪獸大戰，先把敵方的<strong>「核心根脈」</strong>打爆的一方獲勝！</p>
@@ -1567,6 +1623,38 @@ function goNext(id) {
 
 document.addEventListener('DOMContentLoaded', () => {
   buildNextButtons();
+});
+
+
+// ── Image Carousels (fade) ───────────────────────
+document.querySelectorAll('.carousel-wrap').forEach(wrap => {
+  const slides = wrap.querySelectorAll('.carousel-slide');
+  const dots = wrap.querySelectorAll('.carousel-dot');
+  let current = 0;
+  let timer;
+
+  // Init: first slide visible
+  slides[0].classList.add('active');
+
+  function goTo(idx) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (idx + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startAuto() {
+    timer = setInterval(next, 3000);
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => { clearInterval(timer); goTo(i); startAuto(); });
+  });
+
+  startAuto();
 });
 
 </script>
