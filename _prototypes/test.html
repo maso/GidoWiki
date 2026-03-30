@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gamepad Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #1a1a2e;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: monospace;
+      color: #eee;
+      overflow: hidden;
+    }
+
+    #arena {
+      position: relative;
+      width: 800px;
+      height: 500px;
+      border: 2px solid #444;
+      border-radius: 8px;
+      background: #16213e;
+      overflow: hidden;
+    }
+
+    #player {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background: #e94560;
+      border-radius: 6px;
+      box-shadow: 0 0 16px #e94560aa;
+    }
+
+    #status {
+      margin-top: 16px;
+      font-size: 14px;
+      color: #888;
+      letter-spacing: 1px;
+    }
+
+    #status.connected { color: #4ecca3; }
+  </style>
+</head>
+<body>
+
+  <div id="arena">
+    <div id="player"></div>
+  </div>
+  <div id="status">請插入 Gamepad 並按任意按鍵以連接...</div>
+
+  <script>
+    const player = document.getElementById('player');
+    const status = document.getElementById('status');
+
+    const ARENA_W = 800;
+    const ARENA_H = 500;
+    const PLAYER_SIZE = 48;
+    const SPEED = 4;
+    const DEADZONE = 0.12;
+
+    let x = (ARENA_W - PLAYER_SIZE) / 2;
+    let y = (ARENA_H - PLAYER_SIZE) / 2;
+
+    function applyDeadzone(value) {
+      return Math.abs(value) < DEADZONE ? 0 : value;
+    }
+
+    function loop() {
+      const gamepads = navigator.getGamepads();
+      const gp = gamepads[0];
+
+      if (gp) {
+        status.textContent = `Gamepad 已連接：${gp.id}`;
+        status.className = 'connected';
+
+        const dx = applyDeadzone(gp.axes[0]);
+        const dy = applyDeadzone(gp.axes[1]);
+
+        x = Math.max(0, Math.min(ARENA_W - PLAYER_SIZE, x + dx * SPEED));
+        y = Math.max(0, Math.min(ARENA_H - PLAYER_SIZE, y + dy * SPEED));
+
+        player.style.left = x + 'px';
+        player.style.top  = y + 'px';
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('gamepadconnected', (e) => {
+      console.log('Gamepad connected:', e.gamepad.id);
+    });
+
+    window.addEventListener('gamepaddisconnected', () => {
+      status.textContent = '請插入 Gamepad 並按任意按鍵以連接...';
+      status.className = '';
+    });
+
+    player.style.left = x + 'px';
+    player.style.top  = y + 'px';
+
+    requestAnimationFrame(loop);
+  </script>
+
+</body>
+</html>
