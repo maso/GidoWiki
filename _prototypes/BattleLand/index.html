@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BattleLand</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; background: #111; }
+    #game-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+    
+    #ui {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+    /* ── Territory bar ── */
+    #territory-wrap {
+      position: absolute; top: 10px; left: 20px; right: 20px;
+    }
+    #territory-bar {
+      height: 30px;
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.15);
+    }
+    #territory-a {
+      height: 100%;
+      width: 0%;
+      background: #2e98c0;
+      transition: width 0.4s ease;
+      display: flex; align-items: center; justify-content: flex-end;
+      overflow: hidden;
+    }
+    #territory-b {
+      height: 100%;
+      width: 0%;
+      background: #e05080;
+      transition: width 0.4s ease;
+      display: flex; align-items: center; justify-content: flex-start;
+      overflow: hidden;
+    }
+    #territory-label-pct-a, #territory-label-pct-b {
+      color: #fff;
+      font-family: monospace; font-size: 13px; font-weight: bold;
+      padding: 0 6px;
+      white-space: nowrap;
+    }
+    #territory-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 4px;
+      font-family: monospace; font-size: 18px; font-weight: bold;
+      letter-spacing: 2px;
+    }
+    #territory-label-a {
+      color: #2e98c0;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+    #territory-label-b {
+      color: #e05080;
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    }
+
+    #btn-fs {
+      position: fixed; bottom: 12px; right: 12px;
+      pointer-events: all;
+      z-index: 9999;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px; color: #fff;
+      font-size: 18px; width: 36px; height: 36px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    #btn-fs:hover { background: rgba(255,255,255,0.25); }
+    
+    #start-screen {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: row; align-items: center; justify-content: center;
+      gap: 48px;
+      pointer-events: all;
+    }
+    #player-slots-a, #player-slots-b {
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .player-slot {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      width: 120px; height: 96px;
+      background: rgba(80,80,80,0.35);
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+    }
+    .player-slot-num {
+      font-family: monospace; font-size: 32px; font-weight: bold;
+      color: rgba(255,255,255,0.85); letter-spacing: 2px;
+    }
+    .player-slot-hint {
+      font-family: monospace; font-size: 12px;
+      color: rgba(255,255,255,0.6); letter-spacing: 1px;
+      margin-top: 6px;
+    }
+    .player-slot-hint.ready {
+      color: #a8f0b8; font-size: 16px; font-weight: bold; letter-spacing: 2px;
+    }
+    .player-slot.ready {
+      background: rgba(255,255,255,0.18);
+    }
+    #btn-start {
+      font-family: monospace; font-size: 52px; font-weight: bold;
+      color: #fff; letter-spacing: 6px;
+      background: rgba(255,255,255,0.12);
+      border: 3px solid rgba(255,255,255,0.55);
+      border-radius: 18px;
+      padding: 22px 72px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    #btn-start:hover:not(:disabled)  { background: rgba(255,255,255,0.24); transform: scale(1.04); }
+    #btn-start:active:not(:disabled) { transform: scale(0.97); }
+    #btn-start:disabled {
+      color: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.18);
+      cursor: default;
+    }
+    
+    #time-picker {
+      position: absolute; top: 48px; left: 50%; transform: translateX(-50%) scale(1.5);
+      transform-origin: top center;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      pointer-events: all; z-index: 20;
+    }
+    #time-label {
+      font-family: monospace; font-size: 13px; font-weight: bold;
+      color: rgba(255,255,255,0.65); letter-spacing: 3px;
+    }
+    #time-row {
+      display: flex; align-items: center; gap: 10px;
+      position: relative;
+    }
+    .timer-penalty-item {
+      position: absolute;
+      left: calc(100% + 10px);
+      top: 50%; transform: translateY(-50%);
+      font-family: monospace; font-size: 28px; font-weight: bold;
+      color: #ff4444;
+      pointer-events: none; white-space: nowrap;
+    }
+    #timer-display {
+      font-family: monospace; font-size: 34px; font-weight: bold;
+      color: #fff; letter-spacing: 2px;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      padding: 4px 22px;
+      min-width: 80px; text-align: center;
+      transform-origin: center center;
+    }
+    @keyframes timerFlash {
+      0%, 49% { color: #ff2222; }
+      50%, 100% { color: #ffffff; }
+    }
+    @keyframes timerPulse {
+      0%   { transform: scale(2); }
+      100% { transform: scale(1); }
+    }
+    #timer-display.urgent {
+      animation: timerFlash 0.5s linear infinite, timerPulse 1s ease-out infinite;
+    }
+    
+    #gameover-screen {
+      position: absolute; inset: 0;
+      display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 20px;
+      pointer-events: all;
+      background: rgba(0, 0, 0, 0.40);
+      z-index: 50;
+    }
+    #gameover-screen h1 {
+      font-family: monospace; font-size: 72px; font-weight: bold;
+      color: #fff; letter-spacing: 10px;
+    }
+    #gameover-result {
+      font-family: monospace; font-size: 36px; font-weight: bold;
+      letter-spacing: 6px;
+      text-shadow: 0 0 18px currentColor;
+    }
+    #btn-again {
+      font-family: monospace; font-size: 36px; font-weight: bold;
+      color: #fff; letter-spacing: 4px;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 14px;
+      padding: 16px 52px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    #btn-again:hover  { background: rgba(255,255,255,0.22); transform: scale(1.04); }
+    #btn-again:active { transform: scale(0.97); }
+    
+    /* ── Pause button ── */
+    #btn-pause {
+      position: fixed; bottom: 56px; right: 12px;
+      pointer-events: all;
+      z-index: 9999;
+      display: none;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px; color: #fff;
+      font-size: 18px; width: 36px; height: 36px;
+      cursor: pointer;
+      align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    #btn-pause:hover { background: rgba(255,255,255,0.25); }
+    
+    /* ── Pause screen ── */
+    #pause-screen {
+      position: absolute; inset: 0;
+      display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 24px;
+      pointer-events: all;
+      background: rgba(0,0,0,0.40);
+      z-index: 50;
+    }
+    .btn-pause-action {
+      font-family: monospace; font-size: 42px; font-weight: bold;
+      color: #fff; letter-spacing: 5px;
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.5);
+      border-radius: 14px;
+      padding: 18px 60px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      min-width: 320px; text-align: center;
+    }
+    .btn-pause-action:hover  { background: rgba(255,255,255,0.22); transform: scale(1.04); }
+    .btn-pause-action:active { transform: scale(0.97); }
+    
+    /* ── Bar slide-in animations ── */
+    @keyframes slideInLeft {
+      from { transform: translateX(-110vw); opacity: 0; }
+      to   { transform: translateX(0);      opacity: 1; }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(110vw);  opacity: 0; }
+      to   { transform: translateX(0);      opacity: 1; }
+    }
+    
+    
+    /* ── Duo bars ── */
+    #duo-left, #duo-right {
+      position: absolute;
+      top: 30%;
+      display: none;  /* hidden until game starts */
+      flex-direction: column;
+      gap: 6px;
+    }
+    #duo-left  { left: 12px;  animation: slideInLeft  0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+    #duo-right { right: 12px; animation: slideInRight 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both; }
+    
+    .duo-bar-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .duo-bar-label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      width: 210px;
+    }
+    .duo-bar-label {
+      font-family: monospace; font-size: 16px; font-weight: bold;
+      color: rgba(255,255,255,0.7); letter-spacing: 2px;
+    }
+    .duo-bar-val {
+      font-size: 11px; font-weight: normal; letter-spacing: 0;
+      color: rgba(255,255,255,0.5);
+    }
+    .duo-bar-score {
+      font-family: monospace; font-size: 12px; font-weight: bold;
+      color: rgba(255,255,255,0.55); letter-spacing: 1px;
+    }
+    .duo-bar-outer {
+      width: 210px; height: 34px;
+      background: rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .duo-bar-inner {
+      width: 0%; height: 100%;
+      background: #f5c518;
+      border-radius: 5px;
+      transition: width 0.2s ease-out;
+    }
+    @keyframes duoBarFlash {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.15; }
+    }
+    .duo-bar-inner.is-full {
+      animation: duoBarFlash 0.4s linear infinite;
+    }
+    
+    /* ── Time picker ± buttons ── */
+    .btn-time {
+      font-family: monospace; font-size: 26px; font-weight: bold;
+      color: #fff; width: 40px; height: 40px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .btn-time:hover  { background: rgba(255,255,255,0.25); }
+    .btn-time:active { transform: scale(0.93); }
+    
+    /* ── Bottom-left toggles ── */
+    #bottom-toggles {
+      position: fixed; bottom: 12px; left: 12px;
+      z-index: 9999;
+      pointer-events: all;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 4px;
+    }
+    .toggle-row {
+      display: flex; align-items: center; gap: 5px;
+      color: rgba(255,255,255,0.5);
+      font-family: monospace; font-size: 11px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle-row input {
+      cursor: pointer;
+      accent-color: rgba(255,255,255,0.6);
+    }
+    
+    /* ── Debug box ── */
+    #debug-box {
+      position: absolute; bottom: 40px; left: 12px;
+      font-family: monospace; font-size: 12px;
+      color: #0f0;
+      background: rgba(0,0,0,0.55);
+      padding: 6px 10px;
+      border-radius: 6px;
+      z-index: 20;
+      pointer-events: all;
+      cursor: pointer;
+      min-width: 160px;
+    }
+    
+
+    @keyframes hpBarDanger {
+      0%, 49% { background: #ff4422; }
+      50%, 100% { background: #ffcc44; }
+    }
+    .hp-bar-danger {
+      animation: hpBarDanger 0.4s linear infinite;
+    }
+  </style>
+</head>
+<body>
+  <div id="ui">
+    <div id="territory-wrap">
+      <div id="territory-bar">
+        <div id="territory-a"><span id="territory-label-pct-a"></span></div>
+        <div id="territory-neutral" style="flex:1"></div>
+        <div id="territory-b"><span id="territory-label-pct-b"></span></div>
+      </div>
+      <div id="territory-labels">
+        <span id="territory-label-a">Team A</span>
+        <span id="territory-label-b">Team B</span>
+      </div>
+    </div>
+    <button id="btn-fs">⛶</button>
+    <div id="bottom-toggles">
+      <label class="toggle-row">
+        <input type="checkbox" id="chk-bldg-hp" checked>
+        Buildings HP
+      </label>
+    </div>
+    <button id="btn-pause">⏸</button>
+
+    <!-- timer row: always visible at top-center; ±buttons hidden after game starts -->
+    <div id="time-picker">
+      <div id="time-row">
+        <button class="btn-time" id="btn-time-minus">−</button>
+        <div id="timer-display">100</div>
+        <button class="btn-time" id="btn-time-plus">＋</button>
+      </div>
+      <div id="time-label">TIME</div>
+    </div>
+    
+    <!-- Duo bars — left (A1=player0, A2=player2) -->
+    <div id="duo-left">
+      <div id="duo-bar-1p" class="duo-bar-wrap" style="margin-bottom: 16px;">
+        <div class="duo-bar-label-row">
+          <span class="duo-bar-label">A1 DUO <span id="duo-val-1p" class="duo-bar-val"></span></span>
+          <span id="duo-score-1p" class="duo-bar-score"></span>
+        </div>
+        <div class="duo-bar-outer"><div id="duo-inner-1p" class="duo-bar-inner"></div></div>
+      </div>
+      <div id="duo-bar-3p" class="duo-bar-wrap">
+        <div class="duo-bar-label-row">
+          <span class="duo-bar-label">A2 DUO <span id="duo-val-3p" class="duo-bar-val"></span></span>
+          <span id="duo-score-3p" class="duo-bar-score"></span>
+        </div>
+        <div class="duo-bar-outer"><div id="duo-inner-3p" class="duo-bar-inner"></div></div>
+      </div>
+    </div>
+
+    <!-- Duo bars — right (B1=player1, B2=player3) -->
+    <div id="duo-right">
+      <div id="duo-bar-2p" class="duo-bar-wrap" style="margin-bottom: 16px;">
+        <div class="duo-bar-label-row">
+          <span class="duo-bar-label">B1 DUO <span id="duo-val-2p" class="duo-bar-val"></span></span>
+          <span id="duo-score-2p" class="duo-bar-score"></span>
+        </div>
+        <div class="duo-bar-outer"><div id="duo-inner-2p" class="duo-bar-inner"></div></div>
+      </div>
+      <div id="duo-bar-4p" class="duo-bar-wrap">
+        <div class="duo-bar-label-row">
+          <span class="duo-bar-label">B2 DUO <span id="duo-val-4p" class="duo-bar-val"></span></span>
+          <span id="duo-score-4p" class="duo-bar-score"></span>
+        </div>
+        <div class="duo-bar-outer"><div id="duo-inner-4p" class="duo-bar-inner"></div></div>
+      </div>
+    </div>
+    
+    <div id="start-screen">
+      <div id="player-slots-a">
+        <div class="player-slot" data-slot="0"><span class="player-slot-num">A1</span><span class="player-slot-hint">Press Any Key</span></div>
+        <div class="player-slot" data-slot="2"><span class="player-slot-num">A2</span><span class="player-slot-hint">Press Any Key</span></div>
+      </div>
+      <button id="btn-start" disabled>START</button>
+      <div id="player-slots-b">
+        <div class="player-slot" data-slot="1"><span class="player-slot-num">B1</span><span class="player-slot-hint">Press Any Key</span></div>
+        <div class="player-slot" data-slot="3"><span class="player-slot-num">B2</span><span class="player-slot-hint">Press Any Key</span></div>
+      </div>
+    </div>
+    
+    <div id="pause-screen">
+      <button class="btn-pause-action" id="btn-resume">RESUME</button>
+      <button class="btn-pause-action" id="btn-quit">QUIT</button>
+    </div>
+    
+    <div id="gameover-screen">
+      <div id="gameover-result"></div>
+      <h1>GAME OVER</h1>
+      <button id="btn-again">PLAY AGAIN</button>
+    </div>
+    <div id="debug-box">— debug —</div>
+  </div>
+  
+  <script src="three.min.js"></script>
+  <script src="constants.js"></script>
+  <script src="scene.js"></script>
+  <script src="character.js"></script>
+  <script src="input.js"></script>
+  <script src="buildings.js"></script>
+  <script src="mountains.js"></script>
+  <script src="patches.js"></script>
+  <script src="pedestrians.js"></script>
+  <script src="items.js"></script>
+  <script src="game.js"></script>
+  <script src="effects.js"></script>
+  <script src="hpbar.js"></script>
+  <script src="bubble.js"></script>
+  <script src="collision.js"></script>
+  <script>
+    document.getElementById('chk-bldg-hp').addEventListener('change', function() {
+      buildings.forEach(b => { b.hpPlane.visible = this.checked; });
+    });
+    loop();
+  </script>
+</body>
+</html>
