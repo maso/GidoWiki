@@ -70,11 +70,12 @@ export function initPeoplePicker(callbacks = {}) {
         `;
       } else {
         card.innerHTML = `
-          <div class="human-avatar locked-avatar">🔒</div>
+          <div class="human-avatar locked-avatar">?</div>
           <strong class="human-title">???</strong>
           <div class="human-count-badge locked-badge">0</div>
         `;
       }
+
 
       card.addEventListener('mouseenter', () => updateFocusIndex(index));
       card.addEventListener('click', () => updateFocusIndex(index));

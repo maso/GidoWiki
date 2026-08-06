@@ -1194,9 +1194,13 @@ body {
   line-height: 1;
 }
 .human-avatar.locked-avatar {
-  font-size: 1.6em;
-  filter: grayscale(0.5);
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2em;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1;
 }
+
 
 .human-title {
   font-family: 'Noto Sans TC', sans-serif;
