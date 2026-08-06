@@ -23,10 +23,10 @@ export function initPeoplePicker(callbacks = {}) {
     if (!elements.tabWrap) return;
     elements.tabWrap.replaceChildren();
 
-    // Ⓛ shoulder badge
+    // L shoulder badge
     const badgeL = document.createElement('span');
     badgeL.className = 'people-tab-badge';
-    badgeL.textContent = 'Ⓛ';
+    badgeL.textContent = 'L';
     elements.tabWrap.appendChild(badgeL);
 
     state.getCategories().forEach((cat, index) => {
@@ -39,11 +39,12 @@ export function initPeoplePicker(callbacks = {}) {
       elements.tabWrap.appendChild(tab);
     });
 
-    // Ⓡ shoulder badge
+    // R shoulder badge
     const badgeR = document.createElement('span');
     badgeR.className = 'people-tab-badge';
-    badgeR.textContent = 'Ⓡ';
+    badgeR.textContent = 'R';
     elements.tabWrap.appendChild(badgeR);
+
   }
 
   function renderGridCards() {
