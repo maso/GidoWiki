@@ -1,0 +1,19 @@
+{
+  "name": "gido-home-prototype",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "node --test src/**/*.test.js",
+    "build": "vite build",
+    "build:static": "node scripts/build.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

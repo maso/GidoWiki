@@ -1,0 +1,92 @@
+const COMING_SOON_ACCESSORIES = Array.from({ length: 18 }, (_, index) => ({
+  id: `coming-soon-${String(index + 1).padStart(2, '0')}`,
+  name: 'COMMING SOON',
+  selectable: false,
+  comingSoon: true,
+}));
+
+export const ACCESSORY_ITEMS = [
+  {
+    id: 'none',
+    name: 'CLEAR',
+    icon: '✕',
+    selectable: true,
+    clearsAccessory: true,
+  },
+  {
+    id: 'top-hat',
+    name: 'TOP HAT',
+    icon: '🎩',
+    selectable: true,
+  },
+  {
+    id: 'baseball-cap',
+    name: 'RED CAP',
+    icon: '🧢',
+    selectable: true,
+  },
+  {
+    id: 'bull-horns',
+    name: 'HORNS',
+    icon: '🐂',
+    selectable: true,
+  },
+  {
+    id: 'rabbit-ears',
+    name: 'BUNNY EARS',
+    icon: '🐰',
+    selectable: true,
+  },
+  {
+    id: 'curled-mustache',
+    name: 'MUSTACHE',
+    icon: '🥸',
+    selectable: true,
+  },
+  {
+    id: 'ninja-sword',
+    name: 'NINJA SWORD',
+    icon: '🥷',
+    selectable: true,
+  },
+  {
+    id: 'star-shades',
+    name: 'STAR SHADES',
+    icon: '😎',
+    selectable: true,
+  },
+  {
+    id: 'angel-wings',
+    name: 'ANGEL WINGS',
+    icon: '🪽',
+    selectable: true,
+  },
+  {
+    id: 'royal-crown',
+    name: 'ROYAL CROWN',
+    icon: '👑',
+    selectable: true,
+    unlocked: false,
+    progress: 12,
+    unlockText: '累積獲得30場勝利以解鎖這個Accessory',
+  },
+  {
+    id: 'headphones',
+    name: 'HEADPHONES',
+    icon: '🎧',
+    selectable: true,
+    unlocked: false,
+    progress: 48,
+    unlockText: '在主畫面待滿120分鐘以解鎖這個Accessory',
+  },
+  {
+    id: 'magic-wand',
+    name: 'MAGIC WAND',
+    icon: '🪄',
+    selectable: true,
+    unlocked: false,
+    progress: 5,
+    unlockText: '完成10個隱藏挑戰以解鎖這個Accessory',
+  },
+  ...COMING_SOON_ACCESSORIES,
+];
