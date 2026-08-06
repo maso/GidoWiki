@@ -99,11 +99,17 @@ export function initBgPicker(gs, callbacks = {}) {
     cards.push(card);
   });
 
-  // ── Card gamepad focus ──
+  // ── Card gamepad focus & selection ──
+  function selectCard(newIdx) {
+    newIdx = Math.max(0, Math.min(newIdx, cards.length - 1));
+    cardFocusIdx = newIdx;
+    cards[cardFocusIdx]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+    applyTheme(BG_THEMES[cardFocusIdx]?.id);
+  }
+
   function updateCardFocus(newIdx) {
     newIdx = Math.max(0, Math.min(newIdx, cards.length - 1));
     cardFocusIdx = newIdx;
-    cards.forEach((c, i) => c.classList.toggle('gp-focused', i === cardFocusIdx));
     cards[cardFocusIdx]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
   }
 
@@ -166,8 +172,8 @@ export function initBgPicker(gs, callbacks = {}) {
   window.addEventListener('keydown', (e) => {
     if (!isOpen) return;
     if (e.key === 'Escape') { e.preventDefault(); close(); return; }
-    if (e.key === 'ArrowLeft')  { e.preventDefault(); updateCardFocus(cardFocusIdx - 1); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); updateCardFocus(cardFocusIdx + 1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); selectCard(cardFocusIdx - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); selectCard(cardFocusIdx + 1); }
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       applyTheme(BG_THEMES[cardFocusIdx]?.id);
@@ -202,10 +208,10 @@ export function initBgPicker(gs, callbacks = {}) {
         if (now - lastCardNav >= CARD_NAV_COOLDOWN) {
           if (btnLeft || stickX < -0.5) {
             lastCardNav = now;
-            updateCardFocus(cardFocusIdx - 1);
+            selectCard(cardFocusIdx - 1);
           } else if (btnRight || stickX > 0.5) {
             lastCardNav = now;
-            updateCardFocus(cardFocusIdx + 1);
+            selectCard(cardFocusIdx + 1);
           }
         }
 
@@ -219,6 +225,7 @@ export function initBgPicker(gs, callbacks = {}) {
         }
       }
     },
+
     isOpen: () => isOpen,
   };
 }

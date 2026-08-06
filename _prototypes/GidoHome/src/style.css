@@ -336,25 +336,15 @@ body {
 }
 .bg-card:hover {
   transform: translateY(-4px) scale(1.06);
-  border-color: rgba(255, 255, 255, 0.55);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 .bg-card.selected {
-  border-color: #fff53d;
-  box-shadow: 0 0 0 2px #fff53d, 0 6px 20px rgba(255, 243, 61, 0.35);
+  border-color: #f5288a;
+  border-width: 3px;
+  box-shadow: 0 0 0 2px #f5288a, 0 6px 20px rgba(245, 40, 138, 0.4);
   transform: translateY(-3px);
 }
 
-/* Gamepad cursor on a card (separate from selected) */
-.bg-card.gp-focused {
-  outline: 3px solid #3ae6f7;
-  outline-offset: 2px;
-  transform: translateY(-5px) scale(1.08);
-  box-shadow: 0 0 0 3px #3ae6f7, 0 8px 22px rgba(58, 230, 247, 0.4);
-}
-.bg-card.selected.gp-focused {
-  box-shadow: 0 0 0 2px #fff53d, 0 0 0 5px #3ae6f7, 0 8px 22px rgba(58, 230, 247, 0.4);
-}
 
 .bg-card-swatch {
   width: 5.8em;
