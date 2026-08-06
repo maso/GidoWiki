@@ -28,6 +28,22 @@ body {
   background: linear-gradient(135deg, #e4f77c 0%, #caed71 50%, #adfb6e 100%);
 }
 
+/* Permanent Version Badge (Top-Right) */
+#version-badge {
+  position: absolute;
+  top: 1.2em;
+  right: 1.6em;
+  font-family: 'Outfit', sans-serif;
+  font-size: .75em;
+  font-weight: 900;
+  letter-spacing: .08em;
+  color: rgba(36, 20, 81, 0.45);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65);
+  z-index: 100;
+  pointer-events: none;
+  user-select: none;
+}
+
 /* Halftone Dot Overlay Pattern */
 .bg-halftone {
   position: absolute;
