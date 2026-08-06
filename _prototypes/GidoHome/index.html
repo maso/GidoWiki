@@ -97,6 +97,12 @@
 
 <!-- BACKGROUND PICKER PANEL (fixed to viewport bottom, outside #gs) -->
 <div id="bg-picker" aria-label="背景選擇器">
+  <div id="bg-unlock-message" role="status" aria-live="polite">
+    <p id="bg-unlock-message-text">在主畫面待滿60分鐘以解鎖這個背景</p>
+    <div class="skin-unlock-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+      <span id="bg-unlock-progress-fill"></span><b id="bg-unlock-percent">35%</b>
+    </div>
+  </div>
   <div id="bg-picker-inner">
     <div id="bg-card-wrap"></div>
     <button id="btn-bg-back">
@@ -105,6 +111,7 @@
     </button>
   </div>
 </div>
+
 
 <script type="module" src="/src/main.js"></script>
 </body>

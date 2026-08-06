@@ -344,6 +344,46 @@ body {
   box-shadow: 0 0 0 2px #f5288a, 0 6px 20px rgba(245, 40, 138, 0.4);
   transform: translateY(-3px);
 }
+.bg-card.locked {
+  opacity: .58;
+  background: rgba(30, 22, 62, 0.46);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.bg-card.locked.selected {
+  border-color: #f5288a;
+  border-style: dashed;
+  opacity: 1;
+}
+
+#bg-unlock-message {
+  position: absolute;
+  left: 50%;
+  bottom: 8.2em;
+  width: 18.5em;
+  padding: .7em .85em;
+  color: #fff;
+  background: rgba(17, 12, 45, 0.92);
+  border: .14em solid rgba(255, 255, 255, 0.38);
+  border-radius: .85em;
+  box-shadow: 0 .45em 1.5em rgba(25, 14, 60, 0.35);
+  backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateX(-50%) translateY(1em) scale(.96);
+  pointer-events: none;
+  transition: opacity .24s ease, transform .28s cubic-bezier(.22, 1, .36, 1);
+  z-index: 95;
+}
+#bg-unlock-message.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+#bg-unlock-message p {
+  font-size: .68em;
+  font-weight: 900;
+  letter-spacing: .02em;
+  color: #ffffff;
+  margin: 0;
+}
 
 
 .bg-card-swatch {

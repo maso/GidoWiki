@@ -50,6 +50,9 @@ export const BG_THEMES = [
     halftone: 'rgba(0, 160, 120, 0.12)',
     capsule1: 'rgba(200, 255, 240, 0.75)',
     capsule3: 'rgba(255, 220, 200, 0.65)',
+    locked: true,
+    progress: 35,
+    unlockText: '在主畫面待滿60分鐘以解鎖這個背景',
   },
 ];
 
@@ -70,15 +73,33 @@ export function initBgPicker(gs, callbacks = {}) {
   const brushBtn  = document.getElementById('btn-brush');
   const backBtn   = document.getElementById('btn-bg-back');
   const cardWrap  = document.getElementById('bg-card-wrap');
+  const unlockMessage     = document.getElementById('bg-unlock-message');
+  const unlockMessageText = document.getElementById('bg-unlock-message-text');
+  const unlockProgressFill= document.getElementById('bg-unlock-progress-fill');
+  const unlockPercent     = document.getElementById('bg-unlock-percent');
 
   const cards = []; // ordered list of card DOM elements
+
+  function showUnlockMessage(progress, message) {
+    const value = Math.max(0, Math.min(100, progress));
+    if (unlockMessage) {
+      unlockMessage.classList.add('show');
+      if (unlockMessageText) unlockMessageText.textContent = message;
+      if (unlockProgressFill) unlockProgressFill.style.width = `${value}%`;
+      if (unlockPercent) unlockPercent.textContent = `${value}%`;
+    }
+  }
+
+  function hideUnlockMessage() {
+    unlockMessage?.classList.remove('show');
+  }
 
   // ── Build cards ──
   BG_THEMES.forEach((theme, i) => {
     const card = document.createElement('button');
-    card.className = 'bg-card' + (theme.id === selectedId ? ' selected' : '');
+    card.className = 'bg-card' + (theme.id === selectedId ? ' selected' : '') + (theme.locked ? ' locked' : '');
     card.id = `bgcard-${theme.id}`;
-    card.setAttribute('aria-label', theme.label);
+    card.setAttribute('aria-label', theme.locked ? `${theme.label} 尚未解鎖` : theme.label);
 
     const swatch = document.createElement('div');
     swatch.className = 'bg-card-swatch';
@@ -87,6 +108,12 @@ export function initBgPicker(gs, callbacks = {}) {
     const lbl = document.createElement('span');
     lbl.className = 'bg-card-label';
     lbl.textContent = theme.label;
+    if (theme.locked) {
+      const lockMark = document.createElement('span');
+      lockMark.className = 'lock-mark';
+      lockMark.textContent = ' 🔒';
+      lbl.appendChild(lockMark);
+    }
 
     card.append(swatch, lbl);
     card.addEventListener('mouseenter', () => updateCardFocus(i));
@@ -136,6 +163,7 @@ export function initBgPicker(gs, callbacks = {}) {
     leftPanel.classList.remove('slide-left');
     bottomBar.classList.remove('slide-right');
     picker.classList.remove('open');
+    hideUnlockMessage();
     clearCardFocus();
     callbacks.onClose?.();
   }
@@ -144,6 +172,17 @@ export function initBgPicker(gs, callbacks = {}) {
   function applyTheme(id) {
     const theme = BG_THEMES.find(t => t.id === id);
     if (!theme) return;
+
+    // Update selected highlight (solid or dashed via .locked class on the card)
+    cards.forEach(c => c.classList.remove('selected'));
+    document.getElementById(`bgcard-${id}`)?.classList.add('selected');
+
+    if (theme.locked) {
+      showUnlockMessage(theme.progress ?? 0, theme.unlockText);
+      return;
+    }
+
+    hideUnlockMessage();
     selectedId = id;
 
     gs.style.background = theme.gradient;
@@ -159,11 +198,8 @@ export function initBgPicker(gs, callbacks = {}) {
     if (caps[1]) caps[1].style.background = theme.capsule1;
     if (caps[2]) caps[2].style.background = theme.capsule3;
     if (caps[3]) caps[3].style.background = theme.capsule1;
-
-    // Update selected highlight
-    cards.forEach(c => c.classList.remove('selected'));
-    document.getElementById(`bgcard-${id}`)?.classList.add('selected');
   }
+
 
   // ── Wire mouse / keyboard buttons ──
   brushBtn.addEventListener('click', () => { brushBtn.blur(); open(); });
