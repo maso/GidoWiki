@@ -1111,9 +1111,10 @@ body {
 }
 .people-tab.active {
   background: rgba(245, 40, 138, 0.22);
-  border-color: #f5288a;
+  border: 2.5px solid #f5288a;
   color: #ffffff;
-  box-shadow: 0 0 0 2px #f5288a, 0 4px 14px rgba(245, 40, 138, 0.35);
+  box-shadow: 0 4px 14px rgba(245, 40, 138, 0.35);
+  outline: none;
 }
 .people-tab span { font-size: 1.15em; }
 .people-tab strong {
@@ -1160,16 +1161,19 @@ body {
   border: .16em solid rgba(255, 255, 255, 0.22);
   border-radius: .85em;
   color: #ffffff;
-  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+  outline: none;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+}
+.human-card:focus, .human-card:focus-visible {
+  outline: none;
 }
 .human-card:hover {
   transform: translateY(-3px) scale(1.03);
   background: rgba(255, 255, 255, 0.18);
 }
 .human-card.selected {
-  border-color: #f5288a;
-  border-width: 3px;
-  box-shadow: 0 0 0 2px #f5288a, 0 6px 18px rgba(245, 40, 138, 0.4);
+  border: 3.5px solid #f5288a;
+  box-shadow: 0 6px 20px rgba(245, 40, 138, 0.45);
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.18);
 }
@@ -1179,10 +1183,11 @@ body {
   border-color: rgba(255, 255, 255, 0.1);
 }
 .human-card.locked.selected {
-  border-color: #f5288a;
-  border-style: dashed;
+  border: 3.5px dashed #f5288a;
+  box-shadow: 0 6px 20px rgba(245, 40, 138, 0.35);
   opacity: .88;
 }
+
 
 .human-avatar {
   font-size: 2.1em;
