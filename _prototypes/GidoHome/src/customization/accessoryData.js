@@ -1,6 +1,6 @@
 const COMING_SOON_ACCESSORIES = Array.from({ length: 18 }, (_, index) => ({
   id: `coming-soon-${String(index + 1).padStart(2, '0')}`,
-  name: 'COMMING SOON',
+  name: 'COMING SOON',
   selectable: false,
   comingSoon: true,
 }));

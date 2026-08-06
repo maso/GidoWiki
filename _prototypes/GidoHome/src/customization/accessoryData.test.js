@@ -29,6 +29,6 @@ test('provides nine unlocked, three locked, and 18 coming-soon accessory slots',
     item.selectable && item.unlocked === false && item.unlockText && item.progress >= 0
   )), true);
   assert.equal(ACCESSORY_ITEMS.slice(12).every(item => (
-    item.comingSoon && !item.selectable && item.name === 'COMMING SOON'
+    item.comingSoon && !item.selectable && item.name === 'COMING SOON'
   )), true);
 });

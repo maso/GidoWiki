@@ -49,7 +49,7 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
       })),
       ...Array.from({ length: COMING_SOON_SLOT_COUNT }, (_, index) => ({
         id: `coming-soon-${index}`,
-        name: 'COMMING SOON',
+        name: 'COMING SOON',
         unlocked: false,
         selectable: false,
         comingSoon: true,
@@ -61,7 +61,7 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
       card.type = 'button';
       card.className = `character-card${slot.unlocked ? '' : ' locked'}${slot.selectable ? ' selectable' : ' coming-soon'}`;
       card.disabled = !slot.selectable;
-      card.setAttribute('aria-label', slot.selectable ? `選擇 ${slot.name}` : 'COMMING SOON');
+      card.setAttribute('aria-label', slot.selectable ? `選擇 ${slot.name}` : 'COMING SOON');
 
       if (slot.unlocked) {
         const color = slot.color.toString(16).padStart(6, '0');
@@ -73,7 +73,7 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
         card.innerHTML = `<span class="mini-character egg" style="--char-color:#${color};--egg-accent:#${accentColor}"><i></i><i></i></span><strong>${slot.name}</strong><small>LOCKED</small>`;
         card.addEventListener('click', () => selectCharacter(slot.id, { replayTray: true }));
       } else {
-        card.innerHTML = `<strong>COMMING<br>SOON</strong>`;
+        card.innerHTML = `<strong>COMING<br>SOON</strong>`;
       }
 
       elements.characterWrap.appendChild(card);
@@ -92,7 +92,7 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
         accessory.unlocked === false ? `${accessory.name} 尚未解鎖` : accessory.name,
       );
       card.innerHTML = accessory.comingSoon
-        ? '<strong>COMMING<br>SOON</strong>'
+        ? '<strong>COMING<br>SOON</strong>'
         : `<span>${accessory.icon}${accessory.unlocked === false ? '<b>🔒</b>' : ''}</span>${accessory.clearsAccessory ? `<small>${accessory.name}</small>` : ''}`;
       if (accessory.selectable) {
         card.addEventListener('mouseenter', () => updateAccessoryFocus(index));
