@@ -31,9 +31,17 @@ const skinPicker = initSkinPicker(characterSystem, {
 
 // 6. Main Animation Loop
 let clock = 0;
-function animate() {
+let lastTime = performance.now();
+
+function animate(currentTime = performance.now()) {
   requestAnimationFrame(animate);
-  clock += 0.016;
+
+  const delta = (currentTime - lastTime) / 1000;
+  lastTime = currentTime;
+
+  // Cap dt to max 0.1s to prevent animation jumps when returning from background tabs
+  const dt = Math.min(Math.max(delta, 0), 0.1);
+  clock += dt;
 
   characterSystem.update(clock);
   controls.pollGamepad();
