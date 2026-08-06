@@ -42,7 +42,8 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
     accessoryCards.forEach(({ accessory, card }) => {
       card.classList.toggle('has-unread', unreadAccessories.has(accessory.id));
     });
-    elements.accessoryButton.classList.toggle('has-unread', unreadAccessories.size > 0);
+    const showButtonRedDot = panelMode === 'character' && unreadAccessories.size > 0;
+    elements.accessoryButton.classList.toggle('has-unread', showButtonRedDot);
   }
 
   function markAccessoryVisited(accessoryId) {
@@ -310,6 +311,7 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
         showUnlockMessage(inspectedSkin.progress ?? 0);
       }
     }
+    updateUnreadBadges();
   }
 
   function toggleAccessoryMenu() {
