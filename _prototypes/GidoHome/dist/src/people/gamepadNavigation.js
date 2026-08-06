@@ -1,73 +1,49 @@
+const GRID_NAV_COOLDOWN = 180;
+
 export function createPeopleGamepadNavigation(handlers = {}) {
-  let btnLWas = false;
-  let btnRWas = false;
-  let btnBWas = false;
-  let lastNavTime = 0;
-  const NAV_COOLDOWN = 180;
+  let bWasPressed = false;
+  let lWasPressed = false;
+  let rWasPressed = false;
+  let lastGridNav = -Infinity;
 
-  function poll() {
-    if (!handlers.isOpen?.()) return;
+  function poll(gamepads = navigator.getGamepads?.() || []) {
+    const gamepad = [...gamepads].find(Boolean);
+    const bPressed = Boolean(gamepad?.buttons[1]?.pressed);
+    const lPressed = Boolean(gamepad?.buttons[4]?.pressed);
+    const rPressed = Boolean(gamepad?.buttons[5]?.pressed);
 
-    const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-    for (const gp of gamepads) {
-      if (!gp) continue;
+    if (handlers.isOpen()) {
+      if (bPressed && !bWasPressed) handlers.onBack?.();
+      if (lPressed && !lWasPressed) handlers.onStepCategory?.(-1);
+      if (rPressed && !rWasPressed) handlers.onStepCategory?.(1);
 
       const now = performance.now();
+      const stickX = gamepad?.axes[0] || 0;
+      const stickY = gamepad?.axes[1] || 0;
+      let direction = null;
 
-      // ── B Button: Close modal ──
-      const btnB = gp.buttons[1]?.pressed;
-      if (btnB && !btnBWas) {
-        btnBWas = true;
-        handlers.onBack?.();
-        return;
-      } else if (!btnB) {
-        btnBWas = false;
-      }
+      if (gamepad?.buttons[12]?.pressed) direction = 'up';
+      else if (gamepad?.buttons[13]?.pressed) direction = 'down';
+      else if (gamepad?.buttons[14]?.pressed) direction = 'left';
+      else if (gamepad?.buttons[15]?.pressed) direction = 'right';
+      else if (Math.abs(stickX) > Math.abs(stickY) && stickX < -0.55) direction = 'left';
+      else if (Math.abs(stickX) > Math.abs(stickY) && stickX > 0.55) direction = 'right';
+      else if (stickY < -0.55) direction = 'up';
+      else if (stickY > 0.55) direction = 'down';
 
-      // ── L / R Shoulder Buttons (LB / RB): Switch category tabs ──
-      const btnL = gp.buttons[4]?.pressed;
-      if (btnL && !btnLWas) {
-        btnLWas = true;
-        handlers.onStepCategory?.(-1);
-      } else if (!btnL) {
-        btnLWas = false;
-      }
-
-      const btnR = gp.buttons[5]?.pressed;
-      if (btnR && !btnRWas) {
-        btnRWas = true;
-        handlers.onStepCategory?.(1);
-      } else if (!btnR) {
-        btnRWas = false;
-      }
-
-      // ── D-Pad / Left Stick: 4-way grid navigation ──
-      if (now - lastNavTime >= NAV_COOLDOWN) {
-        const btnUp    = gp.buttons[12]?.pressed;
-        const btnDown  = gp.buttons[13]?.pressed;
-        const btnLeft  = gp.buttons[14]?.pressed;
-        const btnRight = gp.buttons[15]?.pressed;
-        const stickX   = gp.axes[0] || 0;
-        const stickY   = gp.axes[1] || 0;
-
-        let direction = null;
-        if (btnUp || stickY < -0.5) {
-          direction = 'up';
-        } else if (btnDown || stickY > 0.5) {
-          direction = 'down';
-        } else if (btnLeft || stickX < -0.5) {
-          direction = 'left';
-        } else if (btnRight || stickX > 0.5) {
-          direction = 'right';
-        }
-
+      if (now - lastGridNav >= GRID_NAV_COOLDOWN) {
         if (direction) {
-          lastNavTime = now;
+          lastGridNav = now;
           handlers.onNavigateGrid?.(direction);
         }
       }
     }
+
+    bWasPressed = bPressed;
+    lWasPressed = lPressed;
+    rWasPressed = rPressed;
   }
 
   return { poll };
 }
+
