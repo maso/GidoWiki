@@ -36,6 +36,22 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
   let panelMode = 'character';
   let accessoryFocusIndex = 0;
 
+  const unreadAccessories = new Set(['star-shades', 'angel-wings']);
+
+  function updateUnreadBadges() {
+    accessoryCards.forEach(({ accessory, card }) => {
+      card.classList.toggle('has-unread', unreadAccessories.has(accessory.id));
+    });
+    elements.accessoryButton.classList.toggle('has-unread', unreadAccessories.size > 0);
+  }
+
+  function markAccessoryVisited(accessoryId) {
+    if (unreadAccessories.has(accessoryId)) {
+      unreadAccessories.delete(accessoryId);
+      updateUnreadBadges();
+    }
+  }
+
   function createCharacterCards() {
     const slots = [
       ...characterSystem.chars.map(character => ({
@@ -102,6 +118,7 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
       elements.accessoryWrap.appendChild(card);
       accessoryCards.push({ accessory, card });
     });
+    updateUnreadBadges();
   }
 
   function renderAccessorySelection() {
@@ -184,6 +201,10 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
     accessoryCards.forEach(({ card }, cardIndex) => {
       card.classList.toggle('gp-focused', cardIndex === accessoryFocusIndex);
     });
+    const focusedEntry = accessoryCards[accessoryFocusIndex];
+    if (focusedEntry?.accessory.id) {
+      markAccessoryVisited(focusedEntry.accessory.id);
+    }
     if (scroll) {
       accessoryCards[accessoryFocusIndex]?.card.scrollIntoView({
         block: 'nearest',
