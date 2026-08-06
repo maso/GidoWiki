@@ -2,6 +2,9 @@
 
 PC party game 主畫面 prototype，HTML + CSS + Three.js (v0.160)。
 
+> 用 AI coding agent 開發本專案時，請先讀 [AGENTS.md](./AGENTS.md)
+> （含工作流程約定：每次修改後都要 build + commit）。
+
 公開頁面（GitHub Pages）：`https://<username>.github.io/GidoWiki/_prototypes/GidoHome/dist/`
 
 ## 本機開發
