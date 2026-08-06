@@ -55,11 +55,29 @@
   <!-- BOTTOM BAR -->
   <footer id="bottom-bar">
     <div id="btm-icons">
-      <button class="btm-icon" title="人類" tabindex="0">👤</button>
+      <button class="btm-icon" id="btn-people" title="人類圖鑑" aria-label="開啟人類圖鑑" tabindex="0">👤</button>
       <button class="btm-icon" id="btn-skin" title="角色造型" aria-label="開啟角色造型選擇" tabindex="0">👕</button>
       <button class="btm-icon" id="btn-brush" title="換背景" tabindex="0">🖌️</button>
     </div>
   </footer>
+
+  <!-- HUMAN ENCYCLOPEDIA MODAL (人類圖鑑) -->
+  <section id="people-picker" aria-label="人類圖鑑" aria-hidden="true">
+    <div id="people-picker-dialog">
+      <div id="people-tab-wrap" aria-label="人類圖鑑類別標籤"></div>
+      <div id="people-card-wrap" aria-label="人類款式列表"></div>
+      <div id="people-picker-footer">
+        <div class="people-stats">
+          <span>吸收總數 <b id="people-total-absorbed">0人</b></span>
+          <span>收集進度 <b id="people-type-stats">0 / 0 款</b></span>
+        </div>
+        <button id="btn-people-back" type="button">
+          <span class="back-label">Back</span>
+          <span class="back-badge">Ⓑ</span>
+        </button>
+      </div>
+    </div>
+  </section>
 
   <!-- CHARACTER / SKIN PICKER -->
   <section id="skin-picker" aria-label="角色造型選擇" aria-hidden="true">

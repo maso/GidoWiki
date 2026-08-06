@@ -3,6 +3,7 @@ import { createCharacters } from './character.js';
 import { initControls } from './controls.js';
 import { initBgPicker } from './bgPicker.js';
 import { initSkinPicker } from './customization/skinPicker.js';
+import { initPeoplePicker } from './people.js';
 
 const gs = document.getElementById('gs');
 const wrap = document.getElementById('canvas-wrap');
@@ -28,7 +29,13 @@ const skinPicker = initSkinPicker(characterSystem, {
   onClose: () => controls.setBlocked(false),
 });
 
-// 6. Main Animation Loop
+// 6. Setup Human Encyclopedia Picker
+const peoplePicker = initPeoplePicker({
+  onOpen:  () => controls.setBlocked(true),
+  onClose: () => controls.setBlocked(false),
+});
+
+// 7. Main Animation Loop
 let clock = 0;
 let lastTime = performance.now();
 
@@ -46,6 +53,7 @@ function animate(currentTime = performance.now()) {
   controls.pollGamepad();
   bgPicker.pollGamepad();
   skinPicker.pollGamepad();
+  peoplePicker.pollGamepad();
 
   renderer.render(scene, camera);
 }
