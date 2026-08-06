@@ -104,16 +104,17 @@ export function initBgPicker(gs, callbacks = {}) {
     const swatch = document.createElement('div');
     swatch.className = 'bg-card-swatch';
     swatch.style.background = theme.gradient;
+    if (theme.locked) {
+      const lockMark = document.createElement('b');
+      lockMark.className = 'swatch-lock-mark';
+      lockMark.textContent = '🔒';
+      swatch.appendChild(lockMark);
+    }
 
     const lbl = document.createElement('span');
     lbl.className = 'bg-card-label';
     lbl.textContent = theme.label;
-    if (theme.locked) {
-      const lockMark = document.createElement('span');
-      lockMark.className = 'lock-mark';
-      lockMark.textContent = ' 🔒';
-      lbl.appendChild(lockMark);
-    }
+
 
     card.append(swatch, lbl);
     card.addEventListener('mouseenter', () => updateCardFocus(i));

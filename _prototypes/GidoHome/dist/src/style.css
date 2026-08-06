@@ -358,7 +358,7 @@ body {
 #bg-unlock-message {
   position: absolute;
   left: 50%;
-  bottom: 8.2em;
+  bottom: 14em;
   width: 18.5em;
   padding: .7em .85em;
   color: #fff;
@@ -387,11 +387,28 @@ body {
 
 
 .bg-card-swatch {
+  position: relative;
   width: 5.8em;
   height: 3.8em;
   border-radius: .55em;
   border: 1.5px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+.swatch-lock-mark {
+  display: grid;
+  place-items: center;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: rgba(17, 12, 45, 0.72);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  font-size: .95em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
 
 .bg-card-label {
   font-family: 'Outfit', sans-serif;
