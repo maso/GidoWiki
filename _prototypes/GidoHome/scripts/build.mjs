@@ -18,12 +18,32 @@
  *
  * Usage: node scripts/build.mjs
  */
+import { execSync } from 'node:child_process';
 import { copyFileSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
+
+// 0. Auto-calculate version string from Git commit count & short hash
+let versionString = 'v1.0.0';
+try {
+  const commitCount = execSync('git rev-list --count HEAD', { cwd: root, encoding: 'utf8' }).trim();
+  const shortHash   = execSync('git rev-parse --short HEAD', { cwd: root, encoding: 'utf8' }).trim();
+  versionString = `v1.0.${commitCount}${shortHash ? ` (${shortHash})` : ''}`;
+} catch (e) {}
+
+// Update src/version.js
+writeFileSync(join(root, 'src', 'version.js'), `export const APP_VERSION = '${versionString}';\n`);
+
+// Update root index.html version badge
+let rootHtml = readFileSync(join(root, 'index.html'), 'utf8');
+rootHtml = rootHtml.replace(
+  /<div id="version-badge" aria-label="版本號">[^<]*<\/div>/,
+  `<div id="version-badge" aria-label="版本號">${versionString}</div>`
+);
+writeFileSync(join(root, 'index.html'), rootHtml);
 
 // Plain readdir/copyFile walk — fs.cpSync's directory-metadata copying hits
 // EACCES on some mounted filesystems (e.g. the Cowork sandbox mount).
@@ -65,4 +85,5 @@ html = html.replace(
 html = html.replace('<script type="module" src="/src/main.js">', '<script type="module" src="./src/main.js">');
 writeFileSync(join(dist, 'index.html'), html);
 
-console.log('dist/ built (no-bundler static build)');
+console.log(`dist/ built for ${versionString} (no-bundler static build)`);
+

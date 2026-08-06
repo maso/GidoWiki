@@ -5,12 +5,16 @@ import { initControls } from './controls.js';
 import { initBgPicker } from './bgPicker.js';
 import { initSkinPicker } from './customization/skinPicker.js';
 import { initPeoplePicker } from './people.js';
+import { APP_VERSION } from './version.js';
 
 const gs = document.getElementById('gs');
 const wrap = document.getElementById('canvas-wrap');
+const versionBadge = document.getElementById('version-badge');
+if (versionBadge) versionBadge.textContent = APP_VERSION;
 
 // 1. Setup 3D Scene
 const { scene, camera, renderer } = setupScene(wrap, gs);
+
 
 // 2. Setup 3D Characters & Raycasting
 const characterSystem = createCharacters(scene, camera, renderer, gs);
