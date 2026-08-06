@@ -774,8 +774,8 @@ body {
 #btn-accessory small { font-size: .43em; font-weight: 900; letter-spacing: .06em; }
 #btn-accessory b {
   position: absolute;
-  bottom: -.35em;
-  right: -.35em;
+  bottom: -.45em;
+  right: -.75em;
   display: grid;
   place-items: center;
   width: 1.5em;
