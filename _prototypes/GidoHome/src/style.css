@@ -774,18 +774,20 @@ body {
 #btn-accessory small { font-size: .43em; font-weight: 900; letter-spacing: .06em; }
 #btn-accessory b {
   position: absolute;
-  bottom: -.45em;
-  right: -.45em;
+  bottom: -.35em;
+  right: -.35em;
   display: grid;
   place-items: center;
-  width: 1.55em;
-  height: 1.55em;
+  width: 1.5em;
+  height: 1.5em;
   border-radius: 50%;
   color: #241451;
   background: #fff23d;
-  border: .12em solid #fff;
-  font-size: 1.36em;
-  box-shadow: 0 .15em .4em rgba(0,0,0,.25);
+  border: .14em solid #241451;
+  font-family: 'Outfit', sans-serif;
+  font-size: .88em;
+  font-weight: 900;
+  box-shadow: 0 .1em .3em rgba(0,0,0,.25);
   z-index: 6;
 }
 #btn-accessory.has-unread::after {
