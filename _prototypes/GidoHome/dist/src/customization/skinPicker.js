@@ -127,6 +127,9 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
     accessoryCards.forEach(({ accessory, card }) => {
       card.classList.toggle('selected', accessory.id === inspectedAccessoryId);
     });
+    if (inspectedAccessoryId) {
+      markAccessoryVisited(inspectedAccessoryId);
+    }
   }
 
   function renderSkins() {
@@ -202,10 +205,6 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
     accessoryCards.forEach(({ card }, cardIndex) => {
       card.classList.toggle('gp-focused', cardIndex === accessoryFocusIndex);
     });
-    const focusedEntry = accessoryCards[accessoryFocusIndex];
-    if (focusedEntry?.accessory.id) {
-      markAccessoryVisited(focusedEntry.accessory.id);
-    }
     if (scroll) {
       accessoryCards[accessoryFocusIndex]?.card.scrollIntoView({
         block: 'nearest',
