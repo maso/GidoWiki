@@ -140,6 +140,7 @@ export function initPeoplePicker(callbacks = {}) {
 
     renderCategoryTabs();
     renderGridCards();
+    updateFocusIndex(state.getSelectedItemIndex());
     callbacks.onOpen?.();
   }
 
@@ -193,7 +194,9 @@ export function initPeoplePicker(callbacks = {}) {
     onBack: close,
     onStepCategory: stepCategory,
     onNavigateGrid: navigateGrid,
+    onConfirm: () => updateFocusIndex(state.getSelectedItemIndex()),
   });
+
 
   return {
     isOpen: () => isOpen,
