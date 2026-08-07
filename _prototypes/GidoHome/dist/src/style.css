@@ -350,16 +350,19 @@ body {
   border-radius: .9em;
   padding: .45em .45em .3em;
   cursor: pointer;
+  outline: none;
   transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.bg-card:focus, .bg-card:focus-visible {
+  outline: none;
 }
 .bg-card:hover {
   transform: translateY(-4px) scale(1.06);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 .bg-card.selected {
-  border-color: #f5288a;
-  border-width: 3px;
-  box-shadow: 0 0 0 2px #f5288a, 0 6px 20px rgba(245, 40, 138, 0.4);
+  border: 3.5px solid #f5288a;
+  box-shadow: 0 6px 20px rgba(245, 40, 138, 0.45);
   transform: translateY(-3px);
 }
 .bg-card.locked {
@@ -368,10 +371,11 @@ body {
   border-color: rgba(255, 255, 255, 0.18);
 }
 .bg-card.locked.selected {
-  border-color: #f5288a;
-  border-style: dashed;
+  border: 3.5px dashed #f5288a;
+  box-shadow: 0 6px 20px rgba(245, 40, 138, 0.35);
   opacity: 1;
 }
+
 
 #bg-unlock-message {
   position: absolute;
