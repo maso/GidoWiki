@@ -141,10 +141,6 @@ export function initBgPicker(gs, callbacks = {}) {
     cards[cardFocusIdx]?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
   }
 
-  function clearCardFocus() {
-    cards.forEach(c => c.classList.remove('gp-focused'));
-  }
-
   // ── Open / Close ──
   function open() {
     if (isOpen) return;
@@ -165,9 +161,9 @@ export function initBgPicker(gs, callbacks = {}) {
     bottomBar.classList.remove('slide-right');
     picker.classList.remove('open');
     hideUnlockMessage();
-    clearCardFocus();
     callbacks.onClose?.();
   }
+
 
   // ── Apply theme ──
   function applyTheme(id) {
