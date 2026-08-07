@@ -7,9 +7,10 @@ export function createPeopleGamepadNavigation(handlers = {}) {
   let rWasPressed = false;
   let lastGridNav = -Infinity;
 
-  function poll() {
-    const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+  function poll(overrideGamepads) {
+    const gamepads = overrideGamepads || (typeof navigator !== 'undefined' && navigator.getGamepads ? navigator.getGamepads() : []);
     const gp = [...gamepads].find(Boolean);
+
 
     const bPressed = Boolean(gp?.buttons[1]?.pressed);
     const aPressed = Boolean(gp?.buttons[0]?.pressed);

@@ -91,6 +91,7 @@ export function initControls() {
 
   return {
     pollGamepad: () => {
+      if (blocked) return;
       const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
       for (const gp of gamepads) {
         if (!gp) continue;
@@ -109,7 +110,7 @@ export function initControls() {
         if (btnRight || stickX > 0.5) navDirection('right');
 
         const btnA = gp.buttons[0]?.pressed;
-        if (btnA && !buttonAPressed && !blocked) {
+        if (btnA && !buttonAPressed) {
           buttonAPressed = true;
           focusableElems[focusIdx]?.click();
         } else if (!btnA) {
@@ -117,6 +118,7 @@ export function initControls() {
         }
       }
     },
+
     setBlocked: (val) => { blocked = val; },
   };
 }

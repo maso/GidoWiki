@@ -77,9 +77,9 @@ export function initPeoplePicker(callbacks = {}) {
       }
 
 
-      card.addEventListener('mouseenter', () => updateFocusIndex(index));
       card.addEventListener('click', () => updateFocusIndex(index));
       elements.cardWrap.appendChild(card);
+
       humanCards.push({ item, card, index });
     });
 

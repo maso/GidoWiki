@@ -9,8 +9,11 @@ export function createCustomizationGamepadNavigation(actions) {
   let rWasPressed = false;
   let lastCharacterNav = -Infinity;
 
-  function poll(gamepads = navigator.getGamepads?.() || []) {
+  function poll(overrideGamepads) {
+    const gamepads = overrideGamepads || (typeof navigator !== 'undefined' && navigator.getGamepads ? navigator.getGamepads() : []);
     const gamepad = [...gamepads].find(Boolean);
+
+
     const bPressed = Boolean(gamepad?.buttons[1]?.pressed);
     const aPressed = Boolean(gamepad?.buttons[0]?.pressed);
     const yPressed = Boolean(gamepad?.buttons[3]?.pressed);
