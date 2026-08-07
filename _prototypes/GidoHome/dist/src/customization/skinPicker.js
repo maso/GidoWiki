@@ -44,7 +44,11 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
     });
     const showButtonRedDot = panelMode === 'character' && unreadAccessories.size > 0;
     elements.accessoryButton.classList.toggle('has-unread', showButtonRedDot);
+
+    const skinButton = document.getElementById('btn-skin');
+    skinButton?.classList.toggle('has-unread', unreadAccessories.size > 0);
   }
+
 
   function markAccessoryVisited(accessoryId) {
     if (unreadAccessories.has(accessoryId)) {
