@@ -134,9 +134,12 @@ body.input-kbm .gp-only { display: none !important; }
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  transform: translate(-50%, -50%) scale(.35);
+  /* Resting (hidden) state doubles as the pop-in's starting pose: smaller and
+     sitting lower, so the bubble rises into place. translateY comes before
+     scale in the list, so the rise distance stays constant as it grows. */
+  transform: translate(-50%, -50%) translateY(1.15em) scale(.35);
   /* transform transition only applies on the way out — the pop-in is the
-     keyframed bounce below, which overrides it while running */
+     keyframed animation below, which overrides it while running */
   transition: opacity .18s ease, transform .18s ease, visibility .18s;
 }
 /* Speech-bubble tail */
@@ -157,13 +160,14 @@ body.input-kbm .gp-only { display: none !important; }
   visibility: visible;
   /* easeOutBack: unlike bounce, this curve *is* expressible as a cubic-bezier,
      so no keyframe sampling is needed (max deviation from the Penner formula
-     is ~0.005, peak overshoot 1.098 vs 1.100). */
-  animation: emoteBubblePop .42s cubic-bezier(.34, 1.56, .64, 1) both;
+     is ~0.005, peak overshoot 1.098 vs 1.100). One timing function drives the
+     whole transform, so the rise and the scale-up share the same overshoot. */
+  animation: emoteBubblePop .84s cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
 @keyframes emoteBubblePop {
-  from { transform: translate(-50%, -50%) scale(.35); }
-  to   { transform: translate(-50%, -50%) scale(1); }
+  from { transform: translate(-50%, -50%) translateY(1.15em) scale(.35); }
+  to   { transform: translate(-50%, -50%) translateY(0) scale(1); }
 }
 
 /* ═══════════════════════════════════════
