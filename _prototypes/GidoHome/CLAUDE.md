@@ -45,6 +45,13 @@ GidoWiki/_prototypes/GidoHome/
 │   ├── controls.js          Main menu keyboard & gamepad navigation handler
 │   ├── bgPicker.js          Background theme selection modal (Solid, Mint, Gradient, etc.)
 │   ├── version.js           Exported APP_VERSION string (auto-updated by build.mjs)
+│   ├── input/               Active Input Device Detection
+│   │   └── inputMode.js     Keyboard/mouse vs gamepad tracker; drives Q/E vs LB/RB hints and `.gp-only` chrome
+│   ├── emote/               Emote Wheel (表情輪盤) — home screen only
+│   │   ├── emoteData.js     Six emote definitions; wheel geometry derives from this array's length
+│   │   ├── emoteWheelState.js Pure state machine (open/close, focus, centre-dwell cancel)
+│   │   ├── stickRelease.js  Tells a released stick (spring snap-back) from a hand-guided return
+│   │   └── emoteWheel.js    Wheel UI: SVG radial geometry, gamepad + mouse input, cursor anchoring
 │   ├── character/           3D Monster System
 │   │   ├── factories.js     3D character body & dinosaur egg lathe mesh builders
 │   │   ├── accessories.js   3D hat & accessory mesh generators

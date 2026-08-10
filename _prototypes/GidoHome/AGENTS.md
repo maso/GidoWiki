@@ -55,6 +55,13 @@ src/
   pedestrian/              3D 都市路人系統
     pedestrianFactory.js   樂高風格 3D 路人模型工廠（具備 SHARED_GEOMETRIES 共享幾何體與 2 Pass 陰影優化）
     pedestrianManager.js   路人群聚管理：10 隻多彩路人，1.5 倍廣闊巡邏範圍，接近怪獸時觸發雙手高舉慌張逃跑 AI
+  input/
+    inputMode.js           鍵鼠／手把偵測（純狀態機 + DOM 接線），驅動肩鍵提示與 .gp-only 顯隱
+  emote/
+    emoteData.js           六個表情定義（輪盤格數依此陣列長度自動調整）
+    emoteWheelState.js     輪盤純狀態機（開關、focus、取消 dwell）
+    stickRelease.js        右搖桿「放手」與「手動回中」的判別
+    emoteWheel.js          輪盤 UI：SVG 放射線幾何、手把／鍵鼠輸入、游標定位
   customization/           角色造型／Accessory 選擇器（狀態機、資料、UI、手把導覽，含單元測試）
   people/                  人類圖鑑視窗（4 大類別 Tab、4 欄卡片 Grid、收集進度頁尾、手把 L/R 切換）
 vendor/                    vendored Three.js（build:static 用）
@@ -80,9 +87,13 @@ dist/                      部署產物（有 commit）
   美術是 Valorant 風格的放射線 layout：SVG 白色細放射線 + 中央空心圓，
   幾何全由 `emoteWheel.js` 頂端的半徑常數算出，格數依 `emoteData.js` 陣列長度自動調整
   （`RING_SIZE_EM` 需與 CSS 的 `#emote-wheel-ring` 尺寸一致）。
-  **dwell（停留即選取）只給手把用**：手把推右搖桿開啟、停留 0.5 秒選取、回中 0.5 秒取消；
-  鍵鼠按住左 Shift 開啟後滑鼠只負責高亮，一定要點擊或放開 Shift 才算選取
-  （狀態機以 `open(now, { dwell })` 區分兩種模式）。
-  選取後 0.3 秒關閉，並在隨機一隻非蛋角色頭上冒出表情泡泡 2.4 秒。
-- **測試規範**：任何修改都需確認 `npm test` 通過 42 項單元測試。
+  **停留在格子上永遠不會選取**，選取一律要玩家的明確動作：
+  - 手把：推右搖桿開啟、瞄準後**放手**，彈簧彈回中心即選取；若用手把搖桿慢慢推回中心，
+    則視為要退出，在中心停留 0.5 秒後取消。兩者由 `stickRelease.js` 依回中耗時區分
+    （門檻 `RELEASE_WINDOW_MS`，目前 80ms；不同手把彈簧鬆緊不同，必要時可調）。
+  - 鍵鼠：按住左 Shift 開啟、滑鼠只負責高亮，一定要點擊或放開 Shift 才算選取；
+    輪盤會以游標為圓心開啟並自動鉗制在畫面內。
+  狀態機唯一的計時轉場是「中心停留即取消」，以 `open(now, { cancelDwell })` 決定是否啟用
+  （鍵鼠模式關閉）。選取後立即關閉，並在隨機一隻非蛋角色頭上冒出表情泡泡 2.4 秒。
+- **測試規範**：任何修改都需確認 `npm test` 通過 53 項單元測試。
 

@@ -135,6 +135,5 @@ export function createEmoteWheelState({
     /** True once a choice is locked in — used to freeze focus highlighting. */
     isSelected: () => phase === 'selected',
     isCancelDwellEnabled: () => cancelDwellEnabled,
-    getSegmentCount: () => segmentCount,
   };
 }
