@@ -72,18 +72,10 @@ writeFileSync(mainPath, main);
 // 3. Vendored three.js
 copyDir(join(root, 'vendor'), join(dist, 'vendor'));
 
-// 4. index.html: import map + stylesheet + relative module path
+// 4. index.html: already contains relative module paths, importmap, and stylesheet
 let html = readFileSync(join(root, 'index.html'), 'utf8');
-html = html.replace(
-  '</head>',
-  `<link rel="stylesheet" href="./src/style.css">
-<script type="importmap">
-{ "imports": { "three": "./vendor/three.module.min.js" } }
-</script>
-</head>`,
-);
-html = html.replace('<script type="module" src="/src/main.js">', '<script type="module" src="./src/main.js">');
 writeFileSync(join(dist, 'index.html'), html);
+
 
 console.log(`dist/ built for ${versionString} (no-bundler static build)`);
 

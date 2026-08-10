@@ -1,5 +1,5 @@
-import './style.css';
 import { setupScene } from './scene.js';
+
 import { createCharacters } from './character.js';
 import { createPedestrians } from './pedestrian.js';
 import { initControls } from './controls.js';
