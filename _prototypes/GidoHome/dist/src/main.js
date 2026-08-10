@@ -6,6 +6,7 @@ import { initControls } from './controls.js';
 import { initBgPicker } from './bgPicker.js';
 import { initSkinPicker } from './customization/skinPicker.js';
 import { initPeoplePicker } from './people.js';
+import { initInputMode } from './input/inputMode.js';
 import { APP_VERSION } from './version.js';
 
 const gs = document.getElementById('gs');
@@ -20,8 +21,9 @@ const { scene, camera, renderer } = setupScene(wrap, gs);
 const characterSystem = createCharacters(scene, camera, renderer, gs);
 const pedestrianSystem = createPedestrians(scene);
 
-// 3. Setup Controls (Keyboard & Gamepad)
+// 3. Setup Controls (Keyboard & Gamepad) + active input device detection
 const controls = initControls();
+const inputModeControl = initInputMode();
 
 // 4. Setup Background Picker
 const bgPicker = initBgPicker(gs, {
@@ -57,6 +59,9 @@ function animate(currentTime = performance.now()) {
 
   characterSystem.update(clock);
   pedestrianSystem.update(dt, characterSystem.chars);
+
+  // Must run before the panel polls so hint labels reflect this frame's device
+  inputModeControl.pollGamepad();
 
   controls.pollGamepad();
   bgPicker.pollGamepad();

@@ -2,6 +2,7 @@ import { CHARACTER_SKINS, COMING_SOON_SLOT_COUNT } from './skinData.js';
 import { createCustomizationState, findGridNeighbor } from './customizationState.js';
 import { createCustomizationGamepadNavigation } from './gamepadNavigation.js';
 import { ACCESSORY_ITEMS } from './accessoryData.js';
+import { inputMode } from '../input/inputMode.js';
 
 export function initSkinPicker(characterSystem, callbacks = {}) {
   const elements = {
@@ -371,10 +372,36 @@ export function initSkinPicker(characterSystem, callbacks = {}) {
   elements.skinTray.addEventListener('animationend', () => {
     elements.skinTray.classList.remove('reentering');
   });
+  // Shoulder-button hints follow the active input device (Q/E vs LB/RB)
+  function applyShoulderLabel(button, label) {
+    if (!button) return;
+    button.textContent = label;
+    button.classList.toggle('wide-label', label.length > 1);
+  }
+
+  inputMode.subscribe(() => {
+    const labels = inputMode.getShoulderLabels();
+    applyShoulderLabel(elements.previousSkinButton, labels.left);
+    applyShoulderLabel(elements.nextSkinButton, labels.right);
+  });
+
   window.addEventListener('keydown', (event) => {
-    if (!isOpen || event.key !== 'Escape') return;
-    event.preventDefault();
-    close();
+    if (!isOpen) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      close();
+      return;
+    }
+    // Q / E are the keyboard equivalents of the LB / RB shoulder buttons
+    if (event.key === 'q' || event.key === 'Q') {
+      event.preventDefault();
+      stepSkin(-1);
+      return;
+    }
+    if (event.key === 'e' || event.key === 'E') {
+      event.preventDefault();
+      stepSkin(1);
+    }
   });
 
   const gamepadNavigation = createCustomizationGamepadNavigation({

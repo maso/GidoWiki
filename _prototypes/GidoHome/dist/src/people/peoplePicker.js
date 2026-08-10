@@ -1,6 +1,7 @@
 import { createPeopleState } from './peopleState.js';
 import { createPeopleGamepadNavigation } from './gamepadNavigation.js';
 import { findGridNeighbor } from '../customization/customizationState.js';
+import { inputMode } from '../input/inputMode.js';
 
 export function initPeoplePicker(callbacks = {}) {
   const elements = {
@@ -19,14 +20,20 @@ export function initPeoplePicker(callbacks = {}) {
   const humanCards = []; // { item, card, index }
   let isOpen = false;
 
+  function applyBadgeLabel(badge, label) {
+    if (!badge) return;
+    badge.textContent = label;
+    badge.classList.toggle('wide-label', label.length > 1);
+  }
+
   function renderCategoryTabs() {
     if (!elements.tabWrap) return;
     elements.tabWrap.replaceChildren();
 
-    // L shoulder badge
+    // Left shoulder badge — label follows the active input device (Q vs LB)
     const badgeL = document.createElement('span');
     badgeL.className = 'people-tab-badge';
-    badgeL.textContent = 'L';
+    applyBadgeLabel(badgeL, inputMode.getShoulderLabels().left);
     elements.tabWrap.appendChild(badgeL);
 
     state.getCategories().forEach((cat, index) => {
@@ -39,13 +46,23 @@ export function initPeoplePicker(callbacks = {}) {
       elements.tabWrap.appendChild(tab);
     });
 
-    // R shoulder badge
+    // Right shoulder badge — label follows the active input device (E vs RB)
     const badgeR = document.createElement('span');
     badgeR.className = 'people-tab-badge';
-    badgeR.textContent = 'R';
+    applyBadgeLabel(badgeR, inputMode.getShoulderLabels().right);
     elements.tabWrap.appendChild(badgeR);
 
   }
+
+  // Re-label the badges in place when the player switches device mid-panel
+  inputMode.subscribe(() => {
+    if (!elements.tabWrap) return;
+    const badges = elements.tabWrap.querySelectorAll('.people-tab-badge');
+    if (badges.length < 2) return;
+    const labels = inputMode.getShoulderLabels();
+    applyBadgeLabel(badges[0], labels.left);
+    applyBadgeLabel(badges[badges.length - 1], labels.right);
+  });
 
   function renderGridCards() {
     if (!elements.cardWrap) return;

@@ -991,6 +991,11 @@ body {
   box-shadow: .12em .16em 0 #f5288a;
   transition: transform .16s ease, filter .16s ease;
 }
+/* Two-character hints (LB/RB) must shrink to stay inside the round badge */
+.skin-cycle-btn.wide-label {
+  font-size: .55em;
+  letter-spacing: -.03em;
+}
 .skin-cycle-btn:hover {
   transform: scale(1.1);
   filter: brightness(1.08);
@@ -1097,6 +1102,12 @@ body {
   font-weight: 900;
   box-shadow: 0 2px 6px rgba(0,0,0,.25);
   flex-shrink: 0;
+}
+
+/* Two-character hints (LB/RB) must shrink to stay inside the round badge */
+.people-tab-badge.wide-label {
+  font-size: .6em;
+  letter-spacing: -.03em;
 }
 
 .people-tab {
