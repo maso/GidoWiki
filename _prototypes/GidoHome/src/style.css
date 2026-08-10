@@ -162,7 +162,7 @@ body.input-kbm .gp-only { display: none !important; }
      so no keyframe sampling is needed (max deviation from the Penner formula
      is ~0.005, peak overshoot 1.098 vs 1.100). One timing function drives the
      whole transform, so the rise and the scale-up share the same overshoot. */
-  animation: emoteBubblePop .84s cubic-bezier(.34, 1.56, .64, 1) both;
+  animation: emoteBubblePop .56s cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
 @keyframes emoteBubblePop {
