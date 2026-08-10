@@ -89,12 +89,11 @@ export function mkPedestrian(options = {}) {
   armL.castShadow = true;
   armGrpL.add(armL);
 
-  // C-Clamp Lego Hand Left
-  const handGeo = new THREE.TorusGeometry(0.032, 0.012, 8, 16, Math.PI * 1.4);
+  // Cute Round Sphere Hand Left
+  const handGeo = new THREE.SphereGeometry(0.042, 12, 10);
   const handL = new THREE.Mesh(handGeo, skinMat);
-  handL.position.set(0, -0.21, 0.03);
-  handL.rotation.x = Math.PI / 2;
-  handL.rotation.z = Math.PI / 4;
+  handL.position.set(0, -0.21, 0.01);
+  handL.castShadow = true;
   armGrpL.add(handL);
   upperGrp.add(armGrpL);
 
@@ -106,13 +105,13 @@ export function mkPedestrian(options = {}) {
   armR.castShadow = true;
   armGrpR.add(armR);
 
-  // C-Clamp Lego Hand Right
+  // Cute Round Sphere Hand Right
   const handR = new THREE.Mesh(handGeo, skinMat);
-  handR.position.set(0, -0.21, 0.03);
-  handR.rotation.x = Math.PI / 2;
-  handR.rotation.z = -Math.PI / 4;
+  handR.position.set(0, -0.21, 0.01);
+  handR.castShadow = true;
   armGrpR.add(handR);
   upperGrp.add(armGrpR);
+
 
 
   // ── LEGO HIPS ──
