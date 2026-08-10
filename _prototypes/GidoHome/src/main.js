@@ -1,6 +1,7 @@
 import './style.css';
 import { setupScene } from './scene.js';
 import { createCharacters } from './character.js';
+import { createPedestrians } from './pedestrian.js';
 import { initControls } from './controls.js';
 import { initBgPicker } from './bgPicker.js';
 import { initSkinPicker } from './customization/skinPicker.js';
@@ -15,9 +16,9 @@ if (versionBadge) versionBadge.textContent = APP_VERSION;
 // 1. Setup 3D Scene
 const { scene, camera, renderer } = setupScene(wrap, gs);
 
-
-// 2. Setup 3D Characters & Raycasting
+// 2. Setup 3D Characters & Pedestrians
 const characterSystem = createCharacters(scene, camera, renderer, gs);
+const pedestrianSystem = createPedestrians(scene);
 
 // 3. Setup Controls (Keyboard & Gamepad)
 const controls = initControls();
@@ -55,6 +56,7 @@ function animate(currentTime = performance.now()) {
   clock += dt;
 
   characterSystem.update(clock);
+  pedestrianSystem.update(dt);
   controls.pollGamepad();
   bgPicker.pollGamepad();
   skinPicker.pollGamepad();
@@ -64,3 +66,4 @@ function animate(currentTime = performance.now()) {
 }
 
 animate();
+
