@@ -2,9 +2,33 @@ import * as THREE from 'three';
 import { toon, solid } from '../materials.js';
 
 /* ═══════════════════════════════════════
-   3D PEDESTRIAN (路人) LEGO MINIFIGURE FACTORY
+   3D PEDESTRIAN (路人) OPTIMIZED MESH FACTORY
 ═══════════════════════════════════════ */
 
+// Pre-created static shared geometries (reused across all pedestrian instances)
+const SHARED_GEOMETRIES = {
+  head: new THREE.CylinderGeometry(0.145, 0.145, 0.22, 12),
+  hair: new THREE.SphereGeometry(0.168, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.44),
+  eye: new THREE.SphereGeometry(0.035, 10, 8),
+  torso: (() => {
+    const geo = new THREE.CylinderGeometry(0.20, 0.28, 0.28, 4);
+    geo.rotateY(Math.PI / 4);
+    return geo;
+  })(),
+  arm: (() => {
+    const geo = new THREE.CylinderGeometry(0.042, 0.038, 0.22, 8);
+    geo.translate(0, -0.09, 0);
+    return geo;
+  })(),
+  hand: new THREE.SphereGeometry(0.04, 8, 6),
+  hips: new THREE.BoxGeometry(0.27, 0.06, 0.13),
+  leg: (() => {
+    const geo = new THREE.BoxGeometry(0.12, 0.21, 0.13);
+    geo.translate(0, -0.09, 0);
+    return geo;
+  })(),
+  shoe: new THREE.BoxGeometry(0.12, 0.05, 0.16),
+};
 
 export function mkPedestrian(options = {}) {
   const {
@@ -26,125 +50,94 @@ export function mkPedestrian(options = {}) {
   const shoeMat = solid(shoeColor);
   const eyeMat = solid(0x221133);
 
-  // ── LEGO HEAD & TOP STUD ──
+  // ── HEAD & HAIR ──
   const headGrp = new THREE.Group();
   headGrp.position.y = 0.72;
 
-  // Main Lego cylindrical head with slightly rounded top/bottom edges
-  const headGeo = new THREE.CylinderGeometry(0.145, 0.145, 0.22, 20);
-  const headMesh = new THREE.Mesh(headGeo, skinMat);
+  const headMesh = new THREE.Mesh(SHARED_GEOMETRIES.head, skinMat);
   headMesh.castShadow = true;
   headGrp.add(headMesh);
 
-  // Hair / Cap (snug fit over head, eliminating any corner mesh penetration)
-  const hairGeo = new THREE.SphereGeometry(0.168, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.44);
-  const hairMesh = new THREE.Mesh(hairGeo, hairMat);
+  const hairMesh = new THREE.Mesh(SHARED_GEOMETRIES.hair, hairMat);
   hairMesh.position.set(0, 0.055, -0.012);
-  hairMesh.scale.set(1.02, 0.88, 1.05); // slightly flattened cap shape
+  hairMesh.scale.set(1.02, 0.88, 1.05);
   hairMesh.castShadow = true;
   headGrp.add(hairMesh);
 
-
-
-  // ── PURE VERTICAL OVAL BLACK DOT EYES (ENLARGED) ──
-  const eyeGeo = new THREE.SphereGeometry(0.035, 16, 12);
-
-  const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
+  // ── VERTICAL OVAL EYES ──
+  const eyeL = new THREE.Mesh(SHARED_GEOMETRIES.eye, eyeMat);
   eyeL.scale.set(0.72, 1.45, 0.4);
   eyeL.position.set(-0.062, 0.008, 0.138);
   headGrp.add(eyeL);
 
-  const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
+  const eyeR = new THREE.Mesh(SHARED_GEOMETRIES.eye, eyeMat);
   eyeR.scale.set(0.72, 1.45, 0.4);
   eyeR.position.set(0.062, 0.008, 0.138);
   headGrp.add(eyeR);
 
-
   upperGrp.add(headGrp);
 
-
-
-  // ── LEGO TRAPEZOIDAL TORSO ──
-  // Cylinder with 4 segments rotated 45deg creates a clean trapezoid box torso (narrower shoulders, wider hips)
-  const torsoGeo = new THREE.CylinderGeometry(0.20, 0.28, 0.28, 4);
-  torsoGeo.rotateY(Math.PI / 4);
-  const torsoMesh = new THREE.Mesh(torsoGeo, shirtMat);
-  torsoMesh.scale.set(0.9, 1, 0.52); // Flatten depth to match Lego minifig body ratio
+  // ── TRAPEZOIDAL TORSO ──
+  const torsoMesh = new THREE.Mesh(SHARED_GEOMETRIES.torso, shirtMat);
+  torsoMesh.scale.set(0.9, 1, 0.52);
   torsoMesh.position.y = 0.44;
   torsoMesh.castShadow = true;
   upperGrp.add(torsoMesh);
 
-  // ── LEGO ARMS & C-HANDS ──
-  const armGeo = new THREE.CylinderGeometry(0.042, 0.038, 0.22, 10);
-  armGeo.translate(0, -0.09, 0);
-
-  // Left Arm & Hand (shoulder placed outward, angled outward)
+  // ── ARMS & SPHERE HANDS ──
+  // Left Arm
   const armGrpL = new THREE.Group();
   armGrpL.position.set(-0.19, 0.53, 0.02);
-  armGrpL.rotation.z = -0.14; // angled outward away from torso
-  const armL = new THREE.Mesh(armGeo, shirtMat);
+  armGrpL.rotation.z = -0.14;
+  const armL = new THREE.Mesh(SHARED_GEOMETRIES.arm, shirtMat);
   armL.castShadow = true;
   armGrpL.add(armL);
 
-  // Cute Round Sphere Hand Left
-  const handGeo = new THREE.SphereGeometry(0.042, 12, 10);
-  const handL = new THREE.Mesh(handGeo, skinMat);
+  const handL = new THREE.Mesh(SHARED_GEOMETRIES.hand, skinMat);
   handL.position.set(0, -0.21, 0.01);
-  handL.castShadow = true;
   armGrpL.add(handL);
   upperGrp.add(armGrpL);
 
-  // Right Arm & Hand
+  // Right Arm
   const armGrpR = new THREE.Group();
   armGrpR.position.set(0.19, 0.53, 0.02);
-  armGrpR.rotation.z = 0.14; // angled outward away from torso
-  const armR = new THREE.Mesh(armGeo, shirtMat);
+  armGrpR.rotation.z = 0.14;
+  const armR = new THREE.Mesh(SHARED_GEOMETRIES.arm, shirtMat);
   armR.castShadow = true;
   armGrpR.add(armR);
 
-  // Cute Round Sphere Hand Right
-  const handR = new THREE.Mesh(handGeo, skinMat);
+  const handR = new THREE.Mesh(SHARED_GEOMETRIES.hand, skinMat);
   handR.position.set(0, -0.21, 0.01);
-  handR.castShadow = true;
   armGrpR.add(handR);
   upperGrp.add(armGrpR);
 
-
-
-  // ── LEGO HIPS ──
-  const hipsGeo = new THREE.BoxGeometry(0.27, 0.06, 0.13);
-  const hipsMesh = new THREE.Mesh(hipsGeo, pantsMat);
+  // ── HIPS ──
+  const hipsMesh = new THREE.Mesh(SHARED_GEOMETRIES.hips, pantsMat);
   hipsMesh.position.y = 0.26;
-  hipsMesh.castShadow = true;
   g.add(hipsMesh);
 
-  // ── LEGO BLOCKY LEGS & FEET (Pivot at hips) ──
-  const legGeo = new THREE.BoxGeometry(0.12, 0.21, 0.13);
-  legGeo.translate(0, -0.09, 0);
-
+  // ── BLOCKY LEGS & FEET ──
   // Left Leg
   const legGrpL = new THREE.Group();
   legGrpL.position.set(-0.07, 0.24, 0);
-  const legL = new THREE.Mesh(legGeo, pantsMat);
+  const legL = new THREE.Mesh(SHARED_GEOMETRIES.leg, pantsMat);
   legL.castShadow = true;
   legGrpL.add(legL);
-  // Shoe / Toe box
-  const shoeL = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.05, 0.16), shoeMat);
+
+  const shoeL = new THREE.Mesh(SHARED_GEOMETRIES.shoe, shoeMat);
   shoeL.position.set(0, -0.205, 0.015);
-  shoeL.castShadow = true;
   legGrpL.add(shoeL);
   g.add(legGrpL);
 
   // Right Leg
   const legGrpR = new THREE.Group();
   legGrpR.position.set(0.07, 0.24, 0);
-  const legR = new THREE.Mesh(legGeo, pantsMat);
+  const legR = new THREE.Mesh(SHARED_GEOMETRIES.leg, pantsMat);
   legR.castShadow = true;
   legGrpR.add(legR);
-  // Shoe / Toe box
-  const shoeR = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.05, 0.16), shoeMat);
+
+  const shoeR = new THREE.Mesh(SHARED_GEOMETRIES.shoe, shoeMat);
   shoeR.position.set(0, -0.205, 0.015);
-  shoeR.castShadow = true;
   legGrpR.add(shoeR);
   g.add(legGrpR);
 
@@ -159,4 +152,3 @@ export function mkPedestrian(options = {}) {
     legGrpR,
   };
 }
-
