@@ -150,11 +150,12 @@ export function createPedestrians(scene) {
         p.legGrpL.rotation.x = Math.sin(p.walkPhase) * 1.15;
         p.legGrpR.rotation.x = -Math.sin(p.walkPhase) * 1.15;
 
-        // Arm flailing
-        p.armGrpL.rotation.x = Math.sin(p.walkPhase * 1.3) * 1.1 - 0.4;
-        p.armGrpR.rotation.x = -Math.sin(p.walkPhase * 1.3) * 1.1 - 0.4;
-        p.armGrpL.rotation.z = -0.3 + Math.sin(p.walkPhase * 1.8) * 0.25;
-        p.armGrpR.rotation.z = 0.3 - Math.sin(p.walkPhase * 1.8) * 0.25;
+        // Panicked Arms Raised High Flailing (雙手高高舉起慌張甩手)
+        p.armGrpL.rotation.x = -2.6 + Math.sin(p.walkPhase * 1.5) * 0.4;
+        p.armGrpR.rotation.x = -2.6 - Math.sin(p.walkPhase * 1.5) * 0.4;
+        p.armGrpL.rotation.z = -0.45 + Math.sin(p.walkPhase * 2.2) * 0.3;
+        p.armGrpR.rotation.z = 0.45 - Math.sin(p.walkPhase * 2.2) * 0.3;
+
 
         // Leaning forward while sprinting & high bounce
         p.upperGrp.rotation.x = 0.28;
