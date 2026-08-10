@@ -56,7 +56,8 @@ function animate(currentTime = performance.now()) {
   clock += dt;
 
   characterSystem.update(clock);
-  pedestrianSystem.update(dt);
+  pedestrianSystem.update(dt, characterSystem.chars);
+
   controls.pollGamepad();
   bgPicker.pollGamepad();
   skinPicker.pollGamepad();
