@@ -81,10 +81,10 @@ export function mkPedestrian(options = {}) {
   const armGeo = new THREE.CylinderGeometry(0.042, 0.038, 0.22, 10);
   armGeo.translate(0, -0.09, 0);
 
-  // Left Arm & Hand
+  // Left Arm & Hand (shoulder placed outward, angled outward)
   const armGrpL = new THREE.Group();
-  armGrpL.position.set(-0.16, 0.52, 0);
-  armGrpL.rotation.z = 0.18; // angled outward like Lego arms
+  armGrpL.position.set(-0.19, 0.53, 0.02);
+  armGrpL.rotation.z = -0.14; // angled outward away from torso
   const armL = new THREE.Mesh(armGeo, shirtMat);
   armL.castShadow = true;
   armGrpL.add(armL);
@@ -92,7 +92,7 @@ export function mkPedestrian(options = {}) {
   // C-Clamp Lego Hand Left
   const handGeo = new THREE.TorusGeometry(0.032, 0.012, 8, 16, Math.PI * 1.4);
   const handL = new THREE.Mesh(handGeo, skinMat);
-  handL.position.set(0, -0.21, 0);
+  handL.position.set(0, -0.21, 0.03);
   handL.rotation.x = Math.PI / 2;
   handL.rotation.z = Math.PI / 4;
   armGrpL.add(handL);
@@ -100,19 +100,20 @@ export function mkPedestrian(options = {}) {
 
   // Right Arm & Hand
   const armGrpR = new THREE.Group();
-  armGrpR.position.set(0.16, 0.52, 0);
-  armGrpR.rotation.z = -0.18;
+  armGrpR.position.set(0.19, 0.53, 0.02);
+  armGrpR.rotation.z = 0.14; // angled outward away from torso
   const armR = new THREE.Mesh(armGeo, shirtMat);
   armR.castShadow = true;
   armGrpR.add(armR);
 
   // C-Clamp Lego Hand Right
   const handR = new THREE.Mesh(handGeo, skinMat);
-  handR.position.set(0, -0.21, 0);
+  handR.position.set(0, -0.21, 0.03);
   handR.rotation.x = Math.PI / 2;
   handR.rotation.z = -Math.PI / 4;
   armGrpR.add(handR);
   upperGrp.add(armGrpR);
+
 
   // ── LEGO HIPS ──
   const hipsGeo = new THREE.BoxGeometry(0.27, 0.06, 0.13);
