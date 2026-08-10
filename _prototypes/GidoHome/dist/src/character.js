@@ -40,6 +40,9 @@ export function createCharacters(scene, camera, renderer, gs) {
   const customizationCameraTarget = new THREE.Vector3(0.5, 0.55, 0);
   let customization = { active: false, selectedId: null, snapshots: null };
   let currentClock = 0;
+  // Set while a full-screen overlay (e.g. the emote wheel) owns pointer input,
+  // so clicks on that overlay can't also punch through to the 3D characters.
+  let interactionBlocked = false;
 
   /* ── Build character objects ── */
   const chars = CHARACTER_DEFS.map((def, i) => {
@@ -55,8 +58,16 @@ export function createCharacters(scene, camera, renderer, gs) {
       c.eyeR.position.x = initWander.r.x; c.eyeR.position.y = initWander.r.y;
     }
 
+    // Emote speech bubble, positioned above the head each frame like the label
+    const emoteBubble = document.createElement('div');
+    emoteBubble.className = 'emote-bubble';
+    emoteBubble.setAttribute('aria-hidden', 'true');
+    gs.appendChild(emoteBubble);
+
     return {
       ...c,
+      emoteBubble,
+      emoteUntil: -Infinity,
       id: def.id, name: def.name,
       characterType: def.characterType || 'blob',
       locked: Boolean(def.locked),
@@ -110,7 +121,7 @@ export function createCharacters(scene, camera, renderer, gs) {
   /* ── Raycaster ── */
   setupRaycaster(
     camera, renderer, gs,
-    () => customization.active ? [] : chars.map(c => ({ group: c.grp, char: c })),
+    () => (customization.active || interactionBlocked) ? [] : chars.map(c => ({ group: c.grp, char: c })),
     (hitTarget) => {
       const c = hitTarget.char;
       if (c.characterType === 'egg') {
@@ -454,11 +465,44 @@ export function createCharacters(scene, camera, renderer, gs) {
     return { tx, tz, dist };
   }
 
+  /* ── Emote bubbles ── */
+  const EMOTE_DURATION = 2.4; // seconds a bubble stays up
+
+  /** Pops an emote bubble over a random non-egg character. */
+  function showEmote(emoji) {
+    const candidates = chars.filter(c => c.characterType !== 'egg');
+    if (!candidates.length) return null;
+    const target = candidates[Math.floor(Math.random() * candidates.length)];
+    target.emoteBubble.textContent = emoji;
+    target.emoteUntil = currentClock + EMOTE_DURATION;
+    // Restart the pop-in animation even if this character is already emoting
+    target.emoteBubble.classList.remove('show');
+    void target.emoteBubble.offsetWidth;
+    target.emoteBubble.classList.add('show');
+    return target.id;
+  }
+
+  function tickEmoteBubbles(clock) {
+    chars.forEach((c) => {
+      if (!c.emoteBubble) return;
+      const visible = !customization.active && clock < c.emoteUntil;
+      c.emoteBubble.classList.toggle('show', visible);
+      if (!visible) return;
+      const headY = (c.characterType === 'egg' ? 1.0 : c.bodyMesh.position.y)
+        + c.grp.position.y + 1.25;
+      const sp = worldToScreen(c.grp.position.x, headY, c.grp.position.z);
+      c.emoteBubble.style.left = sp.x + 'px';
+      c.emoteBubble.style.top = sp.y + 'px';
+    });
+  }
+
   /* ════════════════════════════════════════════════════
      MAIN UPDATE LOOP
   ════════════════════════════════════════════════════ */
   return {
     chars,
+    showEmote,
+    setInteractionBlocked: (value) => { interactionBlocked = Boolean(value); },
     setCustomizationMode,
     selectCustomizationCharacter,
     setCharacterColor,
@@ -468,7 +512,10 @@ export function createCharacters(scene, camera, renderer, gs) {
 
       currentClock = clock;
 
-      if (tickCustomization(clock)) return;
+      if (tickCustomization(clock)) {
+        tickEmoteBubbles(clock); // keeps bubbles hidden while customizing
+        return;
+      }
 
       /* ── PASS 1: per-character animation ── */
       chars.forEach((c, selfIdx) => {
@@ -669,6 +716,9 @@ export function createCharacters(scene, camera, renderer, gs) {
           }
         }
       }
+
+      /* ── PASS 3: emote bubbles follow their character's head ── */
+      tickEmoteBubbles(clock);
     }
   };
 }

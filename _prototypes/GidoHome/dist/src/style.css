@@ -116,6 +116,120 @@ body.input-kbm .gp-only { display: none !important; }
 }
 
 /* ═══════════════════════════════════════
+   EMOTE BUBBLE (角色頭上的表情泡泡)
+═══════════════════════════════════════ */
+.emote-bubble {
+  position: absolute;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  width: 2.6em;
+  height: 2.6em;
+  font-size: 1.5em;
+  line-height: 1;
+  background: #fff;
+  border: .1em solid rgba(36, 20, 81, .18);
+  border-radius: 50%;
+  box-shadow: 0 .18em .5em rgba(25, 14, 60, .25);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -50%) scale(.4);
+  transition: opacity .18s ease, transform .28s cubic-bezier(.2, 1.5, .4, 1), visibility .18s;
+}
+/* Speech-bubble tail */
+.emote-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -.28em;
+  left: 50%;
+  width: .55em;
+  height: .55em;
+  background: #fff;
+  border-right: .1em solid rgba(36, 20, 81, .18);
+  border-bottom: .1em solid rgba(36, 20, 81, .18);
+  transform: translateX(-50%) rotate(45deg);
+}
+.emote-bubble.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* ═══════════════════════════════════════
+   EMOTE WHEEL (表情輪盤)
+═══════════════════════════════════════ */
+#emote-wheel {
+  position: absolute;
+  inset: 0;
+  z-index: 130;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 12, 45, .32);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .16s ease, visibility .16s;
+}
+#emote-wheel.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto; /* swallows clicks so they can't reach the 3D scene */
+}
+
+#emote-wheel-ring {
+  position: relative;
+  width: 24em;
+  height: 24em;
+  transform: scale(.86);
+  transition: transform .2s cubic-bezier(.2, 1.4, .4, 1);
+}
+#emote-wheel.open #emote-wheel-ring { transform: scale(1); }
+
+.emote-pod,
+#emote-wheel-cancel {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .92);
+  border: .16em solid rgba(255, 255, 255, .75);
+  box-shadow: 0 .3em .8em rgba(25, 14, 60, .3);
+  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.emote-pod {
+  width: 4.4em;
+  height: 4.4em;
+  font-size: 1.6em;
+  /* transform is set per-pod in JS to place it around the ring */
+}
+#emote-wheel-cancel {
+  width: 4.6em;
+  height: 4.6em;
+  font-size: 1.15em;
+  color: #241451;
+  font-weight: 900;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, .8);
+}
+
+.emote-pod.focused,
+#emote-wheel-cancel.focused {
+  background: #fff23d;
+  border-color: #f5288a;
+  box-shadow: 0 0 0 .18em #f5288a, 0 .3em .9em rgba(25, 14, 60, .35);
+}
+/* Locked-in choice: distinct from mere focus so the confirmation reads clearly */
+.emote-pod.chosen {
+  background: #f5288a;
+  border-color: #fff;
+  box-shadow: 0 0 0 .22em #fff23d, 0 .35em 1em rgba(25, 14, 60, .4);
+}
+
+/* ═══════════════════════════════════════
    LEFT NAVIGATION PANEL
 ═══════════════════════════════════════ */
 #left-panel {

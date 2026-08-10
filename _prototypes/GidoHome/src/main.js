@@ -7,6 +7,7 @@ import { initBgPicker } from './bgPicker.js';
 import { initSkinPicker } from './customization/skinPicker.js';
 import { initPeoplePicker } from './people.js';
 import { initInputMode } from './input/inputMode.js';
+import { initEmoteWheel } from './emote/emoteWheel.js';
 import { APP_VERSION } from './version.js';
 
 const gs = document.getElementById('gs');
@@ -43,7 +44,21 @@ const peoplePicker = initPeoplePicker({
   onClose: () => controls.setBlocked(false),
 });
 
-// 7. Main Animation Loop
+// 7. Setup Emote Wheel (home screen only — suppressed while a panel is open)
+const emoteWheel = initEmoteWheel({
+  isSuppressed: () => bgPicker.isOpen?.() || skinPicker.isOpen() || peoplePicker.isOpen(),
+  onSelect: emote => characterSystem.showEmote(emote.emoji),
+  onOpen: () => {
+    controls.setBlocked(true);
+    characterSystem.setInteractionBlocked(true);
+  },
+  onClose: () => {
+    controls.setBlocked(false);
+    characterSystem.setInteractionBlocked(false);
+  },
+});
+
+// 8. Main Animation Loop
 let clock = 0;
 let lastTime = performance.now();
 
@@ -67,6 +82,7 @@ function animate(currentTime = performance.now()) {
   bgPicker.pollGamepad();
   skinPicker.pollGamepad();
   peoplePicker.pollGamepad();
+  emoteWheel.poll();
 
   renderer.render(scene, camera);
 }
