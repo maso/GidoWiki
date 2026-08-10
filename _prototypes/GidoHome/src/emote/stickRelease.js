@@ -20,8 +20,13 @@
 export const RELEASE_HIGH = 0.55;
 /** Magnitude at or below which the stick counts as back at centre. */
 export const RELEASE_LOW = 0.22;
-/** Longest HIGH→LOW travel time still considered a spring snap-back. */
-export const RELEASE_WINDOW_MS = 130;
+/**
+ * Longest HIGH→LOW travel time still considered a spring snap-back.
+ * At 60fps this is only ~5 poll frames, so a genuine release must be caught
+ * within a handful of samples — tighten further and frame jitter starts
+ * misreading real releases as guided returns.
+ */
+export const RELEASE_WINDOW_MS = 80;
 
 export function createStickReleaseDetector({
   high = RELEASE_HIGH,
