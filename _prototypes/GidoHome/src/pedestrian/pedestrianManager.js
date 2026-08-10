@@ -8,11 +8,12 @@ import { mkPedestrian } from './pedestrianFactory.js';
 ═══════════════════════════════════════ */
 
 const PEDESTRIAN_ROAM = {
-  xMin: -13.0,
-  xMax: 13.0,
-  zMin: -8.5,
-  zMax: 9.0,
+  xMin: -9.8,
+  xMax: 9.8,
+  zMin: -6.3,
+  zMax: 6.8,
 };
+
 
 
 const PANIC_DISTANCE = 2.2; // Trigger distance to flee
