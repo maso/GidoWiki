@@ -489,7 +489,7 @@ export function createCharacters(scene, camera, renderer, gs) {
       c.emoteBubble.classList.toggle('show', visible);
       if (!visible) return;
       const headY = (c.characterType === 'egg' ? 1.0 : c.bodyMesh.position.y)
-        + c.grp.position.y + 1.25;
+        + c.grp.position.y + 1.02;
       const sp = worldToScreen(c.grp.position.x, headY, c.grp.position.z);
       c.emoteBubble.style.left = sp.x + 'px';
       c.emoteBubble.style.top = sp.y + 'px';
