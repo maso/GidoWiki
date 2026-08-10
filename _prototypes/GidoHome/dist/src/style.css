@@ -16,6 +16,15 @@ body {
 }
 
 /* ═══════════════════════════════════════
+   INPUT MODE UTILITIES
+   `.gp-only` marks chrome that only makes sense with a controller in hand
+   (the Ⓑ back badges, the Ⓨ accessory badge). The body class is kept in sync
+   by src/input/inputMode.js. !important is deliberate: some of these badges
+   are targeted by ID-specificity display rules that would otherwise win.
+═══════════════════════════════════════ */
+body.input-kbm .gp-only { display: none !important; }
+
+/* ═══════════════════════════════════════
    GAME SCREEN — 16:9 Aspect Ratio
 ═══════════════════════════════════════ */
 #gs {

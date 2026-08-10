@@ -6,6 +6,7 @@ import {
   KBM,
   GAMEPAD,
   SHOULDER_LABELS,
+  MODE_BODY_CLASSES,
 } from './inputMode.js';
 
 const gp = ({ buttons = [], axes = [] } = {}) => ({ buttons, axes });
@@ -77,4 +78,10 @@ test('exposes a label pair for every supported mode', () => {
   for (const labels of Object.values(SHOULDER_LABELS)) {
     assert.ok(labels.left && labels.right);
   }
+});
+
+test('exposes a distinct body class per mode for gamepad-only chrome', () => {
+  assert.deepEqual(Object.keys(MODE_BODY_CLASSES).sort(), [GAMEPAD, KBM].sort());
+  const classNames = Object.values(MODE_BODY_CLASSES);
+  assert.equal(new Set(classNames).size, classNames.length, 'mode classes must be unique');
 });

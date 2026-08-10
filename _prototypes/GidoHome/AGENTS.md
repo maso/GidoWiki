@@ -73,5 +73,8 @@ dist/                      部署產物（有 commit）
   換 Skin 面板與人類圖鑑的肩鍵提示會跟著切換（鍵鼠 `Q`/`E`、手把 `LB`/`RB`）。
   新增肩鍵提示 UI 時請訂閱 `inputMode.subscribe()` 並使用 `getShoulderLabels()`，
   兩字提示需加上 `.wide-label` class 以縮小字級避免撐破圓形徽章。
-- **測試規範**：任何修改都需確認 `npm test` 通過 25 項單元測試。
+- **手把專屬 UI**：只在手把模式才該出現的按鍵圖示（Back 的 Ⓑ、Accessory 的 Ⓨ）
+  請加上 `.gp-only` class 即可，`body.input-kbm` 會自動隱藏它們，
+  不需另外寫訂閱邏輯。`index.html` 的 `<body>` 預設帶 `input-kbm` 避免載入時閃現。
+- **測試規範**：任何修改都需確認 `npm test` 通過 26 項單元測試。
 

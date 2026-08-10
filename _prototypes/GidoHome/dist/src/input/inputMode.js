@@ -19,6 +19,16 @@ export const SHOULDER_LABELS = {
   [GAMEPAD]: { left: 'LB', right: 'RB' },
 };
 
+/**
+ * Body classes reflecting the active device. CSS uses these to show/hide
+ * gamepad-only chrome (the Ⓑ back badges, the Ⓨ accessory badge) via the
+ * `.gp-only` utility class.
+ */
+export const MODE_BODY_CLASSES = {
+  [KBM]: 'input-kbm',
+  [GAMEPAD]: 'input-gamepad',
+};
+
 /** Axis magnitude a stick must exceed to count as deliberate input. */
 export const STICK_DEADZONE = 0.35;
 
@@ -80,6 +90,15 @@ export const inputMode = createInputModeTracker(KBM);
 export function initInputMode(tracker = inputMode) {
   let lastX = null;
   let lastY = null;
+
+  // Drive gamepad-only chrome from a body class so any `.gp-only` element
+  // hides/shows without needing its own subscription.
+  tracker.subscribe((mode) => {
+    const body = document.body;
+    if (!body) return;
+    Object.values(MODE_BODY_CLASSES).forEach(cls => body.classList.remove(cls));
+    body.classList.add(MODE_BODY_CLASSES[mode]);
+  });
 
   window.addEventListener('keydown', () => tracker.useKeyboardMouse());
   window.addEventListener('mousedown', () => tracker.useKeyboardMouse());
