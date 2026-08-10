@@ -1,5 +1,6 @@
 import { EMOTES } from './emoteData.js';
 import { createEmoteWheelState, pointToSegment, vectorToSegment, CENTER } from './emoteWheelState.js';
+import { createStickReleaseDetector } from './stickRelease.js';
 
 /* ═══════════════════════════════════════
    EMOTE WHEEL UI (表情輪盤)
@@ -8,8 +9,10 @@ import { createEmoteWheelState, pointToSegment, vectorToSegment, CENTER } from '
    each slice labelled with an emoji and its name. Home screen only —
    suppressed while the skin, encyclopedia or background panels are open.
 
-   Gamepad : push the right stick to open; rest on a slice for 0.5s to pick it,
-             or let the stick sit at centre for 0.5s to cancel.
+   Gamepad : push the right stick to open, aim, then let go — the spring
+             snapping home commits the slice you were on. Guiding the stick
+             back to centre by hand instead and holding it there for 0.5s
+             cancels. (See stickRelease.js for how the two are told apart.)
    Keyboard: hold Left Shift to open and aim with the mouse. Hovering only
              highlights — committing needs a click or releasing Shift. Doing
              either over the centre cancels.
@@ -72,11 +75,16 @@ export function initEmoteWheel(options = {}) {
   const labels = [];
   const sliceDeg = 360 / EMOTES.length;
 
+  const release = createStickReleaseDetector();
+
   // Right stick must return to neutral before it can re-open the wheel,
   // otherwise a still-held stick would immediately trigger a second round.
   let stickArmed = true;
   let shiftHeld = false;
   let lastPointer = null;
+  // Last slice the stick actually pointed at. Kept so a release can commit it
+  // even though the stick is already back at centre by the time we notice.
+  let lastStickSegment = null;
 
   /* ── Build the radial artwork ── */
   const svg = document.createElementNS(SVG_NS, 'svg');
@@ -165,8 +173,10 @@ export function initEmoteWheel(options = {}) {
     ring.style.top = `${y}px`;
   }
 
-  function show({ dwell, at = null }) {
-    if (!state.open(performance.now(), { dwell })) return;
+  function show({ cancelDwell, at = null }) {
+    if (!state.open(performance.now(), { cancelDwell })) return;
+    release.reset();
+    lastStickSegment = null;
     positionRing(at); // set before revealing so it never visibly jumps
     root.classList.add('open');
     root.setAttribute('aria-hidden', 'false');
@@ -226,9 +236,9 @@ export function initEmoteWheel(options = {}) {
     if (event.code !== 'ShiftLeft' || event.repeat) return;
     shiftHeld = true;
     if (isSuppressed() || state.isOpen()) return;
-    // Mouse aiming: hovering must never commit on its own, and the wheel
-    // opens around the cursor so every slice is an equal flick away.
-    show({ dwell: false, at: lastPointer });
+    // Mouse aiming: hovering must never commit or cancel on its own, and the
+    // wheel opens around the cursor so every slice is an equal flick away.
+    show({ cancelDwell: false, at: lastPointer });
     focusFromPointer(performance.now());
   });
 
@@ -264,7 +274,8 @@ export function initEmoteWheel(options = {}) {
       : [];
     const gamepad = [...gamepads].find(Boolean);
 
-    if (gamepad) {
+    // Shift-held sessions are mouse-aimed; don't let the stick fight the cursor.
+    if (gamepad && !shiftHeld) {
       const rx = gamepad.axes[2] || 0;
       const ry = -(gamepad.axes[3] || 0); // gamepad Y grows downward
       const magnitude = Math.hypot(rx, ry);
@@ -273,14 +284,35 @@ export function initEmoteWheel(options = {}) {
         if (magnitude < STICK_DEADZONE) stickArmed = true;
         if (stickArmed && magnitude >= STICK_OPEN_THRESHOLD && !isSuppressed()) {
           stickArmed = false;
-          show({ dwell: true }); // gamepad has no cursor — always centred
-          state.setFocus(vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE), now);
+          show({ cancelDwell: true }); // gamepad has no cursor — always centred
+          const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE);
+          lastStickSegment = segment === CENTER ? null : segment;
+          state.setFocus(segment, now);
+          release.sample(magnitude, now); // seed the detector with this push
           render();
         }
-      } else if (!state.isSelected() && !shiftHeld && state.isDwellEnabled()) {
-        // Shift-held sessions are mouse-aimed; don't let a resting stick fight it.
+      } else if (!state.isSelected()) {
         const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE);
-        if (state.setFocus(segment, now)) render();
+        // Hold the highlight on the last real slice while the stick travels
+        // home, so a snap-back doesn't visibly blink through the centre.
+        if (segment !== CENTER) {
+          lastStickSegment = segment;
+          if (state.setFocus(segment, now)) render();
+        }
+
+        const verdict = release.sample(magnitude, now);
+        if (verdict === 'released') {
+          if (lastStickSegment !== null) {
+            commitSelection(lastStickSegment);
+            return;
+          }
+          // Let go without ever aiming at a slice — nothing to commit.
+          if (state.setFocus(CENTER, now)) render();
+        } else if (verdict === 'settled') {
+          // Guided back to centre by hand: start the 0.5s cancel dwell.
+          lastStickSegment = null;
+          if (state.setFocus(CENTER, now)) render();
+        }
       }
     }
 

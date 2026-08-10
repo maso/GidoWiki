@@ -35,36 +35,24 @@ test('pointToSegment flips screen-space Y so up on screen is segment 0', () => {
   assert.equal(pointToSegment(5, 5, 6, 30), CENTER, 'inside centre radius');
 });
 
-test('dwelling on a segment for the full delay selects it', () => {
-  const wheel = createEmoteWheelState({ dwellMs: 500, hideDelayMs: 300 });
-  wheel.open(0);
-  wheel.setFocus(2, 100);
-  assert.equal(wheel.tick(500), null, 'only 400ms held');
-  assert.equal(wheel.tick(600), 'selected');
-  assert.equal(wheel.getSelectedIndex(), 2);
-  assert.equal(wheel.isSelected(), true);
-});
-
-test('moving between segments restarts the dwell timer', () => {
+test('resting on a segment never commits, however long it is held', () => {
   const wheel = createEmoteWheelState({ dwellMs: 500 });
   wheel.open(0);
-  wheel.setFocus(1, 0);
-  wheel.tick(400);
-  wheel.setFocus(4, 400); // switched just before it would have fired
-  assert.equal(wheel.tick(800), null, 'timer restarted on the new segment');
-  assert.equal(wheel.tick(900), 'selected');
-  assert.equal(wheel.getSelectedIndex(), 4);
+  wheel.setFocus(2, 100);
+  assert.equal(wheel.tick(600), null);
+  assert.equal(wheel.tick(10000), null, 'holding for 10s must still not commit');
+  assert.equal(wheel.getPhase(), 'open');
+  assert.equal(wheel.getSelectedIndex(), null);
 });
 
-test('re-focusing the same segment does not restart the dwell timer', () => {
+test('re-focusing the same segment reports no change', () => {
   const wheel = createEmoteWheelState({ dwellMs: 500 });
   wheel.open(0);
   wheel.setFocus(3, 0);
-  assert.equal(wheel.setFocus(3, 400), false, 'no change reported');
-  assert.equal(wheel.tick(500), 'selected', 'still selects on the original schedule');
+  assert.equal(wheel.setFocus(3, 400), false);
 });
 
-test('dwelling at the centre cancels instead of selecting', () => {
+test('dwelling at the centre cancels', () => {
   const wheel = createEmoteWheelState({ dwellMs: 500 });
   wheel.open(0);
   wheel.setFocus(2, 100);
@@ -108,35 +96,31 @@ test('focus is clamped to the cancel hole for invalid targets', () => {
   assert.equal(wheel.getFocus(), CENTER);
 });
 
-test('mouse sessions (dwell disabled) never auto-select or auto-cancel', () => {
-  const wheel = createEmoteWheelState({ dwellMs: 500, hideDelayMs: 300 });
-  wheel.open(0, { dwell: false });
-  assert.equal(wheel.isDwellEnabled(), false);
+test('mouse sessions disable the centre-dwell cancel', () => {
+  const wheel = createEmoteWheelState({ dwellMs: 500 });
+  wheel.open(0, { cancelDwell: false });
+  assert.equal(wheel.isCancelDwellEnabled(), false);
 
-  wheel.setFocus(2, 0);
-  assert.equal(wheel.tick(5000), null, 'hovering forever must not commit');
-  assert.equal(wheel.getPhase(), 'open');
-
-  wheel.setFocus(CENTER, 5000);
-  assert.equal(wheel.tick(10000), null, 'resting at centre must not cancel either');
+  wheel.setFocus(CENTER, 0);
+  assert.equal(wheel.tick(10000), null, 'resting at centre must not cancel');
   assert.equal(wheel.isOpen(), true);
 });
 
 test('mouse sessions still auto-hide after an explicit selection', () => {
   const wheel = createEmoteWheelState({ hideDelayMs: 300 });
-  wheel.open(0, { dwell: false });
+  wheel.open(0, { cancelDwell: false });
   wheel.select(1, 1000);
   assert.equal(wheel.tick(1200), null);
   assert.equal(wheel.tick(1300), 'hidden');
   assert.equal(wheel.isOpen(), false);
 });
 
-test('dwell defaults to on so gamepad sessions keep working', () => {
+test('the cancel dwell defaults to on for gamepad sessions', () => {
   const wheel = createEmoteWheelState({ dwellMs: 500 });
   wheel.open(0);
-  assert.equal(wheel.isDwellEnabled(), true);
-  wheel.setFocus(1, 0);
-  assert.equal(wheel.tick(500), 'selected');
+  assert.equal(wheel.isCancelDwellEnabled(), true);
+  wheel.setFocus(CENTER, 0);
+  assert.equal(wheel.tick(500), 'cancelled');
 });
 
 test('opening twice is a no-op and selection freezes further focus changes', () => {

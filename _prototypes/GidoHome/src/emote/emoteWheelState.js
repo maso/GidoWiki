@@ -5,14 +5,15 @@
    the caller so the whole thing is deterministic and unit testable.
 
    Lifecycle:
-     closed --open()--> open --(dwell 0.5s on a segment)--> selected
-                                                              |
-                                          (0.3s later) --> closed
-     open --(dwell 0.5s at centre)--> closed   (cancel)
+     closed --open()--> open --select()--> selected --(hide delay)--> closed
+     open --(cancel dwell 0.5s at centre)--> closed
 
-   Dwell is a gamepad affordance: a stick can only "hover", so resting on a
-   segment is the commit gesture. Mouse sessions open with dwell disabled —
-   there a click or releasing Shift is the commit, and hovering does nothing.
+   Committing is always an explicit act by the caller: releasing the stick,
+   clicking, or letting go of Shift. Hovering a segment never commits.
+
+   The only timed transition is the cancel dwell: resting at the centre for
+   0.5s closes the wheel. That is a gamepad affordance (a stick guided home is
+   how the player backs out), so mouse sessions open with it disabled.
 ═══════════════════════════════════════ */
 
 /** Focus value meaning "the cancel hole in the middle". */
@@ -58,15 +59,15 @@ export function createEmoteWheelState({
   let focusSince = 0;
   let selectedIndex = null;
   let selectedAt = 0;
-  let dwellEnabled = true;
+  let cancelDwellEnabled = true;
 
-  function open(now = 0, { dwell = true } = {}) {
+  function open(now = 0, { cancelDwell = true } = {}) {
     if (phase !== 'closed') return false;
     phase = 'open';
     focus = CENTER;
     focusSince = now;
     selectedIndex = null;
-    dwellEnabled = dwell;
+    cancelDwellEnabled = cancelDwell;
     return true;
   }
 
@@ -108,15 +109,11 @@ export function createEmoteWheelState({
    */
   function tick(now) {
     if (phase === 'open') {
-      // Mouse sessions never auto-commit: they wait for a click / Shift release.
-      if (!dwellEnabled) return null;
+      // Resting on a segment never commits — only an explicit act does.
+      if (!cancelDwellEnabled || focus !== CENTER) return null;
       if (now - focusSince < dwellMs) return null;
-      if (focus === CENTER) {
-        close();
-        return 'cancelled';
-      }
-      select(focus, now);
-      return 'selected';
+      close();
+      return 'cancelled';
     }
     if (phase === 'selected' && now - selectedAt >= hideDelayMs) {
       close();
@@ -137,7 +134,7 @@ export function createEmoteWheelState({
     isOpen: () => phase !== 'closed',
     /** True once a choice is locked in — used to freeze focus highlighting. */
     isSelected: () => phase === 'selected',
-    isDwellEnabled: () => dwellEnabled,
+    isCancelDwellEnabled: () => cancelDwellEnabled,
     getSegmentCount: () => segmentCount,
   };
 }
