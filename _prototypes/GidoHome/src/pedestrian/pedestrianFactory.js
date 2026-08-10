@@ -2,15 +2,9 @@ import * as THREE from 'three';
 import { toon, solid } from '../materials.js';
 
 /* ═══════════════════════════════════════
-   3D PEDESTRIAN (路人) MESH FACTORY
-═══════════════════════════════════════ */
-
-import * as THREE from 'three';
-import { toon, solid } from '../materials.js';
-
-/* ═══════════════════════════════════════
    3D PEDESTRIAN (路人) LEGO MINIFIGURE FACTORY
 ═══════════════════════════════════════ */
+
 
 export function mkPedestrian(options = {}) {
   const {
