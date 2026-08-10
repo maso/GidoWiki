@@ -51,18 +51,19 @@ export function mkPedestrian(options = {}) {
   headGrp.add(hairMesh);
 
 
-  // ── PURE VERTICAL OVAL BLACK DOT EYES ──
-  const eyeGeo = new THREE.SphereGeometry(0.024, 16, 12);
+  // ── PURE VERTICAL OVAL BLACK DOT EYES (ENLARGED) ──
+  const eyeGeo = new THREE.SphereGeometry(0.035, 16, 12);
 
   const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
-  eyeL.scale.set(0.65, 1.4, 0.4);
-  eyeL.position.set(-0.055, 0.008, 0.142);
+  eyeL.scale.set(0.72, 1.45, 0.4);
+  eyeL.position.set(-0.062, 0.008, 0.138);
   headGrp.add(eyeL);
 
   const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
-  eyeR.scale.set(0.65, 1.4, 0.4);
-  eyeR.position.set(0.055, 0.008, 0.142);
+  eyeR.scale.set(0.72, 1.45, 0.4);
+  eyeR.position.set(0.062, 0.008, 0.138);
   headGrp.add(eyeR);
+
 
   upperGrp.add(headGrp);
 
