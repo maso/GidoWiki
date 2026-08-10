@@ -3,7 +3,7 @@ import { mkPedestrian } from './pedestrianFactory.js';
 
 /* ═══════════════════════════════════════
    3D PEDESTRIAN (路人) MANAGER & AI
-   - Expands roam area across full screen
+   - Manages crowd of 10 randomized pedestrians
    - Panic run animation & flee AI near Gido monsters (excluding eggs)
 ═══════════════════════════════════════ */
 
@@ -16,6 +16,17 @@ const PEDESTRIAN_ROAM = {
 
 const PANIC_DISTANCE = 2.2; // Trigger distance to flee
 const CALM_DISTANCE = 3.4;  // Distance to calm down
+
+const PALETTES = {
+  skins:  [0xffd11a, 0xffd1a4, 0xe5b88f, 0x9e6843, 0xffc3a0],
+  shirts: [0x3b5998, 0xee5253, 0x10ac84, 0xff6b6b, 0xff9f43, 0x0abde3, 0x5f27cd, 0x341f97],
+  pants:  [0x2f3542, 0xd4a373, 0x222f3e, 0x1e1e24, 0x576574],
+  hairs:  [0x3d2314, 0x1e1e24, 0xf6e58d, 0x833471, 0x574b90],
+};
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 export function createPedestrians(scene) {
   const pedestrians = [];
@@ -36,14 +47,15 @@ export function createPedestrians(scene) {
     const {
       x = 0,
       z = 0.5,
-      shirtColor = 0x3b5998,
-      pantsColor = 0x2f3542,
-      hairColor = 0x3d2314,
-      moveSpeed = 0.95,
-      runSpeed = 2.5,
+      skinColor = pickRandom(PALETTES.skins),
+      shirtColor = pickRandom(PALETTES.shirts),
+      pantsColor = pickRandom(PALETTES.pants),
+      hairColor = pickRandom(PALETTES.hairs),
+      moveSpeed = 0.85 + Math.random() * 0.3,
+      runSpeed = 2.3 + Math.random() * 0.4,
     } = options;
 
-    const ped = mkPedestrian({ shirtColor, pantsColor, hairColor });
+    const ped = mkPedestrian({ skinColor, shirtColor, pantsColor, hairColor });
     ped.grp.position.set(x, 0, z);
     scene.add(ped.grp);
 
@@ -53,23 +65,30 @@ export function createPedestrians(scene) {
       runSpeed,
       walkState: 'idle', // 'idle' | 'walking' | 'panicked'
       walkTarget: pickRandomDestination(ped.grp.position),
-      idleTimer: 1.0 + Math.random() * 2.0,
+      idleTimer: 0.5 + Math.random() * 2.5,
       walkPhase: Math.random() * Math.PI * 2,
-      currentFacing: 0,
+      currentFacing: Math.random() * Math.PI * 2,
     };
 
     pedestrians.push(pedObj);
     return pedObj;
   }
 
-  // Initial single pedestrian spawn
-  spawnPedestrian({
-    x: 0,
-    z: 1.2,
-    shirtColor: 0x3b5998, // Navy Blue shirt
-    pantsColor: 0x2f3542, // Dark Slate pants
-    hairColor: 0x3d2314,  // Dark Brown hair
-  });
+  // Spawn 10 diverse pedestrians staggered across the scene
+  const initialPositions = [
+    { x:  0.0, z:  1.2 },
+    { x: -2.8, z: -1.5 },
+    { x:  3.2, z: -0.8 },
+    { x: -4.5, z:  2.1 },
+    { x:  4.8, z:  1.8 },
+    { x: -1.5, z:  3.5 },
+    { x:  2.1, z:  3.8 },
+    { x: -5.2, z: -2.8 },
+    { x:  5.4, z: -2.4 },
+    { x: -3.8, z:  0.4 },
+  ];
+
+  initialPositions.forEach(pos => spawnPedestrian({ x: pos.x, z: pos.z }));
 
   function update(dt, characters = []) {
     // Filter active non-egg Gido monsters
@@ -168,7 +187,7 @@ export function createPedestrians(scene) {
           p.legGrpL.rotation.x = Math.sin(p.walkPhase) * 0.62;
           p.legGrpR.rotation.x = -Math.sin(p.walkPhase) * 0.62;
           p.armGrpL.rotation.x = -Math.sin(p.walkPhase) * 0.52;
-          p.armGrpR.rotation.x = Math.sin(p.walkPhase) * 0.52;
+          p.armGrpR.rotation.x = Math.sin(p.walkPhase * 0.52);
           p.armGrpL.rotation.z = -0.14;
           p.armGrpR.rotation.z = 0.14;
           p.upperGrp.position.y = Math.abs(Math.sin(p.walkPhase * 2)) * 0.035;
