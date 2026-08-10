@@ -50,19 +50,21 @@ export function mkPedestrian(options = {}) {
   hairMesh.castShadow = true;
   headGrp.add(hairMesh);
 
-  // ── EYES (Vertical Oval Black Dots) ──
-  const eyeGeo = new THREE.CircleGeometry(0.022, 16);
+  // ── PURE VERTICAL OVAL BLACK DOT EYES ──
+  const eyeGeo = new THREE.SphereGeometry(0.024, 16, 12);
+
   const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
-  eyeL.scale.set(0.72, 1.35, 1.0);
-  eyeL.position.set(-0.055, 0.005, 0.147);
+  eyeL.scale.set(0.65, 1.4, 0.4);
+  eyeL.position.set(-0.055, 0.008, 0.142);
   headGrp.add(eyeL);
 
   const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
-  eyeR.scale.set(0.72, 1.35, 1.0);
-  eyeR.position.set(0.055, 0.005, 0.147);
+  eyeR.scale.set(0.65, 1.4, 0.4);
+  eyeR.position.set(0.055, 0.008, 0.142);
   headGrp.add(eyeR);
 
   upperGrp.add(headGrp);
+
 
 
   // ── LEGO TRAPEZOIDAL TORSO ──
