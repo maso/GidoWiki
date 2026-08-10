@@ -178,56 +178,89 @@ body.input-kbm .gp-only { display: none !important; }
   pointer-events: auto; /* swallows clicks so they can't reach the 3D scene */
 }
 
+/* Radial layout: thin white spokes from a hollow centre ring, no filled pods.
+   Geometry (radii, label positions) is computed in emoteWheel.js — the size
+   here must stay in step with RING_SIZE_EM. */
 #emote-wheel-ring {
   position: relative;
-  width: 24em;
-  height: 24em;
-  transform: scale(.86);
+  width: 26em;
+  height: 26em;
+  transform: scale(.9);
   transition: transform .2s cubic-bezier(.2, 1.4, .4, 1);
 }
 #emote-wheel.open #emote-wheel-ring { transform: scale(1); }
 
-.emote-pod,
+.emote-wheel-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.emote-spoke {
+  stroke: rgba(255, 255, 255, .5);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.emote-wedge {
+  fill: transparent;
+  transition: fill .12s ease;
+}
+.emote-wedge.focused { fill: rgba(255, 255, 255, .16); }
+/* Locked-in choice reads brighter than mere focus */
+.emote-wedge.chosen  { fill: rgba(255, 255, 255, .38); }
+
+.emote-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .12em;
+  width: 7em;
+  color: rgba(255, 255, 255, .82);
+  text-align: center;
+  pointer-events: none; /* aiming is angular; the overlay handles clicks */
+  text-shadow: 0 .12em .5em rgba(10, 6, 30, .85);
+  transition: color .12s ease, transform .12s ease;
+  /* transform is set per-label in JS to place it along its slice */
+}
+.emote-glyph { font-size: 2.1em; line-height: 1; }
+.emote-name {
+  font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+  font-size: .82em;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+.emote-label.focused { color: #fff; }
+.emote-label.chosen  { color: #fff23d; }
+
 #emote-wheel-cancel {
   position: absolute;
   left: 50%;
   top: 50%;
   display: grid;
   place-items: center;
+  width: 7.02em;   /* 2 x INNER_R(27) x UNIT_TO_EM(0.13) */
+  height: 7.02em;
   border-radius: 50%;
-  background: rgba(255, 255, 255, .92);
-  border: .16em solid rgba(255, 255, 255, .75);
-  box-shadow: 0 .3em .8em rgba(25, 14, 60, .3);
-  transition: background .12s ease, border-color .12s ease, box-shadow .12s ease;
-}
-.emote-pod {
-  width: 4.4em;
-  height: 4.4em;
-  font-size: 1.6em;
-  /* transform is set per-pod in JS to place it around the ring */
-}
-#emote-wheel-cancel {
-  width: 4.6em;
-  height: 4.6em;
-  font-size: 1.15em;
-  color: #241451;
+  background: transparent;
+  border: .22em solid rgba(255, 255, 255, .9);
+  color: rgba(255, 255, 255, .75);
+  font-size: 1em;
   font-weight: 900;
   transform: translate(-50%, -50%);
-  background: rgba(255, 255, 255, .8);
+  pointer-events: none; /* the overlay resolves clicks by angle */
+  transition: border-color .12s ease, background .12s ease, color .12s ease;
 }
-
-.emote-pod.focused,
+#emote-wheel-cancel span { opacity: 0; transition: opacity .12s ease; }
 #emote-wheel-cancel.focused {
-  background: #fff23d;
-  border-color: #f5288a;
-  box-shadow: 0 0 0 .18em #f5288a, 0 .3em .9em rgba(25, 14, 60, .35);
-}
-/* Locked-in choice: distinct from mere focus so the confirmation reads clearly */
-.emote-pod.chosen {
-  background: #f5288a;
+  background: rgba(255, 255, 255, .16);
   border-color: #fff;
-  box-shadow: 0 0 0 .22em #fff23d, 0 .35em 1em rgba(25, 14, 60, .4);
+  color: #fff;
 }
+#emote-wheel-cancel.focused span { opacity: 1; }
 
 /* ═══════════════════════════════════════
    LEFT NAVIGATION PANEL

@@ -4,23 +4,58 @@ import { createEmoteWheelState, pointToSegment, vectorToSegment, CENTER } from '
 /* ═══════════════════════════════════════
    EMOTE WHEEL UI (表情輪盤)
 
-   Home screen only — suppressed while any other panel is open.
+   Valorant-style radial menu: thin white spokes radiating from a centre ring,
+   each slice labelled with an emoji and its name. Home screen only —
+   suppressed while the skin, encyclopedia or background panels are open.
 
-   Gamepad : push the right stick to open; rest on a segment for 0.5s to pick
-             it, or let the stick return to centre for 0.5s to cancel.
-   Keyboard: hold Left Shift to open, aim with the mouse. Click a segment, or
-             release Shift while aiming at one, to pick it. Releasing Shift
-             over the centre cancels.
+   Gamepad : push the right stick to open; rest on a slice for 0.5s to pick it,
+             or let the stick sit at centre for 0.5s to cancel.
+   Keyboard: hold Left Shift to open and aim with the mouse. Hovering only
+             highlights — committing needs a click or releasing Shift. Doing
+             either over the centre cancels.
 ═══════════════════════════════════════ */
 
-const RING_RADIUS_EM = 9;      // distance from wheel centre to each pod
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+// Geometry is defined in SVG user units on a -100..100 viewBox, then mirrored
+// into em for the HTML labels so both stay in sync from one set of numbers.
+const VIEW = 100;
+const INNER_R = 27;   // centre ring radius (the cancel hole)
+const OUTER_R = 97;   // where the spokes stop
+const LABEL_R = 66;   // where emoji + name sit
+const RING_SIZE_EM = 26;
+const UNIT_TO_EM = RING_SIZE_EM / (VIEW * 2);
+
 const CENTER_RADIUS_PX = 46;   // cursor inside this radius counts as cancel
-const STICK_DEADZONE = 0.45;   // right stick push needed to leave the centre
+const STICK_DEADZONE = 0.45;
 const STICK_OPEN_THRESHOLD = 0.6;
+
+/** Polar (degrees clockwise from 12 o'clock) → SVG cartesian. */
+function polar(angleDeg, radius) {
+  const rad = (angleDeg * Math.PI) / 180;
+  return { x: Math.sin(rad) * radius, y: -Math.cos(rad) * radius };
+}
+
+/** Annular wedge path spanning [startDeg, endDeg] between INNER_R and OUTER_R. */
+function wedgePath(startDeg, endDeg) {
+  const outerStart = polar(startDeg, OUTER_R);
+  const outerEnd = polar(endDeg, OUTER_R);
+  const innerEnd = polar(endDeg, INNER_R);
+  const innerStart = polar(startDeg, INNER_R);
+  const largeArc = endDeg - startDeg > 180 ? 1 : 0;
+  return [
+    `M ${innerStart.x} ${innerStart.y}`,
+    `L ${outerStart.x} ${outerStart.y}`,
+    `A ${OUTER_R} ${OUTER_R} 0 ${largeArc} 1 ${outerEnd.x} ${outerEnd.y}`,
+    `L ${innerEnd.x} ${innerEnd.y}`,
+    `A ${INNER_R} ${INNER_R} 0 ${largeArc} 0 ${innerStart.x} ${innerStart.y}`,
+    'Z',
+  ].join(' ');
+}
 
 export function initEmoteWheel(options = {}) {
   const {
-    isSuppressed = () => false,   // true while another panel owns the screen
+    isSuppressed = () => false,
     onSelect = () => {},
     onOpen = () => {},
     onClose = () => {},
@@ -32,53 +67,75 @@ export function initEmoteWheel(options = {}) {
   if (!root || !ring || !centerPod) return { poll: () => {}, isOpen: () => false };
 
   const state = createEmoteWheelState({ segmentCount: EMOTES.length });
-  const pods = [];
+  const wedges = [];
+  const labels = [];
+  const sliceDeg = 360 / EMOTES.length;
 
   // Right stick must return to neutral before it can re-open the wheel,
   // otherwise a still-held stick would immediately trigger a second round.
   let stickArmed = true;
   let shiftHeld = false;
-  let lastPointer = null; // {x, y} in client coords
+  let lastPointer = null;
 
-  /* ── Build pods laid out clockwise from 12 o'clock ── */
+  /* ── Build the radial artwork ── */
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('class', 'emote-wheel-svg');
+  svg.setAttribute('viewBox', `${-VIEW} ${-VIEW} ${VIEW * 2} ${VIEW * 2}`);
+  svg.setAttribute('aria-hidden', 'true');
+
   EMOTES.forEach((emote, index) => {
-    const angle = (index / EMOTES.length) * Math.PI * 2; // 0 = up
-    const x = Math.sin(angle) * RING_RADIUS_EM;
-    const y = -Math.cos(angle) * RING_RADIUS_EM;
+    const centreDeg = index * sliceDeg;
 
-    const pod = document.createElement('button');
-    pod.type = 'button';
-    pod.className = 'emote-pod';
-    pod.style.transform = `translate(-50%, -50%) translate(${x}em, ${y}em)`;
-    pod.innerHTML = `<span>${emote.emoji}</span>`;
-    pod.setAttribute('aria-label', emote.name);
-    pod.addEventListener('mouseenter', () => state.setFocus(index, performance.now()));
-    pod.addEventListener('click', (event) => {
-      event.preventDefault();
-      commitSelection(index);
-    });
-    ring.appendChild(pod);
-    pods.push(pod);
+    // Slice highlight (invisible until focused)
+    const wedge = document.createElementNS(SVG_NS, 'path');
+    wedge.setAttribute('class', 'emote-wedge');
+    wedge.setAttribute('d', wedgePath(centreDeg - sliceDeg / 2, centreDeg + sliceDeg / 2));
+    svg.appendChild(wedge);
+    wedges.push(wedge);
+
+    // Spoke on this slice's leading boundary
+    const boundaryDeg = centreDeg - sliceDeg / 2;
+    const from = polar(boundaryDeg, INNER_R);
+    const to = polar(boundaryDeg, OUTER_R);
+    const spoke = document.createElementNS(SVG_NS, 'line');
+    spoke.setAttribute('class', 'emote-spoke');
+    spoke.setAttribute('x1', from.x);
+    spoke.setAttribute('y1', from.y);
+    spoke.setAttribute('x2', to.x);
+    spoke.setAttribute('y2', to.y);
+    svg.appendChild(spoke);
+
+    // Emoji + name, placed along the slice's centre line
+    const at = polar(centreDeg, LABEL_R);
+    const label = document.createElement('div');
+    label.className = 'emote-label';
+    label.style.transform =
+      `translate(-50%, -50%) translate(${at.x * UNIT_TO_EM}em, ${at.y * UNIT_TO_EM}em)`;
+    label.innerHTML = `<span class="emote-glyph">${emote.emoji}</span><span class="emote-name">${emote.name}</span>`;
+    label.setAttribute('aria-label', emote.name);
+    labels.push(label);
   });
 
-  centerPod.addEventListener('click', (event) => {
-    event.preventDefault();
-    hide();
-  });
+  ring.insertBefore(svg, ring.firstChild);
+  labels.forEach(label => ring.appendChild(label));
 
   /* ── Rendering ── */
   function render() {
     const focus = state.getFocus();
     const locked = state.isSelected();
-    pods.forEach((pod, index) => {
-      pod.classList.toggle('focused', !locked && focus === index);
-      pod.classList.toggle('chosen', locked && focus === index);
+    wedges.forEach((wedge, index) => {
+      wedge.classList.toggle('focused', !locked && focus === index);
+      wedge.classList.toggle('chosen', locked && focus === index);
+    });
+    labels.forEach((label, index) => {
+      label.classList.toggle('focused', focus === index);
+      label.classList.toggle('chosen', locked && focus === index);
     });
     centerPod.classList.toggle('focused', !locked && focus === CENTER);
   }
 
-  function show() {
-    if (!state.open(performance.now())) return;
+  function show({ dwell }) {
+    if (!state.open(performance.now(), { dwell })) return;
     root.classList.add('open');
     root.setAttribute('aria-hidden', 'false');
     render();
@@ -99,7 +156,14 @@ export function initEmoteWheel(options = {}) {
     onSelect(EMOTES[index], index);
   }
 
-  /** Applies whatever the state machine's timers decided this frame. */
+  /** Commits whatever is currently aimed at; the centre means cancel. */
+  function commitFocus() {
+    if (!state.isOpen() || state.isSelected()) return;
+    const focus = state.getFocus();
+    if (focus === CENTER) hide();
+    else commitSelection(focus);
+  }
+
   function applyTick(now) {
     const event = state.tick(now);
     if (event === 'selected') {
@@ -117,34 +181,28 @@ export function initEmoteWheel(options = {}) {
   function focusFromPointer(now) {
     if (!lastPointer || state.isSelected()) return;
     const rect = ring.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
     const segment = pointToSegment(
-      lastPointer.x - cx,
-      lastPointer.y - cy,
+      lastPointer.x - (rect.left + rect.width / 2),
+      lastPointer.y - (rect.top + rect.height / 2),
       EMOTES.length,
       CENTER_RADIUS_PX,
     );
-    state.setFocus(segment, now);
-    render();
+    if (state.setFocus(segment, now)) render();
   }
 
   window.addEventListener('keydown', (event) => {
     if (event.code !== 'ShiftLeft' || event.repeat) return;
     shiftHeld = true;
     if (isSuppressed() || state.isOpen()) return;
-    show();
+    // Mouse aiming: hovering must never commit on its own.
+    show({ dwell: false });
     focusFromPointer(performance.now());
   });
 
   window.addEventListener('keyup', (event) => {
     if (event.code !== 'ShiftLeft') return;
     shiftHeld = false;
-    if (!state.isOpen() || state.isSelected()) return;
-    const focus = state.getFocus();
-    // Releasing Shift over a segment commits it; over the centre it cancels.
-    if (focus === CENTER) hide();
-    else commitSelection(focus);
+    commitFocus();
   });
 
   window.addEventListener('mousemove', (event) => {
@@ -152,9 +210,11 @@ export function initEmoteWheel(options = {}) {
     if (state.isOpen()) focusFromPointer(performance.now());
   });
 
-  // Swallow clicks that land on the backdrop so they can't reach the 3D scene.
+  // Aiming is angular across the whole overlay, so a click anywhere commits
+  // whatever slice the cursor points at (and the centre still cancels).
   root.addEventListener('click', (event) => {
-    if (event.target === root) hide();
+    event.preventDefault();
+    commitFocus();
   });
 
   /* ── Per-frame polling (gamepad + timers) ── */
@@ -180,11 +240,11 @@ export function initEmoteWheel(options = {}) {
         if (magnitude < STICK_DEADZONE) stickArmed = true;
         if (stickArmed && magnitude >= STICK_OPEN_THRESHOLD && !isSuppressed()) {
           stickArmed = false;
-          show();
+          show({ dwell: true });
           state.setFocus(vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE), now);
           render();
         }
-      } else if (!state.isSelected() && !shiftHeld) {
+      } else if (!state.isSelected() && !shiftHeld && state.isDwellEnabled()) {
         // Shift-held sessions are mouse-aimed; don't let a resting stick fight it.
         const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE);
         if (state.setFocus(segment, now)) render();

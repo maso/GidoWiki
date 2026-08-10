@@ -9,6 +9,10 @@
                                                               |
                                           (0.3s later) --> closed
      open --(dwell 0.5s at centre)--> closed   (cancel)
+
+   Dwell is a gamepad affordance: a stick can only "hover", so resting on a
+   segment is the commit gesture. Mouse sessions open with dwell disabled —
+   there a click or releasing Shift is the commit, and hovering does nothing.
 ═══════════════════════════════════════ */
 
 /** Focus value meaning "the cancel hole in the middle". */
@@ -54,13 +58,15 @@ export function createEmoteWheelState({
   let focusSince = 0;
   let selectedIndex = null;
   let selectedAt = 0;
+  let dwellEnabled = true;
 
-  function open(now = 0) {
+  function open(now = 0, { dwell = true } = {}) {
     if (phase !== 'closed') return false;
     phase = 'open';
     focus = CENTER;
     focusSince = now;
     selectedIndex = null;
+    dwellEnabled = dwell;
     return true;
   }
 
@@ -102,6 +108,8 @@ export function createEmoteWheelState({
    */
   function tick(now) {
     if (phase === 'open') {
+      // Mouse sessions never auto-commit: they wait for a click / Shift release.
+      if (!dwellEnabled) return null;
       if (now - focusSince < dwellMs) return null;
       if (focus === CENTER) {
         close();
@@ -129,6 +137,7 @@ export function createEmoteWheelState({
     isOpen: () => phase !== 'closed',
     /** True once a choice is locked in — used to freeze focus highlighting. */
     isSelected: () => phase === 'selected',
+    isDwellEnabled: () => dwellEnabled,
     getSegmentCount: () => segmentCount,
   };
 }

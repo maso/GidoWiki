@@ -108,6 +108,37 @@ test('focus is clamped to the cancel hole for invalid targets', () => {
   assert.equal(wheel.getFocus(), CENTER);
 });
 
+test('mouse sessions (dwell disabled) never auto-select or auto-cancel', () => {
+  const wheel = createEmoteWheelState({ dwellMs: 500, hideDelayMs: 300 });
+  wheel.open(0, { dwell: false });
+  assert.equal(wheel.isDwellEnabled(), false);
+
+  wheel.setFocus(2, 0);
+  assert.equal(wheel.tick(5000), null, 'hovering forever must not commit');
+  assert.equal(wheel.getPhase(), 'open');
+
+  wheel.setFocus(CENTER, 5000);
+  assert.equal(wheel.tick(10000), null, 'resting at centre must not cancel either');
+  assert.equal(wheel.isOpen(), true);
+});
+
+test('mouse sessions still auto-hide after an explicit selection', () => {
+  const wheel = createEmoteWheelState({ hideDelayMs: 300 });
+  wheel.open(0, { dwell: false });
+  wheel.select(1, 1000);
+  assert.equal(wheel.tick(1200), null);
+  assert.equal(wheel.tick(1300), 'hidden');
+  assert.equal(wheel.isOpen(), false);
+});
+
+test('dwell defaults to on so gamepad sessions keep working', () => {
+  const wheel = createEmoteWheelState({ dwellMs: 500 });
+  wheel.open(0);
+  assert.equal(wheel.isDwellEnabled(), true);
+  wheel.setFocus(1, 0);
+  assert.equal(wheel.tick(500), 'selected');
+});
+
 test('opening twice is a no-op and selection freezes further focus changes', () => {
   const wheel = createEmoteWheelState();
   assert.equal(wheel.open(0), true);
