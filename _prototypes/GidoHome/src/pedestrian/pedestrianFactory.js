@@ -50,22 +50,20 @@ export function mkPedestrian(options = {}) {
   hairMesh.castShadow = true;
   headGrp.add(hairMesh);
 
-  // Eyes & Smile
-  const eyeGeo = new THREE.CircleGeometry(0.022, 12);
+  // ── EYES (Vertical Oval Black Dots) ──
+  const eyeGeo = new THREE.CircleGeometry(0.022, 16);
   const eyeL = new THREE.Mesh(eyeGeo, eyeMat);
-  eyeL.position.set(-0.055, 0.01, 0.147);
+  eyeL.scale.set(0.72, 1.35, 1.0);
+  eyeL.position.set(-0.055, 0.005, 0.147);
   headGrp.add(eyeL);
+
   const eyeR = new THREE.Mesh(eyeGeo, eyeMat);
-  eyeR.position.set(0.055, 0.01, 0.147);
+  eyeR.scale.set(0.72, 1.35, 1.0);
+  eyeR.position.set(0.055, 0.005, 0.147);
   headGrp.add(eyeR);
 
-  // Classic Lego smile line
-  const smileGeo = new THREE.RingGeometry(0.032, 0.042, 12, 1, Math.PI * 1.1, Math.PI * 0.8);
-  const smileMesh = new THREE.Mesh(smileGeo, eyeMat);
-  smileMesh.position.set(0, -0.045, 0.147);
-  headGrp.add(smileMesh);
-
   upperGrp.add(headGrp);
+
 
   // ── LEGO TRAPEZOIDAL TORSO ──
   // Cylinder with 4 segments rotated 45deg creates a clean trapezoid box torso (narrower shoulders, wider hips)
