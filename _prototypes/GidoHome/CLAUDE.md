@@ -1,8 +1,86 @@
-See @AGENTS.md for full project instructions.
+# CLAUDE.md — GidoHome Development Guide
 
-重點摘要：
+This guide is for Claude and AI coding assistants taking over development of the **Gido Gido Home Prototype**.
 
-- 工作目錄是 `GidoWiki/_prototypes/GidoHome/`（舊的 `~/Documents/GidoHomePrototype` 已停用）
-- **每次改完程式碼都要執行 `npm run build:static` 並 `git commit`**，不需詢問
-- `dist/` 必須 commit 進 repo，公開頁面直接讀取它
-- **不要自動 `git push`**，由使用者決定何時上線
+---
+
+## 🚀 Quick Reference & Essential Rules
+
+- **Workspace Path**: `GidoWiki/_prototypes/GidoHome/` (The old `~/Documents/GidoHomePrototype` is DEPRECATED).
+- **GitHub Pages Subpath Deployment**: `https://maso.github.io/GidoWiki/_prototypes/GidoHome/`
+- **Workflow Requirement after EVERY Code Edit**:
+  ```bash
+  npm test && npm run build:static
+  git add -A && git commit -m "<descriptive message>"
+  ```
+  - **`dist/` MUST be committed** because GitHub Pages serves `dist/` directly.
+  - **DO NOT auto `git push`** — the user decides when to push.
+
+---
+
+## 🛠️ Build & Test Commands
+
+| Command | Purpose |
+|---|---|
+| `npm run dev` | Local Vite dev server |
+| `npm run build:static` | **Primary build command** (Zero-dependency Node script `scripts/build.mjs`) |
+| `npm test` | Runs unit test suite (`src/**/*.test.js`) via native Node test runner |
+| `npm run build` | Optional bundled Vite build |
+
+---
+
+## 📁 Project Architecture & Modules
+
+```
+GidoWiki/_prototypes/GidoHome/
+├── index.html               Root HTML page with importmap, relative scripts & stylesheet links
+├── scripts/
+│   └── build.mjs            Build script: generates dist/, auto-calculates Git commit count version (v1.0.X)
+├── src/
+│   ├── main.js              Main entry: Animation RAF loop, updates characters & 3D pedestrians, polls gamepads
+│   ├── config.js            Monster definitions (color, speed, eye style, roaming bounds)
+│   ├── scene.js             Three.js scene, camera (0.5, 5.5, 11.5), lighting, shadows, toon renderer
+│   ├── materials.js         Toon and solid color material factory wrappers
+│   ├── raycaster.js         Mouse hover & click selection raycasting for 3D monsters
+│   ├── controls.js          Main menu keyboard & gamepad navigation handler
+│   ├── bgPicker.js          Background theme selection modal (Solid, Mint, Gradient, etc.)
+│   ├── version.js           Exported APP_VERSION string (auto-updated by build.mjs)
+│   ├── character/           3D Monster System
+│   │   ├── factories.js     3D character body & dinosaur egg lathe mesh builders
+│   │   ├── accessories.js   3D hat & accessory mesh generators
+│   │   └── stunts.js        20 pure-function idle stunt animations
+│   ├── pedestrian/          3D Pedestrian (路人) System
+│   │   ├── pedestrianFactory.js   Lego-style 3D pedestrian factory with shared static geometries & optimized shadow passes
+│   │   └── pedestrianManager.js   Crowd manager: 10 randomized pedestrians roaming in 1.5x area, panic fleeing AI & panicked running animation
+│   ├── customization/      Character Skin & Accessory Customization Panel
+│   │   ├── skinPicker.js    Customization UI modal controller
+│   │   ├── customizationState.js Pure state machine for character/skin/accessory selection
+│   │   ├── customizationState.test.js Unit tests for customization state
+│   │   ├── gamepadNavigation.js Single-press gamepad edge-trigger handler
+│   │   └── gamepadNavigation.test.js Unit tests for customization gamepad controls
+│   └── people/              Human Encyclopedia (人類圖鑑) Modal
+│       ├── peoplePicker.js  Modal UI controller with 4 category tabs, 4-column grid, stats footer
+│       ├── peopleData.js    24 human types definitions across 4 categories
+│       ├── peopleState.js   Pure state machine for encyclopedia progress & type stats
+│       ├── peopleState.test.js Unit tests for people state
+│       └── gamepadNavigation.js L/R shoulder button category stepping & 4-way grid D-pad navigation
+└── dist/                    Committed static build output directory
+```
+
+---
+
+## 🎨 Design & UI Specifications
+
+1. **Selection Border**:
+   - Hot-pink selection border `#f5288a` (3.5px solid for unlocked/selected cards, 3.5px dashed for locked/selected cards).
+   - Single border line — no duplicate box-shadow rings or browser focus outlines.
+2. **Version Badge**:
+   - Permanent top-right badge (`#version-badge`, `top: 1.2em; right: 1.6em`).
+   - Format: `v1.0.<commit_count> (<short_hash>)`.
+3. **Notification Red Dots**:
+   - Clothing icon button (`👕`, `#btn-skin`) red dot is synchronized with unread accessories (`unreadAccessories.size > 0`).
+4. **3D Pedestrians (路人)**:
+   - Lego Minifigure proportions, 50% overall scale (`scale = 0.5`).
+   - Oval black dot eyes, no mouth, sphere hands.
+   - Roaming area: 1.5x scale (`x: [-9.8, 9.8], z: [-6.3, 6.8]`).
+   - Panic AI: Flee at 2.5 u/s with arms raised high flailing when within 2.2 units of non-egg Gido monsters.
