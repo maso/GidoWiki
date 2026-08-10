@@ -1035,6 +1035,8 @@ body.input-kbm .gp-only { display: none !important; }
 }
 .skin-actions button:hover { transform: scale(1.05); background: rgba(255,255,255,.15); }
 #btn-skin-back { color: #241451; background: #fff23d; border-color: #fff; }
+/* This Back button is yellow, so the default gold badge colour would vanish */
+#btn-skin-back .back-badge { color: #241451; }
 
 @media (max-aspect-ratio: 4/3) {
   #character-card-wrap { width: 34%; }
