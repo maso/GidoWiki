@@ -40,8 +40,10 @@ export function mkPedestrian(options = {}) {
   } = options;
 
   const g = new THREE.Group();
+  g.scale.set(0.5, 0.5, 0.5); // Overall scale down to 50%
   const upperGrp = new THREE.Group();
   g.add(upperGrp);
+
 
   const skinMat = toon(skinColor);
   const shirtMat = toon(shirtColor);
