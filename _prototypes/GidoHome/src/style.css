@@ -155,40 +155,15 @@ body.input-kbm .gp-only { display: none !important; }
 .emote-bubble.show {
   opacity: 1;
   visibility: visible;
-  /* linear is required: the curve lives in the samples, so easing between
-     keyframes would distort it */
-  animation: emoteBubblePop .62s linear both;
+  /* easeOutBack: unlike bounce, this curve *is* expressible as a cubic-bezier,
+     so no keyframe sampling is needed (max deviation from the Penner formula
+     is ~0.005, peak overshoot 1.098 vs 1.100). */
+  animation: emoteBubblePop .42s cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
-/* Robert Penner easeOutBounce, sampled every 4% — a piecewise curve like this
-   can't be expressed as a cubic-bezier, so it has to be keyframed. */
 @keyframes emoteBubblePop {
-  0%   { transform: translate(-50%, -50%) scale(.35); }
-  4%   { transform: translate(-50%, -50%) scale(.3579); }
-  8%   { transform: translate(-50%, -50%) scale(.3815); }
-  12%  { transform: translate(-50%, -50%) scale(.4208); }
-  16%  { transform: translate(-50%, -50%) scale(.4758); }
-  20%  { transform: translate(-50%, -50%) scale(.5466); }
-  24%  { transform: translate(-50%, -50%) scale(.6331); }
-  28%  { transform: translate(-50%, -50%) scale(.7354); }
-  32%  { transform: translate(-50%, -50%) scale(.8534); }
-  36%  { transform: translate(-50%, -50%) scale(.9871); }
-  40%  { transform: translate(-50%, -50%) scale(.9415); }
-  44%  { transform: translate(-50%, -50%) scale(.8922); }
-  48%  { transform: translate(-50%, -50%) scale(.8586); }
-  52%  { transform: translate(-50%, -50%) scale(.8407); }
-  56%  { transform: translate(-50%, -50%) scale(.8385); }
-  60%  { transform: translate(-50%, -50%) scale(.8521); }
-  64%  { transform: translate(-50%, -50%) scale(.8814); }
-  68%  { transform: translate(-50%, -50%) scale(.9265); }
-  72%  { transform: translate(-50%, -50%) scale(.9873); }
-  76%  { transform: translate(-50%, -50%) scale(.9760); }
-  80%  { transform: translate(-50%, -50%) scale(.9610); }
-  84%  { transform: translate(-50%, -50%) scale(.9617); }
-  88%  { transform: translate(-50%, -50%) scale(.9782); }
-  92%  { transform: translate(-50%, -50%) scale(.9957); }
-  96%  { transform: translate(-50%, -50%) scale(.9900); }
-  100% { transform: translate(-50%, -50%) scale(1); }
+  from { transform: translate(-50%, -50%) scale(.35); }
+  to   { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* ═══════════════════════════════════════
