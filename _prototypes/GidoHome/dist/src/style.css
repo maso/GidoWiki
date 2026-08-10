@@ -163,8 +163,6 @@ body.input-kbm .gp-only { display: none !important; }
   position: absolute;
   inset: 0;
   z-index: 130;
-  display: grid;
-  place-items: center;
   background: rgba(20, 12, 45, .32);
   backdrop-filter: blur(2px);
   opacity: 0;
@@ -181,14 +179,20 @@ body.input-kbm .gp-only { display: none !important; }
 /* Radial layout: thin white spokes from a hollow centre ring, no filled pods.
    Geometry (radii, label positions) is computed in emoteWheel.js — the size
    here must stay in step with RING_SIZE_EM. */
+/* Anchored by JS: centred for gamepad, on the cursor for mouse (clamped so it
+   never overflows the play area). left/top are the wheel's centre point. */
 #emote-wheel-ring {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: 50%;
   width: 26em;
   height: 26em;
-  transform: scale(.9);
+  transform: translate(-50%, -50%) scale(.9);
   transition: transform .2s cubic-bezier(.2, 1.4, .4, 1);
 }
-#emote-wheel.open #emote-wheel-ring { transform: scale(1); }
+#emote-wheel.open #emote-wheel-ring { transform: translate(-50%, -50%) scale(1); }
+
+.emote-backdrop { fill: rgba(0, 0, 0, .45); }
 
 .emote-wheel-svg {
   position: absolute;
@@ -254,13 +258,12 @@ body.input-kbm .gp-only { display: none !important; }
   pointer-events: none; /* the overlay resolves clicks by angle */
   transition: border-color .12s ease, background .12s ease, color .12s ease;
 }
-#emote-wheel-cancel span { opacity: 0; transition: opacity .12s ease; }
+#emote-wheel-cancel span { font-size: 1.6em; line-height: 1; }
 #emote-wheel-cancel.focused {
   background: rgba(255, 255, 255, .16);
   border-color: #fff;
   color: #fff;
 }
-#emote-wheel-cancel.focused span { opacity: 1; }
 
 /* ═══════════════════════════════════════
    LEFT NAVIGATION PANEL

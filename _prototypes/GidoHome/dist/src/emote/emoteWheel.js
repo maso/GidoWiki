@@ -66,7 +66,8 @@ export function initEmoteWheel(options = {}) {
   const centerPod = document.getElementById('emote-wheel-cancel');
   if (!root || !ring || !centerPod) return { poll: () => {}, isOpen: () => false };
 
-  const state = createEmoteWheelState({ segmentCount: EMOTES.length });
+  // hideDelay 0: a committed choice closes the wheel straight away.
+  const state = createEmoteWheelState({ segmentCount: EMOTES.length, hideDelayMs: 0 });
   const wedges = [];
   const labels = [];
   const sliceDeg = 360 / EMOTES.length;
@@ -82,6 +83,12 @@ export function initEmoteWheel(options = {}) {
   svg.setAttribute('class', 'emote-wheel-svg');
   svg.setAttribute('viewBox', `${-VIEW} ${-VIEW} ${VIEW * 2} ${VIEW * 2}`);
   svg.setAttribute('aria-hidden', 'true');
+
+  // Translucent black disc so the wheel stays legible over a bright scene
+  const backdrop = document.createElementNS(SVG_NS, 'circle');
+  backdrop.setAttribute('class', 'emote-backdrop');
+  backdrop.setAttribute('r', OUTER_R);
+  svg.appendChild(backdrop);
 
   EMOTES.forEach((emote, index) => {
     const centreDeg = index * sliceDeg;
@@ -134,8 +141,33 @@ export function initEmoteWheel(options = {}) {
     centerPod.classList.toggle('focused', !locked && focus === CENTER);
   }
 
-  function show({ dwell }) {
+  /**
+   * Anchors the wheel on the cursor, pulled back just enough that no part of
+   * it leaves the visible play area. Passing no point re-centres it.
+   */
+  function positionRing(point) {
+    if (!point) {
+      ring.style.left = '50%';
+      ring.style.top = '50%';
+      return;
+    }
+    const bounds = root.getBoundingClientRect();
+    const half = ring.offsetWidth / 2;
+    // Too little room to clamp meaningfully — fall back to dead centre.
+    if (!half || bounds.width < half * 2 || bounds.height < half * 2) {
+      positionRing(null);
+      return;
+    }
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+    const x = clamp(point.x - bounds.left, half, bounds.width - half);
+    const y = clamp(point.y - bounds.top, half, bounds.height - half);
+    ring.style.left = `${x}px`;
+    ring.style.top = `${y}px`;
+  }
+
+  function show({ dwell, at = null }) {
     if (!state.open(performance.now(), { dwell })) return;
+    positionRing(at); // set before revealing so it never visibly jumps
     root.classList.add('open');
     root.setAttribute('aria-hidden', 'false');
     render();
@@ -152,8 +184,8 @@ export function initEmoteWheel(options = {}) {
 
   function commitSelection(index) {
     if (!state.select(index, performance.now())) return;
-    render();
     onSelect(EMOTES[index], index);
+    hide(); // committing dismisses the wheel immediately
   }
 
   /** Commits whatever is currently aimed at; the centre means cancel. */
@@ -167,8 +199,8 @@ export function initEmoteWheel(options = {}) {
   function applyTick(now) {
     const event = state.tick(now);
     if (event === 'selected') {
-      render();
       onSelect(EMOTES[state.getSelectedIndex()], state.getSelectedIndex());
+      hide();
     } else if (event === 'cancelled' || event === 'hidden') {
       root.classList.remove('open');
       root.setAttribute('aria-hidden', 'true');
@@ -194,8 +226,9 @@ export function initEmoteWheel(options = {}) {
     if (event.code !== 'ShiftLeft' || event.repeat) return;
     shiftHeld = true;
     if (isSuppressed() || state.isOpen()) return;
-    // Mouse aiming: hovering must never commit on its own.
-    show({ dwell: false });
+    // Mouse aiming: hovering must never commit on its own, and the wheel
+    // opens around the cursor so every slice is an equal flick away.
+    show({ dwell: false, at: lastPointer });
     focusFromPointer(performance.now());
   });
 
@@ -240,7 +273,7 @@ export function initEmoteWheel(options = {}) {
         if (magnitude < STICK_DEADZONE) stickArmed = true;
         if (stickArmed && magnitude >= STICK_OPEN_THRESHOLD && !isSuppressed()) {
           stickArmed = false;
-          show({ dwell: true });
+          show({ dwell: true }); // gamepad has no cursor — always centred
           state.setFocus(vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE), now);
           render();
         }
