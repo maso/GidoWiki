@@ -36,19 +36,14 @@ export function mkPedestrian(options = {}) {
   headMesh.castShadow = true;
   headGrp.add(headMesh);
 
-  // Top Lego stud
-  const studGeo = new THREE.CylinderGeometry(0.06, 0.06, 0.05, 14);
-  const studMesh = new THREE.Mesh(studGeo, skinMat);
-  studMesh.position.y = 0.135;
-  studMesh.castShadow = true;
-  headGrp.add(studMesh);
-
-  // Hair / Cap (bottom edge stays high above the eyes)
-  const hairGeo = new THREE.SphereGeometry(0.152, 16, 12, 0, Math.PI * 2, 0, Math.PI * 0.40);
+  // Hair / Cap (snug fit over head, eliminating any corner mesh penetration)
+  const hairGeo = new THREE.SphereGeometry(0.168, 20, 14, 0, Math.PI * 2, 0, Math.PI * 0.44);
   const hairMesh = new THREE.Mesh(hairGeo, hairMat);
-  hairMesh.position.set(0, 0.04, -0.01);
+  hairMesh.position.set(0, 0.055, -0.012);
+  hairMesh.scale.set(1.02, 0.88, 1.05); // slightly flattened cap shape
   hairMesh.castShadow = true;
   headGrp.add(hairMesh);
+
 
 
   // ── PURE VERTICAL OVAL BLACK DOT EYES (ENLARGED) ──
