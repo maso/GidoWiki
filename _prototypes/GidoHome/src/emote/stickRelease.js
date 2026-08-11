@@ -22,11 +22,14 @@ export const RELEASE_HIGH = 0.55;
 export const RELEASE_LOW = 0.22;
 /**
  * Longest HIGH→LOW travel time still considered a spring snap-back.
- * At 60fps this is only ~5 poll frames, so a genuine release must be caught
- * within a handful of samples — tighten further and frame jitter starts
- * misreading real releases as guided returns.
+ *
+ * Note this times the 0.55→0.22 band only, not the whole return, so a spring
+ * clears it in far less than its full travel time. At 60fps, 50ms is about
+ * three poll frames: anything slower than a genuine let-go now reads as a
+ * guided return. Tightening much further leaves no room for frame jitter and
+ * real releases start being missed.
  */
-export const RELEASE_WINDOW_MS = 80;
+export const RELEASE_WINDOW_MS = 50;
 
 export function createStickReleaseDetector({
   high = RELEASE_HIGH,

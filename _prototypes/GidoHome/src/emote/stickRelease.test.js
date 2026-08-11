@@ -41,12 +41,12 @@ test('the verdict boundary follows the configured window', () => {
   assert.deepEqual(run(slow, [[0, 0.9], [140, 0.05]]), [[140, 'settled']], 'outside the window');
 });
 
-test('the default window accepts a spring return but not a 100ms one', () => {
+test('the default window accepts a snap but rejects a merely brisk return', () => {
   const quick = createStickReleaseDetector();
-  assert.deepEqual(run(quick, [[0, 0.9], [64, 0.05]]), [[64, 'released']], '~4 frames: a real release');
+  assert.deepEqual(run(quick, [[0, 0.9], [32, 0.05]]), [[32, 'released']], '~2 frames: a real release');
 
   const dawdle = createStickReleaseDetector();
-  assert.deepEqual(run(dawdle, [[0, 0.9], [100, 0.05]]), [[100, 'settled']], 'past the 80ms default');
+  assert.deepEqual(run(dawdle, [[0, 0.9], [64, 0.05]]), [[64, 'settled']], 'past the 50ms default');
 });
 
 test('the window is measured from the last deep sample, not the first', () => {
