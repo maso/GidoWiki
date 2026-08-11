@@ -10,7 +10,7 @@
 
 export const EMOTES = [
   { id: 'attack', emoji: '⚔️', name: 'ATTACK' }, // 進攻
-  { id: 'evade',  emoji: '💨', name: 'EVADE' },  // 迴避
+  { id: 'evade',  emoji: '🏃', name: 'EVADE' },  // 迴避
   { id: 'smash',  emoji: '🏚️', name: 'SMASH' },  // 打房子
   { id: 'item',   emoji: '🎁', name: 'ITEM' },   // 道具
   { id: 'angry',  emoji: '😡', name: 'ANGRY' },  // 生氣
