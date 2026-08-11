@@ -40,8 +40,8 @@ const CENTER_RADIUS_PX = 46;   // cursor inside this radius counts as cancel
  * that opens the wheel would land inside the cancel zone and immediately start
  * counting down to close it.
  */
-const STICK_CENTER_RADIUS = 0.65;
-const STICK_OPEN_THRESHOLD = 0.8;
+const STICK_CENTER_RADIUS = 0.75;
+const STICK_OPEN_THRESHOLD = 0.85;
 /**
  * How long the stick must stay inside the centre zone before the aim is
  * forgotten. Must exceed RELEASE_WINDOW_MS so a spring snap-back — which
