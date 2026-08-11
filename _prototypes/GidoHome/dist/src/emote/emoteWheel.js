@@ -80,7 +80,6 @@ export function initEmoteWheel(options = {}) {
   // Right stick must return to neutral before it can re-open the wheel,
   // otherwise a still-held stick would immediately trigger a second round.
   let stickArmed = true;
-  let shiftHeld = false;
   let lastPointer = null;
   // Last slice the stick actually pointed at. Kept so a release can commit it
   // even though the stick is already back at centre by the time we notice.
@@ -234,7 +233,6 @@ export function initEmoteWheel(options = {}) {
 
   window.addEventListener('keydown', (event) => {
     if (event.code !== 'ShiftLeft' || event.repeat) return;
-    shiftHeld = true;
     if (isSuppressed() || state.isOpen()) return;
     // Mouse aiming: hovering must never commit or cancel on its own, and the
     // wheel opens around the cursor so every slice is an equal flick away.
@@ -244,8 +242,16 @@ export function initEmoteWheel(options = {}) {
 
   window.addEventListener('keyup', (event) => {
     if (event.code !== 'ShiftLeft') return;
-    shiftHeld = false;
+    // Releasing Shift only commits the session it opened; a gamepad session
+    // waits for the stick instead.
+    if (state.isCancelDwellEnabled()) return;
     commitFocus();
+  });
+
+  // A mouse session is held open by the Shift key, so if the page loses focus
+  // its keyup never arrives and the wheel would hang open. Close it instead.
+  window.addEventListener('blur', () => {
+    if (state.isOpen() && !state.isCancelDwellEnabled()) hide();
   });
 
   window.addEventListener('mousemove', (event) => {
@@ -274,8 +280,7 @@ export function initEmoteWheel(options = {}) {
       : [];
     const gamepad = [...gamepads].find(Boolean);
 
-    // Shift-held sessions are mouse-aimed; don't let the stick fight the cursor.
-    if (gamepad && !shiftHeld) {
+    if (gamepad) {
       const rx = gamepad.axes[2] || 0;
       const ry = -(gamepad.axes[3] || 0); // gamepad Y grows downward
       const magnitude = Math.hypot(rx, ry);
@@ -291,7 +296,12 @@ export function initEmoteWheel(options = {}) {
           release.sample(magnitude, now); // seed the detector with this push
           render();
         }
-      } else if (!state.isSelected()) {
+      } else if (!state.isSelected() && state.isCancelDwellEnabled()) {
+        // Only steer sessions the stick actually opened. A mouse session is
+        // cursor-aimed, and is identified by having no centre-dwell cancel —
+        // deliberately not by a "is Shift down" flag, which stays stuck if the
+        // keyup is lost (alt-tab while holding Shift) and would then wedge the
+        // gamepad out of the wheel for good.
         const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE);
         // Hold the highlight on the last real slice while the stick travels
         // home, so a snap-back doesn't visibly blink through the centre.
