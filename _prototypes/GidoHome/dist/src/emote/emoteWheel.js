@@ -30,8 +30,24 @@ const RING_SIZE_EM = 26;
 const UNIT_TO_EM = RING_SIZE_EM / (VIEW * 2);
 
 const CENTER_RADIUS_PX = 46;   // cursor inside this radius counts as cancel
-const STICK_DEADZONE = 0.45;
-const STICK_OPEN_THRESHOLD = 0.6;
+
+/**
+ * Stick geometry. These are *logical* zones and deliberately unrelated to the
+ * drawn centre ring — the cancel target is far bigger than it looks, so easing
+ * the stick back a little already reads as "returning to centre".
+ *
+ * STICK_CENTER_RADIUS must stay below STICK_OPEN_THRESHOLD, otherwise the push
+ * that opens the wheel would land inside the cancel zone and immediately start
+ * counting down to close it.
+ */
+const STICK_CENTER_RADIUS = 0.65;
+const STICK_OPEN_THRESHOLD = 0.8;
+/**
+ * How long the stick must stay inside the centre zone before the aim is
+ * forgotten. Must exceed RELEASE_WINDOW_MS so a spring snap-back — which
+ * crosses the zone on its way home — is never mistaken for backing out.
+ */
+const CENTER_SETTLE_MS = 120;
 
 /** Polar (degrees clockwise from 12 o'clock) → SVG cartesian. */
 function polar(angleDeg, radius) {
@@ -84,6 +100,8 @@ export function initEmoteWheel(options = {}) {
   // Last slice the stick actually pointed at. Kept so a release can commit it
   // even though the stick is already back at centre by the time we notice.
   let lastStickSegment = null;
+  // When the stick first entered the centre zone, or null while it is outside.
+  let centerSince = null;
 
   /* ── Build the radial artwork ── */
   const svg = document.createElementNS(SVG_NS, 'svg');
@@ -176,6 +194,7 @@ export function initEmoteWheel(options = {}) {
     if (!state.open(performance.now(), { cancelDwell })) return;
     release.reset();
     lastStickSegment = null;
+    centerSince = null;
     positionRing(at); // set before revealing so it never visibly jumps
     root.classList.add('open');
     root.setAttribute('aria-hidden', 'false');
@@ -286,11 +305,11 @@ export function initEmoteWheel(options = {}) {
       const magnitude = Math.hypot(rx, ry);
 
       if (!state.isOpen()) {
-        if (magnitude < STICK_DEADZONE) stickArmed = true;
+        if (magnitude < STICK_CENTER_RADIUS) stickArmed = true;
         if (stickArmed && magnitude >= STICK_OPEN_THRESHOLD && !isSuppressed()) {
           stickArmed = false;
           show({ cancelDwell: true }); // gamepad has no cursor — always centred
-          const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE);
+          const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_CENTER_RADIUS);
           lastStickSegment = segment === CENTER ? null : segment;
           state.setFocus(segment, now);
           release.sample(magnitude, now); // seed the detector with this push
@@ -302,26 +321,28 @@ export function initEmoteWheel(options = {}) {
         // deliberately not by a "is Shift down" flag, which stays stuck if the
         // keyup is lost (alt-tab while holding Shift) and would then wedge the
         // gamepad out of the wheel for good.
-        const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_DEADZONE);
-        // Hold the highlight on the last real slice while the stick travels
-        // home, so a snap-back doesn't visibly blink through the centre.
-        if (segment !== CENTER) {
+        const segment = vectorToSegment(rx, ry, EMOTES.length, STICK_CENTER_RADIUS);
+
+        if (segment === CENTER) {
+          // Easing the stick back into the generous centre zone reads as
+          // backing out, so the cancel dwell starts here rather than waiting
+          // for the stick to reach dead centre.
+          if (centerSince === null) centerSince = now;
+          if (state.setFocus(CENTER, now)) render();
+          // A released stick only passes through this zone for a frame or two.
+          // Lingering longer means the player really is backing out, so the
+          // old aim must not be committed if they let go from here.
+          if (now - centerSince > CENTER_SETTLE_MS) lastStickSegment = null;
+        } else {
+          centerSince = null;
           lastStickSegment = segment;
           if (state.setFocus(segment, now)) render();
         }
 
-        const verdict = release.sample(magnitude, now);
-        if (verdict === 'released') {
-          if (lastStickSegment !== null) {
-            commitSelection(lastStickSegment);
-            return;
-          }
-          // Let go without ever aiming at a slice — nothing to commit.
-          if (state.setFocus(CENTER, now)) render();
-        } else if (verdict === 'settled') {
-          // Guided back to centre by hand: start the 0.5s cancel dwell.
-          lastStickSegment = null;
-          if (state.setFocus(CENTER, now)) render();
+        // A genuine release still commits, caught before the dwell elapses.
+        if (release.sample(magnitude, now) === 'released' && lastStickSegment !== null) {
+          commitSelection(lastStickSegment);
+          return;
         }
       }
     }
