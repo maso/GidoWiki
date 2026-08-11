@@ -8,6 +8,7 @@ import { initSkinPicker } from './customization/skinPicker.js';
 import { initPeoplePicker } from './people.js';
 import { initInputMode } from './input/inputMode.js';
 import { initEmoteWheel } from './emote/emoteWheel.js';
+import { initGamepadProbe } from './debug/gamepadProbe.js';
 import { APP_VERSION } from './version.js';
 
 const gs = document.getElementById('gs');
@@ -58,6 +59,9 @@ const emoteWheel = initEmoteWheel({
   },
 });
 
+// 7b. Temporary gamepad diagnostic — enable with #gpdebug in the URL
+const gamepadProbe = window.location.hash.includes('gpdebug') ? initGamepadProbe() : null;
+
 // 8. Main Animation Loop
 let clock = 0;
 let lastTime = performance.now();
@@ -83,6 +87,7 @@ function animate(currentTime = performance.now()) {
   skinPicker.pollGamepad();
   peoplePicker.pollGamepad();
   emoteWheel.poll();
+  gamepadProbe?.poll();
 
   renderer.render(scene, camera);
 }

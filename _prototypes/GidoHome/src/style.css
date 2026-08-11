@@ -15,6 +15,26 @@ body {
   font-family: 'Noto Sans TC', 'Outfit', 'Helvetica Neue', sans-serif;
 }
 
+/* Temporary gamepad diagnostic overlay (#gpdebug) */
+#gamepad-probe {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 9999;
+  max-width: 30em;
+  padding: 10px 12px;
+  background: rgba(8, 6, 20, .88);
+  color: #d8e2ff;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  white-space: pre;
+  border-radius: 8px;
+  pointer-events: none;
+}
+#gamepad-probe hr { border: none; border-top: 1px solid rgba(255,255,255,.18); margin: 6px 0; }
+#gamepad-probe .hot { color: #7dffa8; font-weight: 700; }
+
 /* ═══════════════════════════════════════
    INPUT MODE UTILITIES
    `.gp-only` marks chrome that only makes sense with a controller in hand
