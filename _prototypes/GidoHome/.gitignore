@@ -1,7 +1,0 @@
-node_modules/
-.DS_Store
-*.log
-
-# The site is served straight from source (index.html + src/ + vendor/).
-# `npm run build` is optional and its output is never deployed.
-dist/
