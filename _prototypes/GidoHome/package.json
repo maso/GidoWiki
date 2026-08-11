@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "test": "node --test src/**/*.test.js",
+    "version:stamp": "node scripts/stamp-version.mjs",
     "build": "vite build",
-    "build:static": "node scripts/build.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

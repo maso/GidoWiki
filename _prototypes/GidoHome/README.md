@@ -3,33 +3,34 @@
 PC party game 主畫面 prototype，HTML + CSS + Three.js (v0.160)。
 
 > 用 AI coding agent 開發本專案時，請先讀 [AGENTS.md](./AGENTS.md)
-> （含工作流程約定：每次修改後都要 build + commit）。
+> （含工作流程約定）。
 
-公開頁面（GitHub Pages）：`https://<username>.github.io/GidoWiki/_prototypes/GidoHome/dist/`
+公開頁面（GitHub Pages）：`https://maso.github.io/GidoWiki/_prototypes/GidoHome/`
 
-## 本機開發
+## 沒有建置步驟
 
-```bash
-npm install
-npm run dev        # Vite dev server
-```
+網站直接以原始碼提供服務：`index.html` 內含 import map 與相對路徑，
+`src/`（原生 ES modules）與 `vendor/three.module.min.js` 就放在它旁邊，
+GitHub Pages 原樣托管即可。**改完程式碼 commit 就會上線，不需要 build。**
 
-## 建置部署用的 dist/
-
-兩種方式擇一，產出都可直接部署在子路徑下（相對路徑資源）：
+唯一需要生成的是版號字串：
 
 ```bash
-npm run build          # Vite 打包（需要 npm 環境，會 minify）
-npm run build:static   # 零依賴 Node script（scripts/build.mjs），不需安裝任何套件
+npm run version:stamp   # 由 Git commit 數與 short hash 寫入 src/version.js 與右上角版號
 ```
 
-`build:static` 是為了在無法安裝 npm 套件的環境（如 Cowork sandbox）也能建置：
-直接以原生 ES modules 部署 src/，用 import map 把 `three` 對應到
-`vendor/three.module.min.js`。**dist/ 需要 commit 進 repo** 才會出現在公開頁面。
+## 指令
+
+| 指令 | 用途 |
+|---|---|
+| `npm run dev` | 本機開發（Vite dev server，有 HMR） |
+| `npm test` | 執行 `src/**/*.test.js` 單元測試 |
+| `npm run version:stamp` | 更新版號字串（commit 前執行） |
+| `npm run build` | 選用：Vite 打包版本，產出 `dist/`（已 gitignore，不用於部署） |
 
 ## 結構
 
-- `src/` — 原始碼（scene / character / controls / bgPicker / customization）
-- `vendor/three.module.min.js` — vendored Three.js（v0.160.1，供 build:static 用）
-- `scripts/build.mjs` — 零依賴建置腳本
-- `dist/` — 建置產物（有 commit，公開頁面直接指到這裡）
+- `index.html` — 唯一的頁面進入點，含 import map
+- `src/` — 原始碼（scene / character / pedestrian / emote / input / customization / people）
+- `vendor/three.module.min.js` — vendored Three.js v0.160.1
+- `scripts/stamp-version.mjs` — 零依賴版號生成腳本

@@ -11,30 +11,32 @@ Gido Gido 派對遊戲的**主畫面 prototype**：Three.js 打造的 3D 角色�
 （舊的 `~/Documents/GidoHomePrototype` 已停用，請勿在該處修改。）
 
 這個資料夾位於 GidoWiki repo 內，會透過 GitHub Pages 公開分享：
-`https://maso.github.io/GidoWiki/_prototypes/GidoHome/`
+`https://maso.github.io/GidoWiki/_prototypes/GidoHome/`（直接托管原始碼，無 build 產物）
 
 ## 每次修改後必做（重要）
 
-改完程式碼與測試後，**一律執行 build 與 commit**，不需另外詢問：
+改完程式碼與測試後，**一律執行測試、更新版號並 commit**，不需另外詢問：
 
 ```bash
-npm test && npm run build:static   # 執行測試並重建 dist/
+npm test && npm run version:stamp   # 執行測試並更新版號
 git add -A && git commit -m "<描述這次改動>"
 ```
 
-- **`dist/` 必須 commit 進 repo**，公開頁面直接讀取它。只改 `src/` 而沒重新 build，線上看到的仍是舊版。
+- **沒有建置步驟**：網站直接以原始碼提供服務（`index.html` 內含 import map 與相對路徑，
+  `src/` 與 `vendor/` 就在旁邊），改完 commit 就會上線。
+- `npm run version:stamp` 只生成版號字串（寫入 `src/version.js` 與 `index.html` 右上角）。
 - **`git push` 不要自動執行**，由使用者自行決定何時上線。
 
-## 建置與測試方式
+## 指令
 
 | 指令 | 用途 |
 |---|---|
 | `npm run dev` | 本機開發（Vite dev server） |
-| `npm run build:static` | **預設建置方式**，零依賴，只用 Node 標準庫 (`scripts/build.mjs`) |
-| `npm run build` | Vite 打包版本 |
 | `npm test` | 執行 `src/**/*.test.js` 單元測試 |
+| `npm run version:stamp` | 更新版號字串（commit 前執行） |
+| `npm run build` | 選用：Vite 打包，產出 `dist/`（已 gitignore，**不用於部署**） |
 
-`build:static`（`scripts/build.mjs`）會自動計算 Git Commit 次數與 Short Hash 並寫入 `src/version.js` 與右上角常駐版號 (`#version-badge`)。
+`scripts/stamp-version.mjs` 會計算 Git Commit 次數與 Short Hash，寫入 `src/version.js` 與右上角常駐版號 (`#version-badge`)。
 
 ## 專案結構
 
@@ -64,9 +66,8 @@ src/
     emoteWheel.js          輪盤 UI：SVG 放射線幾何、手把／鍵鼠輸入、游標定位
   customization/           角色造型／Accessory 選擇器（狀態機、資料、UI、手把導覽，含單元測試）
   people/                  人類圖鑑視窗（4 大類別 Tab、4 欄卡片 Grid、收集進度頁尾、手把 L/R 切換）
-vendor/                    vendored Three.js（build:static 用）
-scripts/build.mjs          零依賴自動建置腳本
-dist/                      部署產物（有 commit）
+vendor/                    vendored Three.js（由 index.html 的 import map 對應）
+scripts/stamp-version.mjs  零依賴版號生成腳本
 ```
 
 ## 修改時的注意事項
@@ -90,7 +91,7 @@ dist/                      部署產物（有 commit）
   **停留在格子上永遠不會選取**，選取一律要玩家的明確動作：
   - 手把：推右搖桿開啟、瞄準後**放手**，彈簧彈回中心即選取；若用手把搖桿慢慢推回中心，
     則視為要退出，在中心停留 0.5 秒後取消。兩者由 `stickRelease.js` 依回中耗時區分
-    （門檻 `RELEASE_WINDOW_MS`，目前 80ms；不同手把彈簧鬆緊不同，必要時可調）。
+    （門檻 `RELEASE_WINDOW_MS`，目前 50ms；不同手把彈簧鬆緊不同，必要時可調）。
   - 鍵鼠：按住左 Shift 開啟、滑鼠只負責高亮，一定要點擊或放開 Shift 才算選取；
     輪盤會以游標為圓心開啟並自動鉗制在畫面內。
   狀態機唯一的計時轉場是「中心停留即取消」，以 `open(now, { cancelDwell })` 決定是否啟用
